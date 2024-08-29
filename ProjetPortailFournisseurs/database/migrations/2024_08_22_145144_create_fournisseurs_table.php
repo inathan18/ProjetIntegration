@@ -30,7 +30,7 @@ return new class extends Migration
             $table->unsignedBigInteger('usager_id');
             $table->foreign('usager_id', 'personneContact')->references('id')->on('usagers');
             $table->timestamps();
-            $table->string('password', 255)->nullable();
+            $table->string('password', 255);
             $table->primary(['neq', 'email']);
         });
     }
