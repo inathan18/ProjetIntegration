@@ -18,14 +18,19 @@ return new class extends Migration
             $table->string('city', 100);
             $table->string('province', 100);
             $table->string('country', 100);
-            $table->string('phone', 100);
+            $table->json('phone')->nullable();
             $table->string('postCode', 10);
-            $table->string('domain', 20);
+            $table->json('unspsc')->nullable();
             $table->string('website', 255);
             $table->string('email', 100);
+            $table->json('files')->nullable();
+            $table->string('statut', 10);
+            $table->string('neq', 100)->nullable()->unique();
+            $table->string('rbq', 100)->nullable();
             $table->unsignedBigInteger('usager_id');
             $table->foreign('usager_id', 'personneContact')->references('id')->on('usagers');
             $table->timestamps();
+            $table->primary(['neq', 'email']);
         });
     }
 
