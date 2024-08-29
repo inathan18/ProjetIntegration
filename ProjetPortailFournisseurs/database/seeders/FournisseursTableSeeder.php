@@ -12,8 +12,7 @@ class FournisseursTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('fournisseurs')-­insert([
-            'id' => 1,
+        DB::table('fournisseurs')-­>insert([
             'name'=> 'Rona Inc Trois-Rivieres',
             'address' => '4025 Boulevard des Récollets',
             'city' => 'Trois-Rivières',
@@ -30,8 +29,7 @@ class FournisseursTableSeeder extends Seeder
             'password' => Hash::make('rona'),
         ]);
 
-        DB::table('fournisseurs')-­insert([
-            'id' => 2,
+        DB::table('fournisseurs')->­insert([
             'name'=> 'Ford Canada',
             'address' => '1 The Canadian Road',
             'city' => 'Oakville',
