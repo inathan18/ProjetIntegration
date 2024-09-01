@@ -18,9 +18,24 @@ class UsagersController extends Controller
      */
     public function index()
     {
-        $usagers = Usager::all();
+        $fillable = Usager::all();
+        //$fournisseurs = Usager::all()->where('role', 'like', 'fournisseur');
+        //$commis = Usager::all()->where('role', 'like', 'commis');
+        //$responsables = Usager::all()->where('role', 'like', 'responsable');
+        //$administrateurs = Usager::all()->where('role', 'like', 'administrateur');
 
-        return view('Connexion', compact('usagers'));
+    return view('Usagers.Connexion', compact('fillable'/*, 'fournisseurs', 'commis', 'responsables', 'administrateurs'*/));
+    }
+
+    public function connexionNEQ()
+    {
+        $fillable = Usager::all();
+        //$fournisseurs = Usager::all()->where('role', 'like', 'fournisseur');
+        //$commis = Usager::all()->where('role', 'like', 'commis');
+        //$responsables = Usager::all()->where('role', 'like', 'responsable');
+        //$administrateurs = Usager::all()->where('role', 'like', 'administrateur');
+
+    return view('Usagers.ConnexionNEQ', compact('fillable'/*, 'fournisseurs', 'commis', 'responsables', 'administrateurs'*/));
     }
 
     /**
@@ -28,7 +43,7 @@ class UsagersController extends Controller
      */
     public function create()
     {
-        //
+        return view('Usagers.Creation');
     }
 
     /**

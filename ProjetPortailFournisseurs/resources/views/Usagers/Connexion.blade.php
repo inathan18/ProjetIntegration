@@ -7,8 +7,8 @@
 <div class="p-3 text-center"> <h1> Frame Connexion </h1></div>
 
     <div class="p-3">
-        <label class="form-label" for="NEQ">NEQ : </label>
-        <input class="form-control" type="text" id="NEQ" name="NEQ">
+        <label class="form-label" for="Courriel">Courriel : </label>
+        <input class="form-control" type="email" id="courriel" name="courriel">
     </div>
 
     <div class="p-3">
@@ -19,9 +19,15 @@
     <button class="btn" style="background-color: rgba(0, 118, 213,0.9); border-color:black;" type="button">
         Connexion
     </button>
-    <a class="nav-link" href="/connexion">
+
+    <button class="btn" style="background-color: rgba(0, 118, 213,0.9); border-color:black;" type="button">
+        Connexion NEQ
+    </button>
+
+    <a class="nav-link" href="{{route('Usagers.creation')}}">
         <button class="btn" style="background-color: rgba(0, 118, 213,0.9); border-color:black;" type="button">
-            Connexion Courriel
+            S'inscrire
         </button>
     </a>
+
 @endsection
