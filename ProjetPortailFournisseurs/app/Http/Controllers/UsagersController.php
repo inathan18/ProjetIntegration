@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\UsagerRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
+
+use App\Models\Usager;
 
 class UsagersController extends Controller
 {
@@ -11,7 +18,9 @@ class UsagersController extends Controller
      */
     public function index()
     {
-        //
+        $usagers = Usager::all();
+
+        return view('Connexion', compact('usagers'));
     }
 
     /**
