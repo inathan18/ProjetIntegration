@@ -17,3 +17,7 @@ Route::get('/connexionNEQ',
 
 Route::get('/CreationCompte', 
 [UsagersController::class, 'create'])->name('Usagers.creation');
+
+Route::get('mailable', function () {
+    return (new App\Notifications\AcceptationFournisseur())->toMail((object) [])->render();
+  });

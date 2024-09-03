@@ -47,12 +47,13 @@
 @isset($actionText)
 <x-slot:subcopy>
 @lang(
-    "If you're having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
-    'into your web browser:',
+    "Si vous avez de la difficulté à cliquer sur le bouton \":actionText\" , copier et coller l'URL ci-dessous\n".
+    'dans votre navigateur web:',
     [
         'actionText' => $actionText,
     ]
 ) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
 </x-slot:subcopy>
 @endisset
+<img src="{{url('images/logo.png')}}" class="logo" alt="Logo"/>
 </x-mail::message>
