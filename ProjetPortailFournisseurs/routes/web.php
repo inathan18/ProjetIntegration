@@ -29,3 +29,6 @@ Route::get('/admin/usagers',
 
 Route::get('/admin/parametres', 
 [AdminsController::class, 'parametres'])->name('Admins.Parametres');
+
+Route::get('/admin/courriel', 
+[AdminsController::class, 'modelesCourriel'])->name('Admins.Courriel');

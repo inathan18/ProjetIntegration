@@ -93,7 +93,7 @@
             <li><a href="{{ route('Admins.Panel') }}"><i class="bi bi-house-door"></i> Accueil</a></li>
             <li><a href="{{ route('Admins.Usagers') }}"><i class="bi bi-people"></i> Utilisateurs</a></li>
             <li><a href="{{ route('Admins.Parametres') }}"><i class="bi bi-gear-fill"></i> Paramètres</a></li>
-            <li><a href=""><i class="bi bi-envelope"></i> Modèles Courriel</a></li>
+            <li><a href="{{ route('Admins.Courriel') }}"><i class="bi bi-envelope"></i> Modèles Courriel</a></li>
         </ul>
     </div>
 
