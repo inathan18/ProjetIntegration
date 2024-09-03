@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fournisseurs', function (Blueprint $table) {
+            $table->id();
             $table->string('name', 100);
             $table->string('address', 100);
             $table->string('city', 100);
@@ -26,11 +27,9 @@ return new class extends Migration
             $table->string('statut', 10);
             $table->string('neq', 100)->unique();
             $table->string('rbq', 100)->nullable();
-            $table->unsignedBigInteger('usager_id');
-            $table->foreign('usager_id', 'personneContact')->references('id')->on('usagers');
+            $table->string('personneContact', 100);
             $table->timestamps();
             $table->string('password', 255);
-            $table->primary(['neq', 'email']);
         });
     }
 

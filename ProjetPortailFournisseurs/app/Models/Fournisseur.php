@@ -10,9 +10,6 @@ use Thiagoprz\EloquentCompositeKey\HasCompositePrimaryKey;
 class Fournisseur extends Authenticatable
 {
     use HasFactory;
-    use HasCompositePrimaryKey;
-    protected $primaryKey = ['neq', 'email'];
-
     protected $table = "fournisseurs";
     protected $fillable = [
         'name',
@@ -28,7 +25,9 @@ class Fournisseur extends Authenticatable
         'files',
         'neq',
         'rbq',
-        'password'
+        'password',
+        'personneContact',
+        'statut'
     ];
 
     protected $hidden = [
@@ -39,6 +38,10 @@ class Fournisseur extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'phone' => 'array',
+        'files' => 'array',
+        'unspsc' => 'array'
+
     ];
 }
 
