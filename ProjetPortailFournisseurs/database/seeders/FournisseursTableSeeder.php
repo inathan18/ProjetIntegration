@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
 class FournisseursTableSeeder extends Seeder
@@ -13,7 +14,7 @@ class FournisseursTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('fournisseurs')-­>insert([
+        DB::table('fournisseurs')->insert([
             'name'=> 'Rona Inc Trois-Rivieres',
             'address' => '4025 Boulevard des Récollets',
             'city' => 'Trois-Rivières',
@@ -30,7 +31,7 @@ class FournisseursTableSeeder extends Seeder
             'password' => Hash::make('rona'),
         ]);
 
-        DB::table('fournisseurs')->­insert([
+        DB::table('fournisseurs')->insert([
             'name'=> 'Ford Canada',
             'address' => '1 The Canadian Road',
             'city' => 'Oakville',
