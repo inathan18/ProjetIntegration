@@ -6,8 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Thiagoprz\EloquentCompositeKey\HasCompositePrimaryKey;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class Fournisseur extends Authenticatable
+class Fournisseur extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
     protected $table = "fournisseurs";
