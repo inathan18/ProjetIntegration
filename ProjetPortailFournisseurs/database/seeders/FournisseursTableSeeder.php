@@ -41,7 +41,7 @@ class FournisseursTableSeeder extends Seeder
             'city' => 'Oakville',
             'province' => 'Ontario',
             'country' => 'Canada',
-            'phone' => json_encode(['18005653673']),
+            'phone' => json_encode(['18005653673', 'Bureau']),
             'postCode' => 'L6J5E4',
             'unspsc' => json_encode(['25101702']),
             'website' => 'ford.ca',
