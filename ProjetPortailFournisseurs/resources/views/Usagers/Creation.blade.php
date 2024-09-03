@@ -1,28 +1,44 @@
 @extends('layouts.app')
 
-@section('titre', "Connexion")
+@section('titre', "Inscription")
 
 @section('contenu')
 
-<div class="p-3 text-center"> <h1> Frame Creation </h1></div>
+
+<div class="p-3 text-center"> <h1> Frame Inscription </h1></div>
+
+<!-- Section Inscription -->
+<form method="post" action="{{route('Usagers.store')}}">
+
+@csrf
 
     <div class="p-3">
-        <label class="form-label" for="NEQ">NEQ : </label>
-        <input class="form-control" type="text" id="NEQ" name="NEQ">
+        <label class="form-label" for="email">Courriel : </label>
+        <input class="form-control" type="email" id="email" name="email">
     </div>
 
     <div class="p-3">
-        <label class="form-label" for="Courriel">Courriel : </label>
-        <input class="form-control" type="email" id="courriel" name="courriel">
+        <label class="form-label" for="role">Role : </label>
+        <input class="form-control" type="role" id="role" name="role">
     </div>
 
-    <div class="p-3">
-        <label class="form-label" for="MotDePasse">Mot de passe : </label>
-        <input class="form-control" type="MotDePasse" id="MotDePasse" name="MotDePasse">
+    <div class="align-items-center text-center">
+
+        <button class="btn" style="background-color: rgba(255,192,203,0.5); border-color: black;" type="submit">
+            S'inscrire
+        </button>
+
     </div>
-.
-    <button class="btn" style="background-color: rgba(0, 118, 213,0.9); border-color:black;" type="button">
-        Creation
-    </button>
+</form>
+
+    <!-- Fin de la Section Inscription -->
+
+    <div class="align-items-center text-center">
+        <a class="btn" href="{{route('ConnexionNEQ')}}" style="background-color: rgba(0, 118, 213,0.9); border-color:black;" type="button">
+            Connexion
+        </a>
+    </div>
+
+
 
 @endsection
