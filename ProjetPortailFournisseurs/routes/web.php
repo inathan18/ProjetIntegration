@@ -27,8 +27,6 @@ Route::post('/inscription',
 
 Route::post('/', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
-Route::get('/CreationCompte', 
-[UsagersController::class, 'create'])->name('Usagers.creation');
 
 
 
