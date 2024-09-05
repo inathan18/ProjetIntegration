@@ -52,6 +52,25 @@ class AdminsController extends Controller
 
         return redirect()->route('Admins.Usagers')->with('new_user_success', 'Le nouvel utilisateur a bien été ajouté');
     }
+
+    public function updateRole(Request $request, $id)
+    {
+        $request->validate([
+            'role' => 'required|string'
+        ]);
+    
+        try {
+            $usager = Usager::findOrFail($id);
+            $usager->role = $request->input('role');
+            $usager->save();
+    
+            return response()->json(['success' => true]);
+    
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    
     
 
     /**
