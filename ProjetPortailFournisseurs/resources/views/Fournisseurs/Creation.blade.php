@@ -12,6 +12,56 @@
 @csrf
 
     <div class="p-3">
+        <label class="form-label" for="name">Nom : </label>
+        <input class="form-control" type="name" id="name" name="name">
+    </div>
+
+    <div class="p-3">
+        <label class="form-label" for="address">Adresse : </label>
+        <input class="form-control" type="address" id="address" name="address">
+    </div>
+
+    <div class="p-3">
+        <label class="form-label" for="city">Ville : </label>
+        <input class="form-control" type="city" id="city" name="city">
+    </div>
+
+    <div class="p-3">
+        <label class="form-label" for="country">Pays : </label>
+        <input class="form-control" type="country" id="country" name="country">
+    </div>
+
+    <div class="p-3">
+        <label class="form-label" for="province">Province : </label>
+        <input class="form-control" type="province" id="province" name="province">
+    </div>
+
+    <div class="p-3">
+        <label class="form-label" for="postCode">Code Postal : </label>
+        <input class="form-control" type="postCode" id="postCode" name="postCode">
+    </div>
+
+    <div class="p-3">
+        <label class="form-label" for="website">Site Web : </label>
+        <input class="form-control" type="website" id="website" name="website">
+    </div>
+
+    <div class="p-3">
+        <label class="form-label" for="statut">Statut : </label>
+        <input class="form-control" type="statut" id="statut" name="statut">
+    </div>
+
+    <div class="p-3">
+        <label class="form-label" for="personneContact">Personne Contact : </label>
+        <input class="form-control" type="personneContact" id="personneContact" name="personneContact">
+    </div>
+
+    <div class="p-3">
+        <label class="form-label" for="neq">NEQ : </label>
+        <input class="form-control" type="neq" id="neq" name="neq">
+    </div>
+
+    <div class="p-3">
         <label class="form-label" for="email">Courriel : </label>
         <input class="form-control" type="email" id="email" name="email">
     </div>
