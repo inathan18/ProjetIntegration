@@ -2,22 +2,23 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsagersController;
+use App\Http\Controllers\FournisseursController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/connexionNEQ', 
-[UsagersController::class, 'connexionNEQ'])->name('ConnexionNEQ');
+[FournisseursController::class, 'connexionNEQ'])->name('Fournisseurs.connexionNEQ');
 
 Route::get('/connexion', 
-[UsagersController::class, 'index'])->name('Connexion');
+[FournisseursController::class, 'index'])->name('Fournisseurs.connexion');
 
 Route::get('/inscription', 
-[UsagersController::class, 'create'])->name('Usagers.creation');
+[FournisseursController::class, 'create'])->name('Fournisseurs.creation');
 
 Route::post('/inscription', 
-[UsagersController::class, 'store'])->name('Usagers.store');
+[FournisseursController::class, 'store'])->name('Fournisseurs.store');
 
 Route::post('/', 
-[UsagersController::class, 'login'])->name('Login');
+[FournisseursController::class, 'login'])->name('Fournisseurs.login');
