@@ -14,27 +14,24 @@ class UsagersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('usagers')->­insert([
+        DB::table('usagers')->insert([
             'id' => 1,
             'email' => 'admin@admin.com',
             'role' => 'admin'
 
         ]);
 
-        DB::table('usagers')->­insert([
+        DB::table('usagers')->insert([
             'id' => 2,
             'email' => 'responsable@responsable.com',
             'role' => 'responsable'
 
         ]);
 
-        DB::table('usagers')->­insert([
+        DB::table('usagers')->insert([
             'id' => 3,
             'email' => 'commis@commis.com',
             'role' => 'commis'
         ]);
-
-
-        
     }
 }

@@ -3,6 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsagersController;
 use App\Http\Controllers\FournisseursController;
+use App\Http\Controllers\AdminsController;
+
+Route::get('/connexion', 
+[UsagersController::class, 'index'])->name('Connexion');
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,3 +27,20 @@ Route::post('/inscription',
 
 Route::post('/', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
+Route::get('/CreationCompte', 
+[UsagersController::class, 'create'])->name('Usagers.creation');
+
+
+
+// Routes admin
+Route::get('/admin', 
+[AdminsController::class, 'index'])->name('Admins.Panel');
+
+Route::get('/admin/usagers', 
+[AdminsController::class, 'gestionUsagers'])->name('Admins.Usagers');
+
+Route::get('/admin/parametres', 
+[AdminsController::class, 'parametres'])->name('Admins.Parametres');
+
+Route::get('/admin/courriel', 
+[AdminsController::class, 'modelesCourriel'])->name('Admins.Courriel');

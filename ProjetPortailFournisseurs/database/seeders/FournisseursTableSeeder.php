@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class FournisseursTableSeeder extends Seeder
 {
@@ -12,38 +14,44 @@ class FournisseursTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('fournisseurs')-­>insert([
+        DB::table('fournisseurs')->insert([
+            'id' => '1',
             'name'=> 'Rona Inc Trois-Rivieres',
             'address' => '4025 Boulevard des Récollets',
             'city' => 'Trois-Rivières',
             'province' => 'Québec',
             'country' => 'Canada',
-            'phone' => '8196930855',
+            'phone' => json_encode(['8196930855', 'Bureau']),
             'postCode' => 'g9a6m1',
-            'unspsc' => '31160000',
+            'unspsc' => json_encode(['31160000']),
             'website' => 'rona.ca',
             'email' => 'rona@rona.ca',
-            'files',
+            'files' => json_encode(['']),
             'neq' => '1171854699',
-            'rbq',
+            'rbq' => '',
             'password' => Hash::make('rona'),
+            'personneContact' => 'Directeur',
+            'statut'=> 'A',
         ]);
 
-        DB::table('fournisseurs')->­insert([
+        DB::table('fournisseurs')->insert([
+            'id' => '2',
             'name'=> 'Ford Canada',
             'address' => '1 The Canadian Road',
             'city' => 'Oakville',
             'province' => 'Ontario',
             'country' => 'Canada',
-            'phone' => '18005653673',
+            'phone' => json_encode(['18005653673', 'Bureau']),
             'postCode' => 'L6J5E4',
-            'unspsc' => '25101702',
+            'unspsc' => json_encode(['25101702']),
             'website' => 'ford.ca',
             'email' => 'ford@ford.ca',
-            'files',
+            'files' => json_encode(['']),
             'neq' => '1146438586',
-            'rbq',
+            'rbq' => '',
             'password' => Hash::make('ford'),
+            'personneContact' => 'Directeur',
+            'statut'=> 'A',
         ]);
 
         
