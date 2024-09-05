@@ -54,6 +54,26 @@ class FournisseursTableSeeder extends Seeder
             'statut'=> 'A',
         ]);
 
+        DB::table('fournisseurs')->insert([
+            'id' => '3',
+            'name'=> 'Test Fournisseur',
+            'address' => 'Test',
+            'city' => 'Trois-Rivieres',
+            'province' => 'Quebec',
+            'country' => 'Canada',
+            'phone' => json_encode(['18005653673', 'Bureau']),
+            'postCode' => 'L6J5E4',
+            'unspsc' => json_encode(['25101702']),
+            'website' => 'ford.ca',
+            'email' => 'nathan.lafreniere@gmail.com',
+            'files' => json_encode(['']),
+            'neq' => '',
+            'rbq' => '',
+            'password' => Hash::make('nathan'),
+            'personneContact' => 'Nathan',
+            'statut'=> 'A',
+        ]);
+
         
     }
 }

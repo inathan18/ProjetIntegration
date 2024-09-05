@@ -14,9 +14,10 @@ class AcceptationFournisseur extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($fournisseur)
     {
         //
+        $this->courriel = $fournisseur;
     }
 
     /**
@@ -26,7 +27,7 @@ class AcceptationFournisseur extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['email'];
     }
 
     /**
@@ -53,4 +54,5 @@ class AcceptationFournisseur extends Notification
             //
         ];
     }
+
 }

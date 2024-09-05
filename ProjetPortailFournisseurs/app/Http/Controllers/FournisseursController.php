@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Fournisseur;
+use App\Notifications\AcceptationFournisseur;
+use App\Http\Controllers\NotificationsController;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Log; 
 
 class FournisseursController extends Controller
 {
@@ -60,5 +67,10 @@ class FournisseursController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function sendAcceptationEmail(Request $fournisseur){
+        Log::debug($fournisseur);
+        Notification::route('smtp', $fournisseur)->notify(new AcceptationFournisseur($fournisseur));
     }
 }

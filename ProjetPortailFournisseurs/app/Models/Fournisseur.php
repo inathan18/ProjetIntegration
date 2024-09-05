@@ -12,6 +12,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class Fournisseur extends Authenticatable implements MustVerifyEmail
 {
+    use Notificable;
+    public function routeNotificationForMail($notification){
+        return $this->email;
+    }
     use HasFactory;
     protected $table = "fournisseurs";
     protected $fillable = [
