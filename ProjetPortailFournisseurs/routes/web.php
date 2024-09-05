@@ -43,6 +43,6 @@ Route::delete('/admin/usagers/{id}',
 [UsagersController::class,'destroy'])->name('Admins.Usager.Supprimer');
 
 Route::put('/admin/usagers/{id}/update-role',
- [AdminController::class, 'updateRole'])->name('Admins.Usager.UpdateRole');
+[AdminsController::class, 'updateRole'])->name('Admins.Usager.UpdateRole');
 
 
