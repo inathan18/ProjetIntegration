@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Usager;
 
 class AdminsController extends Controller
 {
@@ -16,7 +17,8 @@ class AdminsController extends Controller
 
     public function gestionUsagers()
     {
-        return view('Admins.Usagers');
+        $usagers = Usager::all();
+        return view('Admins.Usagers',  ['usagers' => $usagers]);
     }
 
     public function parametres()
@@ -28,6 +30,29 @@ class AdminsController extends Controller
     {
         return view('Admins.Courriel');
     }
+
+    public function createUser()
+    {
+        return view('Admins.ajouterUsager');
+    }
+
+    public function storeUser(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:usagers,email',
+            'role' => 'required',
+        ]);
+        $email = $request->input('email');
+        $role = $request->input('role');
+    
+        $usager = new Usager();
+        $usager->email = $email;
+        $usager->role = $role;
+        $usager->save();
+
+        return redirect()->route('Admins.Usagers')->with('new_user_success', 'Le nouvel utilisateur a bien été ajouté');
+    }
+    
 
     /**
      * Show the form for creating a new resource.
