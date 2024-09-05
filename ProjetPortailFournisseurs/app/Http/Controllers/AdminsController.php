@@ -11,7 +11,22 @@ class AdminsController extends Controller
      */
     public function index()
     {
-        //
+    return view('Admins.Panel');
+    }
+
+    public function gestionUsagers()
+    {
+        return view('Admins.Usagers');
+    }
+
+    public function parametres()
+    {
+        return view ('Admins.Parametres');
+    }
+
+    public function modelesCourriel()
+    {
+        return view('Admins.Courriel');
     }
 
     /**
