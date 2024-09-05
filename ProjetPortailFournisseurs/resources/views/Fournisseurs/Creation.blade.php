@@ -27,8 +27,10 @@
     </div>
 
     <div class="p-3">
-        <label class="form-label" for="country">Pays : </label>
-        <input class="form-control" type="country" id="country" name="country">
+    <label class="form-label" for="city">Pays : </label><br>
+        <select name="countries" class="pays " id="countries">
+            <option value="country">Sélectionnez le pays</option>
+        </select>
     </div>
 
     <div class="p-3">
@@ -91,6 +93,6 @@
         </a>
     </div>
 
-
+    <script src="localisation.js"></script>
 
 @endsection
