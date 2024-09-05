@@ -16,6 +16,13 @@
     </div>
 @endif
 
+@if(session('edit_role_denied'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('edit_role_denied') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 @if(session('new_user_success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('new_user_success') }}
