@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
    
     }).then((data) => {
          let values = data.result.records ;
-         
+
         values.forEach(element => {
             console.log(element.munnom);
         });
