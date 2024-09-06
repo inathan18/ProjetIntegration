@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', ()=> {
 
     const selectDrop = document.querySelector('#city');
+    const selectDrop2 = document.querySelector('#province');
 
     
 
@@ -11,14 +12,19 @@ document.addEventListener('DOMContentLoaded', ()=> {
    
     }).then((data) => {
         let output = ""; 
+        let output2 = ""; 
         let values = data.result.records ;
 
         values.forEach(element => {
-            console.log(element.munnom);
             output += `<option>${element.munnom}</option>`;
         })
 
+        values.forEach(element => {
+            output2 += `<option>${element.regadm}</option>`;
+        })
+
         selectDrop.innerHTML = output;
+        selectDrop2.innerHTML = output2;
     }).catch((err) => {
         console.log(err);
     })

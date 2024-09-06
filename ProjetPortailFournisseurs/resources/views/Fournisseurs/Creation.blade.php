@@ -37,7 +37,9 @@
 
     <div class="p-3">
         <label class="form-label" for="province">Province : </label>
-        <input class="form-control" type="province" id="province" name="province">
+        <select name="province" class="province " id="province">
+            <option value="province">Sélectionnez la province</option>
+        </select>
     </div>
 
     <div class="p-3">
