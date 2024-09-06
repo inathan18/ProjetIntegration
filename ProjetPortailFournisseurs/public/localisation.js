@@ -10,8 +10,11 @@ document.addEventListener('DOMContentLoaded', ()=> {
     return response.json()
    
     }).then((data) => {
-        console.log(data.result.records);
-        
+         let values = data.result.records ;
+         
+        values.forEach(element => {
+            console.log(element.munnom);
+        });
       
     }).catch((err) => {
         console.log(err);
