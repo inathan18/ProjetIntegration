@@ -22,13 +22,15 @@
     </div>
 
     <div class="p-3">
-        <label class="form-label" for="city">Ville : </label>
-        <input class="form-control" type="city" id="city" name="city">
+        <label class="form-label" for="city">Ville : </label><br>
+        <select name="city" class="city " id="city">
+            <option value="city">Sélectionnez la ville</option>
+        </select>
     </div>
 
     <div class="p-3">
-    <label class="form-label" for="city">Pays : </label><br>
-        <select name="countries" class="pays " id="countries">
+    <label class="form-label" for="country">Pays : </label><br>
+        <select name="country" class="country " id="country">
             <option value="country">Sélectionnez le pays</option>
         </select>
     </div>
