@@ -31,7 +31,7 @@
     <div class="p-3">
     <label class="form-label" for="country">Pays : </label><br>
         <select name="country" class="country " id="country">
-            <option value="country">Sélectionnez le pays</option>
+            <option value="Québec">Québec</option>
         </select>
     </div>
 

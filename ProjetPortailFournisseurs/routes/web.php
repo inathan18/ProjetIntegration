@@ -7,15 +7,6 @@ use App\Http\Controllers\UsagersController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
 
-//----------------------- AJAX -----------------------//
-
-Route::get('posts', 
-[PostController::class, 'index']);
-
-Route::post('posts', 
-[PostController::class, 'store'])->name('posts.store');
-
-//----------------------- AJAX -----------------------//
 
 Route::get('/connexion', 
 [UsagersController::class, 'index'])->name('Connexion');
