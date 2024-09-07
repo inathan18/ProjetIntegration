@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', ()=> {
         let output2 = ""; 
         let values = data.result.records ;
 
+        // placer les values de la REGADM dans une array pour voir si ils ont déja passé et ensuite les faire sortir une a une grace a une boucle pour les mettre dans un ordre logique pour le choix
+
         values.forEach(element => {
             output += `<option>${element.munnom}</option>`;
         })
