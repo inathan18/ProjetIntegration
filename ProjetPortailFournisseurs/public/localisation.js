@@ -15,15 +15,34 @@ document.addEventListener('DOMContentLoaded', ()=> {
         let output2 = ""; 
         let values = data.result.records ;
 
+        let regions = [] ;
+
+        let municipalite = [] ;
+
         // placer les values de la REGADM dans une array pour voir si ils ont déja passé et ensuite les faire sortir une a une grace a une boucle pour les mettre dans un ordre logique pour le choix
 
         values.forEach(element => {
-            output += `<option>${element.munnom}</option>`;
+            regions.push(element.regadm);
+            municipalite.push(element.munnom);
         })
 
-        values.forEach(element => {
-            output2 += `<option>${element.regadm}</option>`;
+        regions.sort();
+        
+        function suppressionDuplicats(data){
+            return data.filter((value,index) => data.indexOf(value) === index);
+        }
+
+        suppressionDuplicats(municipalite).forEach(element => {
+            output += `<option>${element}</option>`;
         })
+
+        suppressionDuplicats(regions).forEach(element => {
+            output2 += `<option>${element}</option>`;
+        })
+        
+
+
+        console.log();
 
         selectDrop.innerHTML = output;
         selectDrop2.innerHTML = output2;
