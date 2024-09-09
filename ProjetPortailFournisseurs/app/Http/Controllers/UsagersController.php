@@ -27,17 +27,6 @@ class UsagersController extends Controller
     return view('Usagers.Connexion', compact('usagers'/*, 'fournisseurs', 'commis', 'responsables', 'administrateurs'*/));
     }
 
-    public function connexionNEQ()
-    {
-        $usagers = Usager::all();
-        //$fournisseurs = Usager::all()->where('role', 'like', 'fournisseur');
-        //$commis = Usager::all()->where('role', 'like', 'commis');
-        //$responsables = Usager::all()->where('role', 'like', 'responsable');
-        //$administrateurs = Usager::all()->where('role', 'like', 'administrateur');
-
-    return view('Usagers.ConnexionNEQ', compact('usagers'/*, 'fournisseurs', 'commis', 'responsables', 'administrateurs'*/));
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -55,7 +44,7 @@ class UsagersController extends Controller
             return redirect()->route('/')->with('message', "Connexion réussi");
         }
         else{
-            return redirect()->route('Login')->withErrors(['Informations invalides']);
+            return redirect()->route('Usagers.login')->withErrors(['Informations invalides']);
         }
     }
 
@@ -73,7 +62,7 @@ class UsagersController extends Controller
             catch (\Throwable $e) {
                 Log::debug($e);
             }
-            return redirect()->route('Login');
+            return redirect()->route('Usagers.login');
     }
 
     /**

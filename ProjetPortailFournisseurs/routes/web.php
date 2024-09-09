@@ -7,13 +7,19 @@ use App\Http\Controllers\UsagersController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
 
+// Route pour Usagers
 
-Route::get('/connexion', 
-[UsagersController::class, 'index'])->name('Connexion');
+Route::get('/connexionUsagers', 
+[UsagersController::class, 'index'])->name('Usagers.connexion');
+
+Route::post('/LoginUsagers', 
+[UsagersController::class, 'login'])->name('Usagers.login');
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Routes pour fournisseurs
 
 Route::get('/connexionNEQ', 
 [FournisseursController::class, 'connexionNEQ'])->name('Fournisseurs.connexionNEQ');
@@ -27,7 +33,7 @@ Route::get('/inscription',
 Route::post('/inscription', 
 [FournisseursController::class, 'store'])->name('Fournisseurs.store');
 
-Route::post('/', 
+Route::post('/loginFournisseur', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
 
 
