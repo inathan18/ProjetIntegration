@@ -33,6 +33,8 @@ class Fournisseur extends Authenticatable implements MustVerifyEmail
         'neq',
         'rbq',
         'password',
+        'raisonRefus',
+        'is_email_verified',
         'personneContact',
         'statut'
     ];
@@ -48,7 +50,8 @@ class Fournisseur extends Authenticatable implements MustVerifyEmail
         'phone' => 'array',
         'files' => 'array',
         'unspsc' => 'array',
-        'raisonRefus' => 'encrypted'
+        'raisonRefus' => 'encrypted',
+        'email_verified_at' => 'datetime',
 
     ];
 

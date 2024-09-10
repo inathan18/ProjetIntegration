@@ -54,14 +54,6 @@ Route::put('/admin/usagers/{id}/update-role',
 [AdminsController::class, 'updateRole'])->name('Admins.Usager.UpdateRole');
 
 //Email Verification
-Route::get('/mail/verify', function(){
-  return view('auth.verify');
-})->middleware('auth')->name('verification.notice');
-
-Route::get('/mail/verify/{id}/{hash}', function(EmailVerificationRequest $r){
-  $r->fulfill();
-
-  return redirect('/accueil');
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
+Route::get('dashboard', [FournisseursController::class, 'dashboard'])->middleware(['auth', 'is_verify_email']);
+Route::get('compte/verify/{token}', [FournisseursController::class, 'verifyAccount'])->name('fournisseur.verify');
 ?>
