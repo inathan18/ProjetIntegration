@@ -9,7 +9,7 @@ use App\Http\Controllers\NotificationsController;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\Log;
 
 class FournisseursController extends Controller
 {

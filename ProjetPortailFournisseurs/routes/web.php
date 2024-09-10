@@ -5,6 +5,7 @@ use App\Http\Controllers\UsagersController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/connexion', 
 [UsagersController::class, 'index'])->name('Connexion');
@@ -51,5 +52,16 @@ Route::delete('/admin/usagers/{id}',
 
 Route::put('/admin/usagers/{id}/update-role',
 [AdminsController::class, 'updateRole'])->name('Admins.Usager.UpdateRole');
+
+//Email Verification
+Route::get('/mail/verify', function(){
+  return view('auth.verify');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/mail/verify/{id}/{hash}', function(EmailVerificationRequest $r){
+  $r->fulfill();
+
+  return redirect('/accueil');
+})->middleware(['auth', 'signed'])->name('verification.verify');
 
 ?>

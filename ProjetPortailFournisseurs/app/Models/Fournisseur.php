@@ -51,6 +51,8 @@ class Fournisseur extends Authenticatable implements MustVerifyEmail
         'raisonRefus' => 'encrypted'
 
     ];
+
+    
 }
 
 
