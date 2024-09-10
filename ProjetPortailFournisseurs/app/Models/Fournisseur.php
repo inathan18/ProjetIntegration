@@ -40,7 +40,8 @@ class Fournisseur extends Authenticatable
         'password' => 'hashed',
         'phone' => 'array',
         'files' => 'array',
-        'unspsc' => 'array'
+        'unspsc' => 'array',
+        'raisonRefus' => 'encrypted'
 
     ];
 }
