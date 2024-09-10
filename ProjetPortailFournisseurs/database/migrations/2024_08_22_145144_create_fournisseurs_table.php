@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('rbq', 100)->nullable();
             $table->string('personneContact', 100);
             $table->timestamps();
+            $table->string('raisonRefus', 255);
             $table->string('password', 255);
         });
     }

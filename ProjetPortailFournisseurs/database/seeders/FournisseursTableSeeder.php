@@ -30,6 +30,7 @@ class FournisseursTableSeeder extends Seeder
             'neq' => '1171854699',
             'rbq' => '',
             'password' => Hash::make('rona'),
+            'raisonRefus' => '',
             'personneContact' => 'Directeur',
             'statut'=> 'A',
         ]);
@@ -50,6 +51,7 @@ class FournisseursTableSeeder extends Seeder
             'neq' => '1146438586',
             'rbq' => '',
             'password' => Hash::make('ford'),
+            'raisonRefus' => '',
             'personneContact' => 'Directeur',
             'statut'=> 'A',
         ]);
@@ -70,6 +72,7 @@ class FournisseursTableSeeder extends Seeder
             'neq' => '',
             'rbq' => '',
             'password' => Hash::make('nathan'),
+            'raisonRefus' => '',
             'personneContact' => 'Nathan',
             'statut'=> 'A',
         ]);
