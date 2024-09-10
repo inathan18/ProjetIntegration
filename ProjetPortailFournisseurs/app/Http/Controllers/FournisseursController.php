@@ -73,4 +73,6 @@ class FournisseursController extends Controller
         Log::debug($fournisseur);
         Notification::route('smtp', $fournisseur)->notify(new AcceptationFournisseur($fournisseur));
     }
+
+
 }
