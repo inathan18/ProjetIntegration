@@ -6,7 +6,6 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UsagersController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\NotificationsController;
-use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 

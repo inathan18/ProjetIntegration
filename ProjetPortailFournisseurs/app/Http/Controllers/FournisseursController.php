@@ -19,12 +19,6 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\FournisseursRequest;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Log;
-
-use App\Models\Fournisseur;
 
 class FournisseursController extends Controller
 {
