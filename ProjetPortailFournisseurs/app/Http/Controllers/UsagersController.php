@@ -37,7 +37,7 @@ class UsagersController extends Controller
 
     public function login(Request $request)
     {
-        $reussi = (auth()->guard('usager')->attempt(['email' => $request->email, 'password' => $request->password]));
+        $reussi = (auth()->guard('usager')->attempt(['email' => $request->email]));
         Log::debug(''.$reussi);
 
         if($reussi){
