@@ -8,25 +8,23 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
-
 use App\Models\Fournisseur;
 
 class FournisseursController extends Controller
 {
-
     /* renvois la page principale pour les Fournisseurs */
     public function index()
     {
         $fournisseurs = Fournisseur::all();
 
-    return view('Fournisseurs.Connexion', compact('fournisseurs'));
+        return view('Fournisseurs.Connexion', compact('fournisseurs'));
     }
 
     public function accueil()
     {
         $fournisseurs = Fournisseur::all();
 
-    return view('Fournisseurs.Accueil', compact('fournisseurs'));
+        return view('Fournisseurs.Accueil', compact('fournisseurs'));
     }
 
     /* renvois la page de connexion avec le NEQ pour les Fournisseurs */
@@ -34,7 +32,7 @@ class FournisseursController extends Controller
     {
         $fournisseurs = Fournisseur::all();
 
-    return view('Fournisseurs.ConnexionNEQ', compact('fournisseurs' /*,'commis', 'responsables', 'administrateurs'*/));
+        return view('Fournisseurs.ConnexionNEQ', compact('fournisseurs' /*,'commis', 'responsables', 'administrateurs'*/));
     }
 
     /* renvois le formulaire de création de compte Fournisseur */
@@ -49,11 +47,10 @@ class FournisseursController extends Controller
         $reussi = (auth()->guard('fournisseur')->attempt(['email' => $request->email, 'password' => $request->password]));
         Log::debug(''.$reussi);
 
-        if($reussi){
+        if ($reussi) {
             $fournisseur = Fournisseur::Where('email', $request->email)->firstOrFail();
             return redirect()->route('Fournisseurs.accueil')->with('message', "Connexion réussi");
-        }
-        else{
+        } else {
             return redirect()->route('Fournisseurs.login')->withErrors(['Informations invalides']);
         }
     }
@@ -65,16 +62,14 @@ class FournisseursController extends Controller
             $fournisseurs = new Fournisseur($request->all());
             Log::debug($fournisseurs);
             $fournisseurs->save();
-            }
-                
-            catch (\Throwable $e) {
-                Log::debug($e);
-                return redirect()->route('Fournisseurs.login');
-            }
+        } catch (\Throwable $e) {
+            Log::debug($e);
             return redirect()->route('Fournisseurs.login');
+        }
+        return redirect()->route('Fournisseurs.login');
     }
 
-    
+
 
     /**
      * Display the specified resource.
