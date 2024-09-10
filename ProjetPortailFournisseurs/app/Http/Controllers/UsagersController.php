@@ -94,6 +94,33 @@ class UsagersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $usager = Usager::find($id);
+        if (!$usager) 
+        {
+            return redirect()->back()->with(['delete_user_denied' => 'Utilisateur non trouvé!']);
+        }
+
+        // Vérification nombre d'admins
+        if ($usager->role == 'administrateur') 
+        {
+            $adminCount = Usager::where('role', 'administrateur')->count();
+            if ($adminCount <= 2) 
+            {
+                return redirect()->back()->with(['delete_user_denied' => 'Impossible de supprimer! Il doit toujours y avoir au moins 2 administrateurs.']);
+            }
+        }
+
+        // Vérification nombre de responsables
+        if ($usager->role == 'responsable') 
+        {
+            $responsableCount = Usager::where('role', 'responsable')->count();
+            if ($responsableCount <= 1) 
+            {
+                return redirect()->back()->with(['delete_user_denied' => 'Impossible de supprimer! Il doit y avoir au moins un responsable.']);
+            }
+        }
+
+        $usager->delete();
+        return redirect()->back()->with(['delete_user' => 'Suppression réussie']);
     }
 }
