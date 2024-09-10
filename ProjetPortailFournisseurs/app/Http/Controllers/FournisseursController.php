@@ -142,7 +142,7 @@ class FournisseursController extends Controller
     return redirect('dashboard')->withSuccess('');
    }
 
-   public function verifyAccpunt($token): RedirectResponse
+   public function verifyAccount($token): RedirectResponse
    {
     $verifyFournisseur = FournisseurVerify::where('token', $token)->first();
 
