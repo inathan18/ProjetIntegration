@@ -20,7 +20,7 @@
                     <div class="mb-3">
                         <label for="role" class="form-label">Rôle</label>
                         <select name="role" id="role" class="form-select">
-                            <option value="admin">Administrateur</option>
+                            <option value="administrateur">Administrateur</option>
                             <option value="commis">Commis</option>
                             <option value="responsable">Responsable</option>
                         </select>
