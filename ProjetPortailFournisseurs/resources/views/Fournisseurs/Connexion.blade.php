@@ -10,8 +10,8 @@
     @csrf
 
         <div class="p-3">
-            <label class="form-label" for="Courriel">Courriel : </label>
-            <input class="form-control" type="email" id="courriel" name="courriel">
+            <label class="form-label" for="email">Courriel : </label>
+            <input class="form-control" type="email" id="email" name="email">
         </div>
 
         <div class="p-3">

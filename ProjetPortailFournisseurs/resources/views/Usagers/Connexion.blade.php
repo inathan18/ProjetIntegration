@@ -6,12 +6,17 @@
 
 <div class="p-3 text-center"> <h1> Frame Connexion </h1></div>
 
-    <form method="post" action="{{route('Usagers.login')}}">
+    <form method="POST" action="{{route('Usagers.login')}}">
     @csrf
 
         <div class="p-3">
             <label class="form-label" for="email">Courriel : </label>
             <input class="form-control" type="email" id="email" name="email">
+        </div>
+
+        <div class="p-3">
+            <label class="form-label" for="password">Mot de Passe : </label>
+            <input class="form-control" type="password" id="password" name="password">
         </div>
 
         <div class="align-items-center text-center">

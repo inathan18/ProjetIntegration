@@ -15,11 +15,16 @@ Route::get('/connexionUsagers',
 Route::post('/LoginUsagers', 
 [UsagersController::class, 'login'])->name('Usagers.login');
 
+
+
 Route::get('/', function () {
     return view('welcome');
 });
 
 // Routes pour fournisseurs
+
+Route::get('/Accueil', 
+[FournisseursController::class, 'accueil'])->name('Fournisseurs.accueil');
 
 Route::get('/connexionNEQ', 
 [FournisseursController::class, 'connexionNEQ'])->name('Fournisseurs.connexionNEQ');

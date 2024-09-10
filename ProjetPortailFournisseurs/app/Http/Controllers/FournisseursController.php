@@ -19,7 +19,14 @@ class FournisseursController extends Controller
     {
         $fournisseurs = Fournisseur::all();
 
-    return view('Fournisseurs.Connexion', compact('fournisseurs' /*,'commis', 'responsables', 'administrateurs'*/));
+    return view('Fournisseurs.Connexion', compact('fournisseurs'));
+    }
+
+    public function accueil()
+    {
+        $fournisseurs = Fournisseur::all();
+
+    return view('Fournisseurs.Accueil', compact('fournisseurs'));
     }
 
     /* renvois la page de connexion avec le NEQ pour les Fournisseurs */
@@ -39,11 +46,12 @@ class FournisseursController extends Controller
     /* Fonction utilisé pour connecter le Fournisseur a son compte */
     public function login(Request $request)
     {
-        $reussi = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
+        $reussi = (auth()->guard('fournisseur')->attempt(['email' => $request->email, 'password' => $request->password]));
         Log::debug(''.$reussi);
 
         if($reussi){
-            return redirect()->route('/')->with('message', "Connexion réussi");
+            $fournisseur = Fournisseur::Where('email', $request->email)->firstOrFail();
+            return redirect()->route('Fournisseurs.accueil')->with('message', "Connexion réussi");
         }
         else{
             return redirect()->route('Fournisseurs.login')->withErrors(['Informations invalides']);

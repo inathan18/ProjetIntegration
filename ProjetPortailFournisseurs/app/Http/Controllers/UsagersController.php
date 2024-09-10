@@ -37,11 +37,11 @@ class UsagersController extends Controller
 
     public function login(Request $request)
     {
-        $reussi = Auth::attempt(['email' => $request->email]);
+        $reussi = (auth()->guard('usager')->attempt(['email' => $request->email, 'password' => $request->password]));
         Log::debug(''.$reussi);
 
         if($reussi){
-            return redirect()->route('/')->with('message', "Connexion réussi");
+            return redirect()->route('Fournisseurs.accueil')->with('message', "Connexion réussi");
         }
         else{
             return redirect()->route('Usagers.login')->withErrors(['Informations invalides']);
