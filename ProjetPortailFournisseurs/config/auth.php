@@ -36,9 +36,14 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'fournisseur' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'fournisseur',
+        ],
+
+        'usager' => [
+            'driver' => 'session',
+            'provider' => 'usager',
         ],
     ],
 
@@ -60,15 +65,15 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'fournisseur' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', App\Models\Fournisseur::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+         'usager' => [
+             'driver' => 'eloquent',
+             'model' => env('AUTH_MODEL', App\Models\Usager::class),
+         ],
     ],
 
     /*

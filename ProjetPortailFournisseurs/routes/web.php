@@ -1,22 +1,45 @@
 <?php
-
+  
 use Illuminate\Support\Facades\Route;
+  
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UsagersController;
+use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
 
-Route::get('/connexion', 
-[UsagersController::class, 'index'])->name('Connexion');
+// Route pour Usagers
+
+Route::get('/connexionUsagers', 
+[UsagersController::class, 'index'])->name('Usagers.connexion');
+
+Route::post('/LoginUsagers', 
+[UsagersController::class, 'login'])->name('Usagers.login');
+
 
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/connexionNEQ', 
-[UsagersController::class, 'connexionNEQ'])->name('ConnexionNEQ');
+// Routes pour fournisseurs
 
-Route::get('/CreationCompte', 
-[UsagersController::class, 'create'])->name('Usagers.creation');
+Route::get('/Accueil', 
+[FournisseursController::class, 'accueil'])->name('Fournisseurs.accueil');
+
+Route::get('/connexionNEQ', 
+[FournisseursController::class, 'connexionNEQ'])->name('Fournisseurs.connexionNEQ');
+
+Route::get('/connexion', 
+[FournisseursController::class, 'index'])->name('Fournisseurs.connexion');
+
+Route::get('/inscription', 
+[FournisseursController::class, 'create'])->name('Fournisseurs.creation');
+
+Route::post('/inscription', 
+[FournisseursController::class, 'store'])->name('Fournisseurs.store');
+
+Route::post('/loginFournisseur', 
+[FournisseursController::class, 'login'])->name('Fournisseurs.login');
 
 
 
@@ -44,5 +67,4 @@ Route::delete('/admin/usagers/{id}',
 
 Route::put('/admin/usagers/{id}/update-role',
 [AdminsController::class, 'updateRole'])->name('Admins.Usager.UpdateRole');
-
 
