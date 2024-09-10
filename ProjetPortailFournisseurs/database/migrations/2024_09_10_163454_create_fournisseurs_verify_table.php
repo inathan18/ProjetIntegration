@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fournisseurs_verify', function (Blueprint $table) {
-            $table->id();
+            $table->integer('fournisseur_id');
+            $table->string('token');
             $table->timestamps();
+        });
+
+        Schema::table('fournisseurs', function (Blueprint $table){
+            $table->boolean('is_email_verified')->default(0);
         });
     }
 
