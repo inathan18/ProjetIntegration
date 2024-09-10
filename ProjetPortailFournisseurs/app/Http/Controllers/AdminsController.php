@@ -58,38 +58,40 @@ class AdminsController extends Controller
         $request->validate([
             'role' => 'required|string'
         ]);
-    
+
         try {
             $usager = Usager::findOrFail($id);
-            
+
             $oldRole = $usager->role;
             $newRole = $request->input('role');
-    
+
             // Vérification nombre d'administrateurs
-            if ($oldRole == 'admin' && $newRole != 'admin') {
-                $adminCount = Usager::where('role', 'admin')->count();
-                if ($adminCount <= 2) {
-                    return response()->json(['success' => false, 'message' => 'Impossible de modifier! Il doit toujours y avoir au moins 2 administrateurs.'], 400);
+            if ($oldRole == 'administrateur' && $newRole != 'administrateur') {
+                $adminCount = Usager::where('role', 'administrateur')->where('id', '!=', $usager->id)->count();
+                if ($adminCount < 2) {
+                    return response()->json(['success' => false, 'message' => 'Impossible de modifier! Il doit toujours y avoir 2 administrateurs.'], 400);
                 }
             }
-    
+
             // Vérification nombre de responsables
             if ($oldRole == 'responsable' && $newRole != 'responsable') {
-                $responsableCount = Usager::where('role', 'responsable')->count();
-                if ($responsableCount <= 1) {
+                $responsableCount = Usager::where('role', 'responsable')->where('id', '!=', $usager->id)->count();
+                if ($responsableCount < 1) {
                     return response()->json(['success' => false, 'message' => 'Impossible de modifier! Il doit y avoir au moins un responsable.'], 400);
                 }
             }
-    
+
+            // Mise à jour du rôle
             $usager->role = $newRole;
             $usager->save();
-    
+
             return response()->json(['success' => true]);
-    
+
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
+
     
     
     

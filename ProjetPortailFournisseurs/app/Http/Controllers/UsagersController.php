@@ -90,9 +90,9 @@ class UsagersController extends Controller
         }
 
         // Vérification nombre d'admins
-        if ($usager->role == 'admin') 
+        if ($usager->role == 'administrateur') 
         {
-            $adminCount = Usager::where('role', 'admin')->count();
+            $adminCount = Usager::where('role', 'administrateur')->count();
             if ($adminCount <= 2) 
             {
                 return redirect()->back()->with(['delete_user_denied' => 'Impossible de supprimer! Il doit toujours y avoir au moins 2 administrateurs.']);
