@@ -24,6 +24,8 @@ Route::get('/', function () {
 });
 
 // Routes pour fournisseurs
+Route::get('/connexion',
+[FournisseursController::class, 'index'])->name('Fournisseurs.connexion');
 
 Route::get('/Accueil', 
 [FournisseursController::class, 'accueil'])->name('Fournisseurs.accueil');
@@ -31,8 +33,11 @@ Route::get('/Accueil',
 Route::get('/connexionNEQ', 
 [FournisseursController::class, 'connexionNEQ'])->name('Fournisseurs.connexionNEQ');
 
-Route::get('/CreationCompte', 
-[UsagersController::class, 'create'])->name('Usagers.creation');
+Route::get('/inscription',
+[FournisseursController::class, 'create'])->name('Fournisseurs.creation');
+
+Route::post('/loginFournisseur',
+[FournisseursController::class, 'login'])->name('Fournisseurs.login');
 
 Route::get('mailable', function () {
     return (new App\Notifications\AcceptationFournisseur())->toMail((object) [])->render();

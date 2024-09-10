@@ -12,7 +12,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class Fournisseur extends Authenticatable implements MustVerifyEmail
 {
-    use Notificable;
+    use Notifiable;
     public function routeNotificationForMail($notification){
         return $this->email;
     }
