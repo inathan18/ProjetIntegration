@@ -18,24 +18,13 @@ class UsagersController extends Controller
      */
     public function index()
     {
-        $fillable = Usager::all();
+        $usagers = Usager::all();
         //$fournisseurs = Usager::all()->where('role', 'like', 'fournisseur');
         //$commis = Usager::all()->where('role', 'like', 'commis');
         //$responsables = Usager::all()->where('role', 'like', 'responsable');
         //$administrateurs = Usager::all()->where('role', 'like', 'administrateur');
 
-    return view('Usagers.Connexion', compact('fillable'/*, 'fournisseurs', 'commis', 'responsables', 'administrateurs'*/));
-    }
-
-    public function connexionNEQ()
-    {
-        $fillable = Usager::all();
-        //$fournisseurs = Usager::all()->where('role', 'like', 'fournisseur');
-        //$commis = Usager::all()->where('role', 'like', 'commis');
-        //$responsables = Usager::all()->where('role', 'like', 'responsable');
-        //$administrateurs = Usager::all()->where('role', 'like', 'administrateur');
-
-    return view('Usagers.ConnexionNEQ', compact('fillable'/*, 'fournisseurs', 'commis', 'responsables', 'administrateurs'*/));
+    return view('Usagers.Connexion', compact('usagers'/*, 'fournisseurs', 'commis', 'responsables', 'administrateurs'*/));
     }
 
     /**
@@ -46,12 +35,34 @@ class UsagersController extends Controller
         return view('Usagers.Creation');
     }
 
+    public function login(Request $request)
+    {
+        $reussi = (auth()->guard('usager')->attempt(['email' => $request->email]));
+        Log::debug(''.$reussi);
+
+        if($reussi){
+            return redirect()->route('Fournisseurs.accueil')->with('message', "Connexion réussi");
+        }
+        else{
+            return redirect()->route('Usagers.login')->withErrors(['Informations invalides']);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $usagers = new Usager($request->all());
+            Log::debug($usagers);
+            $usagers->save();
+            }
+                
+            catch (\Throwable $e) {
+                Log::debug($e);
+            }
+            return redirect()->route('Usagers.login');
     }
 
     /**

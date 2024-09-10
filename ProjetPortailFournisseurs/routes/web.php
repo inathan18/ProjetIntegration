@@ -1,22 +1,36 @@
 <?php
-
+  
 use Illuminate\Support\Facades\Route;
+  
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UsagersController;
+use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
-Route::get('/connexion', 
-[UsagersController::class, 'index'])->name('Connexion');
+// Route pour Usagers
+
+Route::get('/connexionUsagers', 
+[UsagersController::class, 'index'])->name('Usagers.connexion');
+
+Route::post('/LoginUsagers', 
+[UsagersController::class, 'login'])->name('Usagers.login');
+
 
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Routes pour fournisseurs
+
+Route::get('/Accueil', 
+[FournisseursController::class, 'accueil'])->name('Fournisseurs.accueil');
+
 Route::get('/connexionNEQ', 
-[UsagersController::class, 'connexionNEQ'])->name('ConnexionNEQ');
+[FournisseursController::class, 'connexionNEQ'])->name('Fournisseurs.connexionNEQ');
 
 Route::get('/CreationCompte', 
 [UsagersController::class, 'create'])->name('Usagers.creation');
@@ -52,7 +66,6 @@ Route::delete('/admin/usagers/{id}',
 
 Route::put('/admin/usagers/{id}/update-role',
 [AdminsController::class, 'updateRole'])->name('Admins.Usager.UpdateRole');
-
 //Email Verification
 Route::get('dashboard', [FournisseursController::class, 'dashboard'])->middleware(['auth', 'is_verify_email']);
 Route::get('compte/verify/{token}', [FournisseursController::class, 'verifyAccount'])->name('fournisseur.verify');
