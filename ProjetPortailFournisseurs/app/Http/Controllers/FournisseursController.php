@@ -22,12 +22,15 @@ class FournisseursController extends Controller
     return view('Fournisseurs.Connexion', compact('fournisseurs'));
     }
 
+
     public function accueil()
     {
         $fournisseurs = Fournisseur::all();
+        $fournisseur_actuel = auth()->guard('fournisseur')->user();
 
-    return view('Fournisseurs.Accueil', compact('fournisseurs'));
+    return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel'));
     }
+
 
     /* renvois la page de connexion avec le NEQ pour les Fournisseurs */
     public function connexionNEQ()
@@ -37,11 +40,22 @@ class FournisseursController extends Controller
     return view('Fournisseurs.ConnexionNEQ', compact('fournisseurs' /*,'commis', 'responsables', 'administrateurs'*/));
     }
 
+
+    public function statut()
+    {
+        $fournisseurs = Fournisseur::all();
+        $fournisseur_actuel = auth()->guard('fournisseur')->user();
+        
+        return view('Fournisseurs.statut', compact('fournisseurs', 'fournisseur_actuel'));
+    }
+
+
     /* renvois le formulaire de création de compte Fournisseur */
     public function create()
     {
         return view('Fournisseurs.Creation');
     }
+
 
     /* Fonction utilisé pour connecter le Fournisseur a son compte */
     public function login(Request $request)

@@ -27,6 +27,7 @@ class UsagersController extends Controller
     return view('Usagers.Connexion', compact('usagers'/*, 'fournisseurs', 'commis', 'responsables', 'administrateurs'*/));
     }
 
+    
     /**
      * Show the form for creating a new resource.
      */
