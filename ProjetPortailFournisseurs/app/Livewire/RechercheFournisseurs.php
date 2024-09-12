@@ -1,18 +1,51 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Models\Supplier;
 
-class RechercheFournisseurs extends Component
+class SupplierList extends Component
 {
-    public $search = '';
+    public $filter = [
+        'attente' => false,
+        'accepte' => false,
+        'refuse' => false, 
+        'reviser' => false,
+        'service' => '',
+        'categorie' => '',
+        'region' => [],
+        'ville' => []
+    ];
+    public $fournisseursSelectionnes = [];
+
+    public function recherche()
+    {
+        
+    }
+
+    public function exporterSelection()
+    {
+        
+    }
+
     public function render()
     {
-        $fournisseurs = Fournisseur::where('name', 'like', '%' . $this->search . '%')
-                                ->orWhere('email', 'like', '%' . $this->search . '%')
-                                ->orWhere('neq', 'like', '%' . $this->search . '%')
-                                ->get();
-        return view('livewire.recherche-fournisseurs', ['fournisseurs' => $fournisseurs]);
+        $fournisseurs = Fournisseur::query();
+
+        if ($this->filter['AT']) {
+            $fournisseurs->where('statut', 'AT');
+        }
+        if ($this->filter['A']) {
+            $fournisseurs->where('statut', 'A');
+        }
+        if ($this->filter['R']) {
+            $fournisseurs->where('statut', 'R');
+        }
+        if ($this->filter['RE']) {
+            $fournisseurs->where('statut', 'RE');
+        }
+
+        return view('GestionFournisseurs.index', ['fournisseurs' => $fournisseurs->get()]);
     }
 }

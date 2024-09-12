@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UsagersController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
+use App\Http\Controllers\ResponsablesController;
 
 // Route pour Usagers
 
@@ -43,7 +44,8 @@ Route::post('/loginFournisseur',
 
 // Routes pour responsables
 
-
+Route::get('/Dossiers', 
+[ResponsablesController::class, 'index'])->name('GestionFournisseurs.index');
 
 // Routes admin
 Route::get('/admin', 

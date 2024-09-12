@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Fournisseur;
 
 class ResponsablesController extends Controller
 {
@@ -11,7 +12,8 @@ class ResponsablesController extends Controller
      */
     public function index()
     {
-        //
+        $fournisseurs = Fournisseur::all();
+        return view('GestionFournisseurs.index',  ['fournisseurs' => $fournisseurs]);
     }
 
     /**
