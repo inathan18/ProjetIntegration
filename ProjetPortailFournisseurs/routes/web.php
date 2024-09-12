@@ -29,6 +29,9 @@ Route::get('/fournisseur/accueil',
 Route::get('/fournisseur/statut', 
 [FournisseursController::class, 'statut'])->name('Fournisseurs.statut');
 
+Route::get('/fournisseur/edit', 
+[FournisseursController::class, 'edit'])->name('Fournisseurs.edit');
+
 Route::get('/fournisseur/connexionNEQ', 
 [FournisseursController::class, 'connexionNEQ'])->name('Fournisseurs.connexionNEQ');
 

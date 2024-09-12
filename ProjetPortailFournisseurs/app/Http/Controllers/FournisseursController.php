@@ -95,7 +95,7 @@ class FournisseursController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
@@ -103,7 +103,9 @@ class FournisseursController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $fournisseur = auth()->guard('fournisseur')->user();
+
+        return view('fournisseur.Modification', compact('fournisseur'));
     }
 
     /**
@@ -111,7 +113,22 @@ class FournisseursController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try
+        {
+
+            $fournisseur->update([
+                'name' => $request->name,
+                'password' => Hash::make($request->password),
+
+            ]);
+
+            return redirect()->route('fournisseur.accueil')->with('message', "Modification de " . $usager->nom . " réussi!");
+        }
+        catch(\Throwable $e)
+        {
+            Log::debug($e);
+            return redirect()->route('fournisseur.accueil')->withErrors(["la modification n'a pas fonctionné"]);
+        }
     }
 
     /**
