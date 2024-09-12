@@ -41,6 +41,8 @@ Route::post('/inscription',
 Route::post('/loginFournisseur', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
 
+// Routes pour responsables
+
 
 
 // Routes admin
