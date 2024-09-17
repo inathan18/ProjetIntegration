@@ -47,6 +47,15 @@ Route::post('/fournisseur/inscription',
 Route::post('/loginFournisseur', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
 
+Route::get('/fournisseur/monDossier', 
+[FournisseursController::class, 'show'])->name('Fournisseurs.dossier');
+
+Route::get('/fournisseur/modification', 
+[FournisseursController::class, 'edit'])->name('Fournisseurs.edit');
+
+Route::patch('/fournisseur/{fournisseur}/modification', 
+[FournisseursController::class, 'update'])->name('Fournisseurs.update');
+
 
 
 // Routes admin

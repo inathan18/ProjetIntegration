@@ -93,41 +93,56 @@ class FournisseursController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        
+
+        $fournisseur_actuel = auth()->guard('fournisseur')->user();
+
+        $telephone = json_decode($fournisseur_actuel->phone[0], true);
+
+        $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
+
+
+        return view('Fournisseurs.MonDossier', compact('fournisseur_actuel', 'telephone', 'unspsc'));
+
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit()
     {
         $fournisseur = auth()->guard('fournisseur')->user();
 
-        return view('fournisseur.Modification', compact('fournisseur'));
+        $telephone = json_decode($fournisseur->phone[0], true);
+
+        $unspsc = json_decode($fournisseur->unspsc[0], true);
+
+
+        return view('Fournisseurs.Modification', compact('fournisseur', 'telephone', 'unspsc'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Fournisseur $fournisseur)
     {
         try
         {
 
             $fournisseur->update([
-                'name' => $request->name,
-                'password' => Hash::make($request->password),
+                'personneContact' => $request->personneContact,
+                'website' => $request->website,
 
             ]);
 
-            return redirect()->route('fournisseur.accueil')->with('message', "Modification de " . $usager->nom . " réussi!");
+            return redirect()->route('fournisseur.accueil')->with('message', "Modification de " . $fournisseur->name . " réussi!");
         }
         catch(\Throwable $e)
         {
             Log::debug($e);
-            return redirect()->route('fournisseur.accueil')->withErrors(["la modification n'a pas fonctionné"]);
+            return redirect()->route('Fournisseurs.dossier')->withErrors(["la modification n'a pas fonctionné"]);
         }
     }
 

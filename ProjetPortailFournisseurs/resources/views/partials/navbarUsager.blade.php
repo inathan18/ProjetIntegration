@@ -9,7 +9,7 @@
         <a class="nav-link" href="{{route('Fournisseurs.statut')}}">Statut</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Mes documents</a>
+        <a class="nav-link" href="{{route('Fournisseurs.dossier')}}">Mes documents</a>
       </li>
     </ul>
   </div>
