@@ -2,7 +2,7 @@
     <input
         type="text"
         class="form-input w-full"
-        placeholder="Search Contacts..."
+        placeholder="Search"
         wire:model="search"
     />
 
@@ -24,7 +24,7 @@
                             <a
                                 href="https://www.google.com"
                                 class="padding-top-5 list-item {{ $highlightIndex === $i ? 'highlight' : '' }}"
-                            >{{ $unspsc['id'] }} - {{ $unspsc['title'] }}</a>
+                            >{{ $unspsc['Id'] }} - {{ $unspsc['Title'] }}</a>
                         </li>
                     @endforeach
                 </ul>
