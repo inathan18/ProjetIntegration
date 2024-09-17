@@ -3,49 +3,40 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\Supplier;
+use App\Models\Fournisseur;
 
-class SupplierList extends Component
+class RechercheFournisseurs extends Component
 {
-    public $filter = [
+    public $filtre = [
         'attente' => false,
         'accepte' => false,
-        'refuse' => false, 
+        'refuse' => false,
         'reviser' => false,
-        'service' => '',
-        'categorie' => '',
+        'service' => [],
+        'categorie' => [],
         'region' => [],
         'ville' => []
     ];
-    public $fournisseursSelectionnes = [];
-
-    public function recherche()
-    {
-        
-    }
-
-    public function exporterSelection()
-    {
-        
-    }
+    public $rechercheTerm = '';
 
     public function render()
     {
-        $fournisseurs = Fournisseur::query();
-
-        if ($this->filter['AT']) {
-            $fournisseurs->where('statut', 'AT');
+        \Log::info('Render method called', ['filters' => $this->filtre]);
+        $query = Fournisseur::query();
+    
+        $statuts = [];
+        if ($this->filtre['attente']) $statuts[] = 'AT';
+        if ($this->filtre['accepte']) $statuts[] = 'A';
+        if ($this->filtre['refuse']) $statuts[] = 'R';
+        if ($this->filtre['reviser']) $statuts[] = 'AR';
+    
+        if (!empty($statuts)) {
+            $query->whereIn('statut', $statuts);
         }
-        if ($this->filter['A']) {
-            $fournisseurs->where('statut', 'A');
-        }
-        if ($this->filter['R']) {
-            $fournisseurs->where('statut', 'R');
-        }
-        if ($this->filter['RE']) {
-            $fournisseurs->where('statut', 'RE');
-        }
-
-        return view('GestionFournisseurs.index', ['fournisseurs' => $fournisseurs->get()]);
+        
+        return view('GestionFournisseurs.index', [
+            'fournisseurs' => $query->get(),
+        ]);
     }
+    
 }

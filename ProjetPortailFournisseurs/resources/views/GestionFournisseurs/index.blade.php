@@ -2,42 +2,43 @@
 
 @section('titre', "Dossiers fournisseurs")
 
-@section('contenu')
 @livewireStyles
 
+@section('contenu')
+
 <div class="container mt-5">
-    <!-- Section Filtre -->
     <div class="card mb-4">
         <div class="card-header">
             <strong>Rechercher et Filtrer</strong>
         </div>
         <div class="card-body">
             <div class="row mb-3 align-items-center">
-                <div class="col-12 col-md-9 mb-2">
+                <div class="col-12 col-md-8 mb-2">
                     <div class="d-flex flex-wrap align-items-center">
                         <div class="me-2">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filter.attente"> En attente
+                                <input type="checkbox" class="form-check-input" wire:model="filtre.attente"> En attente
                             </label>
                         </div>
                         <div class="me-2">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filter.accepte"> Acceptées
+                                <input type="checkbox" class="form-check-input" wire:model="filtre.accepte"> Acceptées
                             </label>
                         </div>
                         <div class="me-2">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filter.refuse"> Refusées
+                                <input type="checkbox" class="form-check-input" wire:model="filtre.refuse"> Refusées
                             </label>
                         </div>
                         <div class="me-2">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filter.reviser"> À réviser
+                                <input type="checkbox" class="form-check-input" wire:model="filtre.reviser"> À réviser
                             </label>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-3 mb-2">
+
+                <div class="col-12 col-md-4 mb-2">
                     <div class="d-flex align-items-center">
                         <div class="position-relative flex-grow-1">
                             <input type="text" class="form-control pe-5" placeholder="Recherche">
@@ -49,23 +50,24 @@
             </div>
         </div>
 
-        <!-- Section des Select -->
         <div class="row mb-3">
-            <div class="col-12 col-md-3 mb-2">
-                <select id="produitsServices" class="selectpicker my-select" wire:model="filter.service" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count" title="Produits et services">
+            <div class="col-12 col-md-6 col-lg-3 mb-2">
+                <select id="produitsServices" class="selectpicker my-select" wire:model="filtre.service" multiple data-live-search="true" data-actions-box="true" title="Produits et services">
                     <option value="pelouse">Pelouse</option>
                     <option value="rouleuses">Rouleuses pour pelouses</option>
                     <option value="scarificateur">Scarificateur de pelouse</option>
                 </select>
             </div>
-            <div class="col-12 col-md-3 mb-2">
-                <select id="categoriesTravaux" class="selectpicker my-select" wire:model="filter.categorie" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count" title="Catégories de travaux">
+
+            <div class="col-12 col-md-6 col-lg-3 mb-2">
+                <select id="categoriesTravaux" class="selectpicker my-select" wire:model="filtre.categorie" multiple data-live-search="true" data-actions-box="true" title="Catégories de travaux">
                     <option value="general">Entrepreneur général</option>
                     <option value="specialise">Entrepreneur spécialisé</option>
                 </select>
             </div>
-            <div class="col-12 col-md-3 mb-2">
-                <select id="regions" class="selectpicker my-select" wire:model="filter.region" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count" title="Régions administratives">
+
+            <div class="col-12 col-md-6 col-lg-3 mb-2">
+                <select id="regions" class="selectpicker my-select" wire:model="filtre.region" multiple data-live-search="true" data-actions-box="true" title="Régions administratives">
                     <option value="01">Bas-Saint-Laurent</option>
                     <option value="02">Saguenay-Lac-Saint-Jean</option>
                     <option value="03">Capitale-Nationale</option>
@@ -73,8 +75,9 @@
                     <option value="05">Estrie</option>
                 </select>
             </div>
-            <div class="col-12 col-md-3 mb-2">
-                <select id="villes" class="selectpicker my-select" wire:model="filter.ville" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count" title="Villes">
+
+            <div class="col-12 col-md-6 col-lg-3 mb-2">
+                <select id="villes" class="selectpicker my-select" wire:model="filtre.ville" multiple data-live-search="true" data-actions-box="true" title="Villes">
                     <option value="Batiscan">Batiscan</option>
                     <option value="Beaupre">Beaupré</option>
                     <option value="Boischatel">Boischatel</option>
@@ -85,7 +88,6 @@
         </div>
     </div>
 
-    <!-- Liste des Fournisseurs -->
     <div class="card">
         <div class="card-header">
             <strong>Liste des Fournisseurs</strong>
@@ -126,7 +128,7 @@
                         <td>Produit</td>
                         <td>Catégorie</td>
                         <td>
-                            <a href="" class="btn btn-info btn-sm">Ouvrir</a>
+                            <a href="" class="btn btn-secondary btn-sm">Ouvrir</a>
                         </td>
                         <td>
                             <input type="checkbox" wire:model="FournisseursSelectionnes" value="{{ $fournisseur->id }}">
@@ -142,5 +144,5 @@
     </div>
 </div>
 
-@livewireScripts
 @endsection
+@livewireScripts
