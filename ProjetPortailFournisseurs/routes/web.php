@@ -73,4 +73,7 @@ Route::put('/admin/usagers/{id}/update-role',
 //Email Verification
 Route::get('dashboard', [FournisseursController::class, 'dashboard'])->middleware(['auth', 'is_verify_email']);
 Route::get('compte/verify/{token}', [FournisseursController::class, 'verifyAccount'])->name('fournisseur.verify');
+
+
+Route:
 ?>

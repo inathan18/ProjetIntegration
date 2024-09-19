@@ -7,10 +7,12 @@
     "require": {
         "php": "^8.2",
         "cerbero/lazy-json": "^2.0",
+        "knackline/excel-to-x": "^2.1",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
-        "thiagoprz/eloquent-composite-key": "^1.0"
+        "thiagoprz/eloquent-composite-key": "^1.0",
+        "ext-zip": "*"  
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

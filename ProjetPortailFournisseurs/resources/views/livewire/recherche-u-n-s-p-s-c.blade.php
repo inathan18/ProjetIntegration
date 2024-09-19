@@ -3,7 +3,7 @@
         type="text"
         class="form-input w-full"
         placeholder="Search"
-        wire:model="search"
+        wire:model.live.debounce.500ms="search"
     />
 
     <div wire:loading class="absolute w-1/3 bg-white rounded-lg shadow">
@@ -17,14 +17,15 @@
 
     @if(!empty($search))
         <div class="w-1/3 bg-white rounded-lg shadow">
-            @if(!empty($unspscs))
+  
+            @if(!empty($tests))
                 <ul class="divide-y-2 divide-gray-100">
-                    @foreach($unspscs as $i => $unspsc)
-                        <li class="p-2 hover:bg-blue-600 hover:text-blue-200">
+                    @foreach($tests as $unspsc)
+                        <li class="p-2 hover:bg-blue-600 hover:text-blue-200" wire:key="{{ $unspsc['codeUnspsc']}}">
                             <a
                                 href="https://www.google.com"
-                                class="padding-top-5 list-item {{ $highlightIndex === $i ? 'highlight' : '' }}"
-                            >{{ $unspsc['Id'] }} - {{ $unspsc['Title'] }}</a>
+                                class="padding-top-5 list-item "
+                            >{{ $unspsc['codeUnspsc'] }} - {{ $unspsc['descUnspsc'] }}</a>
                         </li>
                     @endforeach
                 </ul>
