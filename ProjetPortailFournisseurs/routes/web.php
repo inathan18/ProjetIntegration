@@ -7,6 +7,7 @@ use App\Http\Controllers\UsagersController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
 use App\Http\Controllers\ResponsablesController;
+use App\Livewire\Recherche;
 
 // Route pour Usagers
 
@@ -46,6 +47,9 @@ Route::post('/loginFournisseur',
 
 Route::get('/Dossiers', 
 [ResponsablesController::class, 'index'])->name('GestionFournisseurs.index');
+
+Route::get('/Recherche', Recherche::class);
+
 
 // Routes admin
 Route::get('/admin', 
