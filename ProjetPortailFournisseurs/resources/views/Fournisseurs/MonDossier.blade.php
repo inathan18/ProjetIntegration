@@ -19,6 +19,7 @@
             <p> {{$telephone}} </p><hr>
             <p> {{$fournisseur_actuel->postCode}} </p><hr>
             <p> {{$unspsc}} </p><hr>
+            <p> {{$fichier}} </p><hr>
             <p> {{$fournisseur_actuel->website}} </p><hr>
             <p> {{$fournisseur_actuel->email}} </p><hr>
             <p> {{$fournisseur_actuel->neq}} </p><hr>
@@ -26,9 +27,27 @@
             <p> {{$fournisseur_actuel->personneContact}} </p><hr>
         </div>
 
+        <form action="{{route('Fournisseurs.fichier.upload')}}" method="POST" enctype="multipart/form-data">
+            @csrf
+            
+            <div class="form-group">
+                <label for="imageID">Sélectionner votre Dossier</label>
+                <input type="file" class="form-control-file" id="file" name="file">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+
+        <hr>
+
         <a href="{{route('Fournisseurs.edit', [$fournisseur_actuel->id])}}" class="btn btn-danger">
-                Modifier mes informations
-            </a>
+            Modifier mes informations
+        </a>
+
+        
+
+
+        
     </div>
 
 </div>

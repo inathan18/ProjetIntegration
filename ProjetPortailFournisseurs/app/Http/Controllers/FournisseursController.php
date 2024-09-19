@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Fournisseur;
+use Illuminate\Support\Facades\Storage;
 
 class FournisseursController extends Controller
 {
@@ -102,8 +103,10 @@ class FournisseursController extends Controller
 
         $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
 
+        $fichier = $fournisseur_actuel->files[0];
+        Log::Debug($fichier);
 
-        return view('Fournisseurs.MonDossier', compact('fournisseur_actuel', 'telephone', 'unspsc'));
+        return view('Fournisseurs.MonDossier', compact('fournisseur_actuel', 'telephone', 'unspsc', 'fichier'));
 
 
     }
@@ -143,6 +146,32 @@ class FournisseursController extends Controller
         {
             Log::debug($e);
             return redirect()->route('Fournisseurs.dossier')->withErrors(["la modification n'a pas fonctionné"]);
+        }
+    }
+
+    public function upload(Request $request) {
+        $file = $request->file("file");
+        $destinationPath = "Fournisseur";
+
+        if ($file->move($destinationPath)) {
+
+            $filename = pathinfo($file, PATHINFO_FILENAME);
+
+            $fournisseur = auth()->guard('fournisseur')->user();
+
+            $fileJSON = array($filename);
+
+            $fournisseur->update([
+                'files' => $fileJSON,
+
+            ]);
+
+
+            return redirect()->route('Fournisseurs.accueil');
+        }
+
+        else {
+            return redirect()->route('Fournisseurs.dossier');
         }
     }
 

@@ -44,6 +44,9 @@ Route::get('/fournisseur/inscription',
 Route::post('/fournisseur/inscription', 
 [FournisseursController::class, 'store'])->name('Fournisseurs.store');
 
+Route::post('/fournisseur/upload', 
+[FournisseursController::class, 'upload'])->name('Fournisseurs.fichier.upload');
+
 Route::post('/loginFournisseur', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
 
