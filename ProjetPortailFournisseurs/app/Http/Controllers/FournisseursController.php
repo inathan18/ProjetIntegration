@@ -132,7 +132,7 @@ class FournisseursController extends Controller
 
         $chemin = storage_path($filename);
 
-        File::delete("fournisseur/" + $filename);
+        Storage::delete("app/fournisseur/" + $chemin);
 
         Log::debug($chemin);
 
@@ -165,13 +165,12 @@ class FournisseursController extends Controller
 
     public function upload(Request $request) {
         $file = $request->file("file");
+        $filename = pathinfo($file, PATHINFO_BASENAME);
         $destinationPath = "fournisseur";
 
-        if ($file->move($destinationPath)) {
+        $fournisseur = auth()->guard('fournisseur')->user();
 
-            $filename = pathinfo($file, PATHINFO_BASENAME);
-
-            $fournisseur = auth()->guard('fournisseur')->user();
+        if (Storage::disk()->putfileas($destinationPath, $file, $filename)) { #$file->move($destinationPath)
 
             $fileJSON = array($filename);
 
