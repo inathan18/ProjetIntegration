@@ -50,6 +50,9 @@ Route::post('/fournisseur/upload',
 Route::post('/loginFournisseur', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
 
+Route::delete('/fournisseur/monDossier', 
+[FournisseursController::class, 'fichierDelete'])->name('Fournisseurs.fichier.delete');
+
 Route::get('/fournisseur/monDossier', 
 [FournisseursController::class, 'show'])->name('Fournisseurs.dossier');
 

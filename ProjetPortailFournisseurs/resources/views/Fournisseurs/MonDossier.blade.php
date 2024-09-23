@@ -19,7 +19,7 @@
             <p> {{$telephone}} </p><hr>
             <p> {{$fournisseur_actuel->postCode}} </p><hr>
             <p> {{$unspsc}} </p><hr>
-            <p> {{$fichier}} </p><hr>
+            <div><p> {{$fichier}} </p> <a href="{{route('Fournisseurs.fichier.delete', [$fichier])}}" class="btn btn-danger"> Supprimer le fichier </a></div><hr>
             <p> {{$fournisseur_actuel->website}} </p><hr>
             <p> {{$fournisseur_actuel->email}} </p><hr>
             <p> {{$fournisseur_actuel->neq}} </p><hr>
@@ -40,7 +40,7 @@
 
         <hr>
 
-        <a href="{{route('Fournisseurs.edit', [$fournisseur_actuel->id])}}" class="btn btn-danger">
+        <a href="{{route('Fournisseurs.edit', [$fournisseur_actuel->id])}}" class="btn btn-warning">
             Modifier mes informations
         </a>
 

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File; 
+
 
 use App\Models\Fournisseur;
 use Illuminate\Support\Facades\Storage;
@@ -104,10 +106,9 @@ class FournisseursController extends Controller
         $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
 
         $fichier = $fournisseur_actuel->files[0];
-        Log::Debug($fichier);
 
         return view('Fournisseurs.MonDossier', compact('fournisseur_actuel', 'telephone', 'unspsc', 'fichier'));
-
+ 
 
     }
 
@@ -124,6 +125,19 @@ class FournisseursController extends Controller
 
 
         return view('Fournisseurs.Modification', compact('fournisseur', 'telephone', 'unspsc'));
+    }
+
+    public function fichierDelete(string $filename)
+    {
+
+        $chemin = storage_path($filename);
+
+        File::delete("fournisseur/" + $filename);
+
+        Log::debug($chemin);
+
+
+        return view('Fournisseurs.MonDossier');
     }
 
     /**
@@ -151,11 +165,11 @@ class FournisseursController extends Controller
 
     public function upload(Request $request) {
         $file = $request->file("file");
-        $destinationPath = "Fournisseur";
+        $destinationPath = "fournisseur";
 
         if ($file->move($destinationPath)) {
 
-            $filename = pathinfo($file, PATHINFO_FILENAME);
+            $filename = pathinfo($file, PATHINFO_BASENAME);
 
             $fournisseur = auth()->guard('fournisseur')->user();
 
@@ -180,7 +194,7 @@ class FournisseursController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        
     }
 
 
