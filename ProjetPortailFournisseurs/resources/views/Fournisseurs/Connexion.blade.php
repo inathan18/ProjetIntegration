@@ -6,6 +6,7 @@
 
 <div class="p-3 text-center"> <h1> Frame Connexion </h1></div>
     @livewire('recherche-u-n-s-p-s-c')
+    @livewire('validation-r-b-q')
     <form method="post" action="{{route('Fournisseurs.login')}}">
     @csrf
 
