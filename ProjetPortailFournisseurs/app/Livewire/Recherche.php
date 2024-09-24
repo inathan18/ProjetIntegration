@@ -28,7 +28,7 @@ class Recherche extends Component
 
         $query = Fournisseur::query();
 
-        // Gestion des statuts en fonction des checkboxes
+        // Cases à cocher
         $statuts = [];
         if ($this->filtre['attente']) $statuts[] = 'AT';
         if ($this->filtre['accepte']) $statuts[] = 'A';
@@ -39,12 +39,13 @@ class Recherche extends Component
             $query->whereIn('statut', $statuts);
         }
 
-        // Gestion du champ de recherche
+        // Champ de recherche
         if (!empty($this->rechercheTerm)) {
             $query->where('name', 'like', '%' . $this->rechercheTerm . '%');
         }
 
-        // Filtre par produits/services, catégories, régions et villes
+        // Filtres
+        /*
         if (!empty($this->filtre['service'])) {
             $query->whereIn('service', $this->filtre['service']);
         }
@@ -57,7 +58,7 @@ class Recherche extends Component
         if (!empty($this->filtre['ville'])) {
             $query->whereIn('ville', $this->filtre['ville']);
         }
-
+        */
         $this->fournisseurs = $query->get();
     }
 

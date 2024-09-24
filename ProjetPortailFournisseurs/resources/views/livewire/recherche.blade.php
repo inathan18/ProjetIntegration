@@ -43,23 +43,23 @@
         </div>
 
         <div class="row mb-3">
-            <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <select id="produitsServices" class="form-control" wire:model="filtre.service" multiple="multiple" wire:change="rechercherFournisseurs">
+            <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
+                <select id="produitsServices" class="selectpicker" multiple wire:model="filtre.service" data-live-search="true">
                     <option value="pelouse">Pelouse</option>
                     <option value="rouleuses">Rouleuses pour pelouses</option>
                     <option value="scarificateur">Scarificateur de pelouse</option>
                 </select>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <select id="categoriesTravaux" class="form-control" wire:model="filtre.categorie" multiple="multiple" wire:change="rechercherFournisseurs">
+            <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
+                <select id="categoriesTravaux" class="selectpicker" multiple wire:model="filtre.categorie" data-live-search="true">
                     <option value="general">Entrepreneur général</option>
                     <option value="specialise">Entrepreneur spécialisé</option>
                 </select>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <select id="regions" class="form-control" wire:model="filtre.region" multiple="multiple" wire:change="rechercherFournisseurs">
+            <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
+                <select id="regions" class="selectpicker" multiple wire:model="filtre.region" data-live-search="true">
                     <option value="01">Bas-Saint-Laurent</option>
                     <option value="02">Saguenay-Lac-Saint-Jean</option>
                     <option value="03">Capitale-Nationale</option>
@@ -68,8 +68,8 @@
                 </select>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <select id="villes" class="form-control" wire:model="filtre.ville" multiple="multiple" wire:change="rechercherFournisseurs">
+            <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
+                <select id="villes" class="selectpicker" multiple wire:model="filtre.ville" data-live-search="true">
                     <option value="Batiscan">Batiscan</option>
                     <option value="Beaupre">Beaupré</option>
                     <option value="Boischatel">Boischatel</option>
@@ -134,3 +134,12 @@
         <button class="btn btn-success" wire:click="ExporterSelection">Liste des fournisseurs sélectionnés</button>
     </div>
 </div>
+
+@section('scripts')
+
+<script>
+
+
+</script>
+
+@endsection
