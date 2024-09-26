@@ -19,7 +19,11 @@
             <p> {{$telephone}} </p><hr>
             <p> {{$fournisseur_actuel->postCode}} </p><hr>
             <p> {{$unspsc}} </p><hr>
-            <div><p> {{$fichier}} </p> <a href="{{route('Fournisseurs.fichier.delete', [$fichier])}}" class="btn btn-danger"> Supprimer le fichier </a></div><hr>
+            <p> {{$fichier}} </p>
+            <?php if( $fichier != "Aucun Fichier Envoyé") { ?>
+                 <a href="{{route('Fournisseurs.fichier.delete')}}" class="btn btn-danger"> Supprimer le fichier </a>
+             <?php } ?>
+            <hr>
             <p> {{$fournisseur_actuel->website}} </p><hr>
             <p> {{$fournisseur_actuel->email}} </p><hr>
             <p> {{$fournisseur_actuel->neq}} </p><hr>
@@ -32,7 +36,7 @@
             
             <div class="form-group">
                 <label for="imageID">Sélectionner votre Dossier</label>
-                <input type="file" class="form-control-file" id="file" name="file">
+                <input type="file" class="form-control-file" id="file" name="file[]" multiple>
             </div>
 
             <button type="submit" class="btn btn-primary">Enregistrer</button>

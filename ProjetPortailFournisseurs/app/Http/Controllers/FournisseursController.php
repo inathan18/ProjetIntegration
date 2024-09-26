@@ -105,7 +105,12 @@ class FournisseursController extends Controller
 
         $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
 
+        try {
         $fichier = $fournisseur_actuel->files[0];
+        }
+        catch (\Throwable $e) {
+            $fichier = "Aucun Fichier Envoyé";
+        }
 
         return view('Fournisseurs.MonDossier', compact('fournisseur_actuel', 'telephone', 'unspsc', 'fichier'));
  
@@ -117,27 +122,34 @@ class FournisseursController extends Controller
      */
     public function edit()
     {
-        $fournisseur = auth()->guard('fournisseur')->user();
+        $fournisseur_actuel = auth()->guard('fournisseur')->user();
 
-        $telephone = json_decode($fournisseur->phone[0], true);
+        $telephone = json_decode($fournisseur_actuel->phone[0], true);
 
-        $unspsc = json_decode($fournisseur->unspsc[0], true);
+        $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
 
 
         return view('Fournisseurs.Modification', compact('fournisseur', 'telephone', 'unspsc'));
     }
 
-    public function fichierDelete(string $filename)
+    public function fichierDelete()
     {
+        $fournisseur_actuel = auth()->guard('fournisseur')->user();
 
-        $chemin = storage_path($filename);
+        $filename = $fournisseur_actuel->files[0];
 
-        Storage::delete("app/fournisseur/" + $chemin);
+        if(Storage::delete($filename)) {
 
-        Log::debug($chemin);
+            $fournisseur_actuel->update([
+                'files' => "",
+
+            ]);
+        }
+
+        unlink(storage_path('app/fournisseur/' .$filename));
 
 
-        return view('Fournisseurs.MonDossier');
+        return view('Fournisseurs.accueil');
     }
 
     /**
@@ -164,6 +176,29 @@ class FournisseursController extends Controller
     }
 
     public function upload(Request $request) {
+
+        $fournisseur_actuel = auth()->guard('fournisseur')->user();
+
+        if ($request->hasfile('file')) {
+            $fileJSON = array();
+            foreach ($request->file('file') as $file) {
+                $filename = pathinfo($file, PATHINFO_BASENAME);
+                $destinationPath = "fournisseur";
+                Storage::disk()->putfileas($destinationPath, $file, $filename);
+                $fileJSON[0] = $filename;
+            }
+            $fournisseur_actuel->update([
+                'files' => $fileJSON,
+
+            ]);
+        }
+
+        return redirect()->route('Fournisseurs.accueil');
+
+
+
+
+        /*
         $file = $request->file("file");
         $filename = pathinfo($file, PATHINFO_BASENAME);
         $destinationPath = "fournisseur";
@@ -186,6 +221,7 @@ class FournisseursController extends Controller
         else {
             return redirect()->route('Fournisseurs.dossier');
         }
+        */
     }
 
     /**
