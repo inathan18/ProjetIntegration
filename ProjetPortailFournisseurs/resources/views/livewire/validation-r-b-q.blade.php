@@ -21,7 +21,7 @@
             @if(!empty($tests))
                 <ul class="divide-y-2 divide-gray-100">
                     @foreach($tests as $rbq)
-                        <li class="p-2 hover:bg-blue-600 hover:text-blue-200" wire:key="{{ $rbq['Numero de licence']}}">
+                        <li class="p-2 hover:bg-blue-600 hover:text-blue-200" wire:key="{{ $rbq['_id']}}">
                             <a
                                 href="https://www.google.com"
                                 class="padding-top-5 list-item "
