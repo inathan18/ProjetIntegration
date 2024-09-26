@@ -25,7 +25,7 @@
                             <a
                                 href="https://www.google.com"
                                 class="padding-top-5 list-item "
-                            >{{ $rbq['Numero de licence'] }} - {{ $rbq['Statut de la licence'] }}</a>
+                            >{{ $rbq['Nom de l\'intervenant'] }} - {{ $rbq['Numero de licence'] }} - {{ $rbq['Statut de la licence'] }}</a>
                         </li>
                     @endforeach
                 </ul>
