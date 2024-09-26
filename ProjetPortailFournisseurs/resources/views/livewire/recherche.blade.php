@@ -9,22 +9,22 @@
                     <div class="d-flex flex-wrap align-items-center">
                         <div class="me-2">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filtre.attente" wire:change="rechercherFournisseurs"> En attente
+                                <input type="checkbox" class="form-check-input" wire:model="filtre.attente" wire:change="recherche"> En attente
                             </label>
                         </div>
                         <div class="me-2">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filtre.accepte" wire:change="rechercherFournisseurs"> Acceptées
+                                <input type="checkbox" class="form-check-input" wire:model="filtre.accepte" wire:change="recherche"> Acceptées
                             </label>
                         </div>
                         <div class="me-2">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filtre.refuse" wire:change="rechercherFournisseurs"> Refusées
+                                <input type="checkbox" class="form-check-input" wire:model="filtre.refuse" wire:change="recherche"> Refusées
                             </label>
                         </div>
                         <div class="me-2">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filtre.reviser" wire:change="rechercherFournisseurs"> À réviser
+                                <input type="checkbox" class="form-check-input" wire:model="filtre.reviser" wire:change="recherche"> À réviser
                             </label>
                         </div>
                     </div>
@@ -33,10 +33,9 @@
                 <div class="col-12 col-md-4 mb-2">
                     <div class="d-flex align-items-center">
                         <div class="position-relative flex-grow-1">
-                            <input type="text" class="form-control pe-5" placeholder="Recherche" wire:model="rechercheTerm">
+                            <input type="text" class="form-control pe-5" placeholder="Recherche" wire:model.live.debounce.500ms="rechercheTerm">
                             <i class="bi bi-search position-absolute top-50 end-0 translate-middle-y me-2"></i>
                         </div>
-                        <button class="btn btn-primary ms-2" wire:click="recherche">Rechercher</button>
                     </div>
                 </div>
             </div>
@@ -44,7 +43,7 @@
 
         <div class="row mb-3">
             <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
-                <select id="produitsServices" class="selectpicker" multiple wire:model="filtre.service" data-live-search="true">
+                <select id="produitsServices" class="selectpicker" multiple wire:model="filtre.service" data-live-search="true" title="Produits et Services" data-selected-text-format="static">
                     <option value="pelouse">Pelouse</option>
                     <option value="rouleuses">Rouleuses pour pelouses</option>
                     <option value="scarificateur">Scarificateur de pelouse</option>
@@ -52,29 +51,25 @@
             </div>
 
             <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
-                <select id="categoriesTravaux" class="selectpicker" multiple wire:model="filtre.categorie" data-live-search="true">
+                <select id="categoriesTravaux" class="selectpicker" multiple wire:model="filtre.categorie" data-live-search="true" title="Catégories de Travaux" data-selected-text-format="static">
                     <option value="general">Entrepreneur général</option>
                     <option value="specialise">Entrepreneur spécialisé</option>
                 </select>
             </div>
 
             <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
-                <select id="regions" class="selectpicker" multiple wire:model="filtre.region" data-live-search="true">
-                    <option value="01">Bas-Saint-Laurent</option>
-                    <option value="02">Saguenay-Lac-Saint-Jean</option>
-                    <option value="03">Capitale-Nationale</option>
-                    <option value="04">Mauricie</option>
-                    <option value="05">Estrie</option>
+                <select id="regions" class="selectpicker" multiple wire:model="filtre.region" data-live-search="true" title="Régions" data-selected-text-format="static">
+                    @foreach($regions as $region)
+                        <option value="{{ $region }}">{{ $region }}</option>
+                    @endforeach
                 </select>
             </div>
 
             <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
-                <select id="villes" class="selectpicker" multiple wire:model="filtre.ville" data-live-search="true">
-                    <option value="Batiscan">Batiscan</option>
-                    <option value="Beaupre">Beaupré</option>
-                    <option value="Boischatel">Boischatel</option>
-                    <option value="Cap-Sante">Cap-Santé</option>
-                    <option value="Champlain">Champlain</option>
+                <select id="villes" class="selectpicker" multiple wire:model="filtre.ville" data-live-search="true" title="Villes" data-selected-text-format="static">
+                    @foreach($villes as $ville)
+                        <option value="{{ $ville['value'] }}">{{ $ville['value'] }}</option>
+                    @endforeach
                 </select>
             </div>
         </div>
@@ -138,8 +133,9 @@
 @section('scripts')
 
 <script>
-
-
+window.addEventListener('refreshSelectpicker', () => {
+    $('.selectpicker').selectpicker('refresh');
+});
 </script>
 
 @endsection

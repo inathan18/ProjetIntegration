@@ -45,9 +45,6 @@ Route::post('/loginFournisseur',
 
 // Routes pour responsables
 
-Route::get('/Dossiers', 
-[ResponsablesController::class, 'index'])->name('GestionFournisseurs.index');
-
 Route::get('/Recherche', Recherche::class);
 
 

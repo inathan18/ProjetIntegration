@@ -12,8 +12,7 @@ class ResponsablesController extends Controller
      */
     public function index()
     {
-        $fournisseurs = Fournisseur::all();
-        return view('GestionFournisseurs.index',  ['fournisseurs' => $fournisseurs]);
+        // 
     }
 
     /**
