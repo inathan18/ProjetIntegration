@@ -36,7 +36,7 @@
             
             <div class="form-group">
                 <label for="imageID">Sélectionner votre Dossier</label>
-                <input type="file" class="form-control-file" id="file" name="file[]" multiple>
+                <input type="file" accept=" .pdf, .png, .txt, .docx " class="form-control-file" id="file" name="file[]" multiple>
             </div>
 
             <button type="submit" class="btn btn-primary">Enregistrer</button>
@@ -48,10 +48,6 @@
             Modifier mes informations
         </a>
 
-        
-
-
-        
     </div>
 
 </div>
