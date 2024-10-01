@@ -19,16 +19,15 @@
         <div class="w-1/3 bg-white rounded-lg shadow">
   
             @if(!empty($tests))
-                <ul class="divide-y-2 divide-gray-100">
+                    <select wire:model.change="neq" name="neq">
                     @foreach($tests as $rbq)
-                        <li class="p-2 hover:bg-blue-600 hover:text-blue-200" wire:key="{{ $rbq['_id']}}">
-                            <a
-                                href="https://www.google.com"
-                                class="padding-top-5 list-item "
-                            >{{ $rbq['Nom de l\'intervenant'] }} - {{ $rbq['Numero de licence'] }} - {{ $rbq['Statut de la licence'] }}</a>
-                        </li>
+                        <option value=" {{ $rbq['_id'] }}">
+                            {{ $rbq['Nom de l\'intervenant'] }} - {{ $rbq['Numero de licence'] }} - {{ $rbq['Statut de la licence'] }}
+                        </option>
                     @endforeach
-                </ul>
+        </select>
+        <h3>{{$neq}}</h3>
+
             @else
                 <div class="list-item">No results!</div>
             @endif

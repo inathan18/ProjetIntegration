@@ -1,25 +1,8 @@
-@extends('layouts.app')
+ <form method="post" action="{{route('Fournisseurs.store')}}">
 
-@section('titre', "Inscription")
-
-@section('contenu')
-
-
-<div class="p-3 text-center"> <h1> Frame Inscription </h1></div>
-
-<!-- Section Inscription -->
-<form method="post" action="{{route('Fournisseurs.store')}}">
-@csrf
-    <div class="p-3">
-        <label class="form-label" for="neq">NEQ: </label>
-
-                @livewire('validation-r-b-q')
-    </div>
-
-
-    <div class="p-3">
+ <div class="p-3">
         <label class="form-label" for="name">Nom : </label>
-        <input class="form-control" type="name" id="name" name="name" wire:model.live="name">
+        <input class="form-control" type="name" id="name" name="name" wire:model="name">
         
     </div>
 
@@ -92,15 +75,3 @@
 
     </div>
 </form>
-
-    <!-- Fin de la Section Inscription -->
-
-    <div class="align-items-center text-center">
-        <a class="btn" href="{{route('Fournisseurs.connexionNEQ')}}" style="background-color: rgba(0, 118, 213,0.9); border-color:black;" type="button">
-            Connexion
-        </a>
-    </div>
-
-    <script src="localisation.js"></script>
-
-@endsection

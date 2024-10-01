@@ -13,10 +13,13 @@ class ValidationRBQ extends Component
 
     public $search = '';
     public $rbq;
+    public $neq = '';
 
     public function render()
     {
-
+        $neq = '';
+        $name = '';
+        $selected = '';
 
         //$result = $url->getBody()->getContents();
        // Log::Debug($result->result->records);
@@ -37,6 +40,7 @@ class ValidationRBQ extends Component
             $rbqs = $rbqCollections->all();
             $rbqs = $jsons['result']['records'];
 
+
             Log::Debug($rbqs);
         }
             else {
@@ -46,6 +50,7 @@ class ValidationRBQ extends Component
 
      
             $tests = $rbqs;
+
 
             
 
