@@ -39,8 +39,6 @@ class Recherche extends Component
 
     public function recherche()
     {
-        Log::info('Recherche en cours', ['filters' => $this->filtre, 'recherche' => $this->rechercheTerm]);
-
         $query = Fournisseur::query();
 
         // Cases à cocher
@@ -126,7 +124,22 @@ class Recherche extends Component
         });
         return $array;
     }
+    
+    public function updatedFiltreRegion()
+    {
+        Log::info('Filtre région mis à jour', ['regions' => $this->filtre['region']]);
+        $this->filtre['ville'] = [];
+        $this->chargerVilles();
+    }
+    
 
+    public function chargerVilles()
+    {
+        // Filtrer les villes selon les régions sélectionnées
+        $this->villes = collect($this->villes)->filter(function ($ville) {
+            return in_array($ville['region'], $this->filtre['region']);
+        })->values()->toArray();
+    }
 
     public function ExporterSelection()
     {

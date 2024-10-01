@@ -42,7 +42,7 @@
         </div>
 
         <div class="row mb-3">
-            <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
+            <div class="col-12 col-md-6 col-lg-3 mb-2">
                 <select id="produitsServices" class="selectpicker" multiple wire:model="filtre.service" data-live-search="true" title="Produits et Services" data-selected-text-format="static">
                     <option value="pelouse">Pelouse</option>
                     <option value="rouleuses">Rouleuses pour pelouses</option>
@@ -50,22 +50,22 @@
                 </select>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
+            <div class="col-12 col-md-6 col-lg-3 mb-2">
                 <select id="categoriesTravaux" class="selectpicker" multiple wire:model="filtre.categorie" data-live-search="true" title="Catégories de Travaux" data-selected-text-format="static">
                     <option value="general">Entrepreneur général</option>
                     <option value="specialise">Entrepreneur spécialisé</option>
                 </select>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
-                <select id="regions" class="selectpicker" multiple wire:model="filtre.region" data-live-search="true" title="Régions" data-selected-text-format="static">
+            <div class="col-12 col-md-6 col-lg-3 mb-2">
+                <select id="regions" class="selectpicker" multiple wire:model="filtre.region" data-live-search="true" title="Régions administratives" data-selected-text-format="static">
                     @foreach($regions as $region)
                         <option value="{{ $region }}">{{ $region }}</option>
                     @endforeach
                 </select>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-3 mb-2" wire:ignore>
+            <div class="col-12 col-md-6 col-lg-3 mb-2">
                 <select id="villes" class="selectpicker" multiple wire:model="filtre.ville" data-live-search="true" title="Villes" data-selected-text-format="static">
                     @foreach($villes as $ville)
                         <option value="{{ $ville['value'] }}">{{ $ville['value'] }}</option>
@@ -111,8 +111,8 @@
 
                         <td>{{ $fournisseur->name }}</td>
                         <td>{{ $fournisseur->city }}</td>
-                        <td>Produit</td>
-                        <td>Catégorie</td>
+                        <td></td>
+                        <td></td>
                         <td>
                             <a href="" class="btn btn-secondary btn-sm">Ouvrir</a>
                         </td>
@@ -133,9 +133,10 @@
 @section('scripts')
 
 <script>
-window.addEventListener('refreshSelectpicker', () => {
+Livewire.hook('message.processed', () => {
     $('.selectpicker').selectpicker('refresh');
 });
 </script>
+
 
 @endsection
