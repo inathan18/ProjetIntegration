@@ -2,39 +2,37 @@
 
  <div class="p-3">
         <label class="form-label" for="name">Nom : </label>
-        <input class="form-control" type="name" id="name" name="name" wire:model="name">
+        <input class="form-control" type="name" id="name" name="name" wire:model="name" value="{{$name}}">
         
     </div>
 
     <div class="p-3">
+    <label class="form-label" for="rbq">No Licence RBQ: </label>
+    <input class="form-control" type="rbq" id="rbq" name="rbq" wire:model="rbq" value="{{$rbq}}">
+</div>
+    <div class="p-3">
         <label class="form-label" for="address">Adresse : </label>
-        <input class="form-control" type="address" id="address" name="address" wire:model="address">
+        <input class="form-control" type="address" id="address" name="address" wire:model="address" value="{{$address}}">
     </div>
 
     <div class="p-3">
         <label class="form-label" for="city">Ville : </label><br>
-        <select name="city" class="city " id="city" wire:model="city">
-            <option value="city">Sélectionnez la ville</option>
-        </select>
+        <input readonly class="form-control" name="city"  id="city" wire:model="city" value="{{$city}}">
     </div>
 
     <div class="p-3">
-    <label class="form-label" for="country">Pays : </label><br>
-        <select name="country" class="country " id="country" wire:model="country">
-            <option value="Québec">Québec</option>
-        </select>
+    <label class="form-label" for="region">Région administrative : </label><br>
+        <input readonly class="form-control" name="region" id="region" wire:model="region" value="{{$region}}">
     </div>
 
     <div class="p-3">
         <label class="form-label" for="province">Province : </label>
-        <select name="province" class="province " id="province">
-            <option value="province">Sélectionnez la province</option>
-        </select>
+<input readonly class="form-control" name="province" id="province" wire:model="province" value="Québec">
     </div>
 
     <div class="p-3">
         <label class="form-label" for="postCode">Code Postal : </label>
-        <input class="form-control" type="postCode" id="postCode" name="postCode">
+        <input readonly class="form-control" type="postCode" id="postCode" name="postCode" value="{{$postCode}}">
     </div>
 
     <div class="p-3">
@@ -44,7 +42,7 @@
 
     <div class="p-3">
         <label class="form-label" for="statut">Statut : </label>
-        <input class="form-control" type="statut" id="statut" name="statut">
+        <input class="form-control" type="statut" id="statut" name="statut" value="{{$status}}">
     </div>
 
     <div class="p-3">
@@ -56,7 +54,7 @@
 
     <div class="p-3">
         <label class="form-label" for="email">Courriel : </label>
-        <input class="form-control" type="email" id="email" name="email">
+        <input class="form-control" type="email" id="email" name="email" value="{{$email}}">
     </div>
 
     <div class="p-3">

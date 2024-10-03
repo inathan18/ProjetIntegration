@@ -19,14 +19,23 @@
         <div class="w-1/3 bg-white rounded-lg shadow">
   
             @if(!empty($tests))
-                    <select wire:model.change="neq" name="neq">
+                    <select wire:model.change="neq" name="neq" class="neq" id="neq">
+                    <option disabled selected value>Choisir une entreprise</option>
                     @foreach($tests as $rbq)
                         <option value=" {{ $rbq['_id'] }}">
-                            {{ $rbq['Nom de l\'intervenant'] }} - {{ $rbq['Numero de licence'] }} - {{ $rbq['Statut de la licence'] }}
+                            {{ $rbq['Nom de l\'intervenant'] }} - {{ $rbq['Numero de licence'] }} - {{ $rbq['Statut de la licence'] }} - 
+                            @if($rbq['Categorie'])
+                            {{ $rbq['Categorie'] }} - 
+                            @endif
+                            {{ $rbq['Sous-categories']}}
                         </option>
                     @endforeach
         </select>
-        <h3>{{$neq}}</h3>
+        <div>
+        @if(!empty($neq))
+            <livewire:supplier-form :neq="$tests[(int)$neq-1]"/>
+        @endif
+        </div>
 
             @else
                 <div class="list-item">No results!</div>
