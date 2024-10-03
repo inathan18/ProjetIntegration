@@ -2,15 +2,15 @@
     <input
         type="text"
         class="form-input w-full"
-        placeholder="Search"
+        placeholder="Rechercher"
         wire:model.live.debounce.500ms="search"
     />
 
     <div wire:loading class="absolute w-1/3 bg-white rounded-lg shadow">
-        {{-- <div class="list-item">Searching...</div> --}}
+        {{-- <div class="list-item">Recherche...</div> --}}
         <ul class="divide-y-2 divide-gray-100">
             <li class="p-2 hover:bg-blue-600 hover:text-blue-200 ">
-                Searching...
+                Recherche...
             </li>
         </ul>
     </div>
@@ -22,7 +22,7 @@
                     <select wire:model.change="neq" name="neq" class="neq" id="neq">
                     <option disabled selected value>Choisir une entreprise</option>
                     @foreach($tests as $rbq)
-                        <option value=" {{ $rbq['_id'] }}">
+                        <option>
                             {{ $rbq['Nom de l\'intervenant'] }} - {{ $rbq['Numero de licence'] }} - {{ $rbq['Statut de la licence'] }} - 
                             @if($rbq['Categorie'])
                             {{ $rbq['Categorie'] }} - 
@@ -33,7 +33,7 @@
         </select>
         <div>
         @if(!empty($neq))
-            <livewire:supplier-form :neq="$tests[(int)$neq-1]"/>
+            <livewire:supplier-form :neq="$tests[(int)$neq]"/>
         @endif
         </div>
 

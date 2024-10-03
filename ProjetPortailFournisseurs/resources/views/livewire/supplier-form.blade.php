@@ -2,17 +2,17 @@
 
  <div class="p-3">
         <label class="form-label" for="name">Nom : </label>
-        <input class="form-control" type="name" id="name" name="name" wire:model="name" value="{{$name}}">
+        <input readonly class="form-control" type="name" id="name" name="name" wire:model="name" value="{{$name}}">
         
     </div>
 
     <div class="p-3">
     <label class="form-label" for="rbq">No Licence RBQ: </label>
-    <input class="form-control" type="rbq" id="rbq" name="rbq" wire:model="rbq" value="{{$rbq}}">
+    <input readonly class="form-control" type="rbq" id="rbq" name="rbq" wire:model="rbq" value="{{$rbq}}">
 </div>
     <div class="p-3">
         <label class="form-label" for="address">Adresse : </label>
-        <input class="form-control" type="address" id="address" name="address" wire:model="address" value="{{$address}}">
+        <input readonly class="form-control" type="address" id="address" name="address" wire:model="address" value="{{$address}}">
     </div>
 
     <div class="p-3">
@@ -35,14 +35,19 @@
         <input readonly class="form-control" type="postCode" id="postCode" name="postCode" value="{{$postCode}}">
     </div>
 
+        <div class="p-3">
+        <label class="form-label" for="country">Pays : </label>
+        <input readonly class="form-control" type="country" id="country" name="country" value="Canada">
+    </div>
+
     <div class="p-3">
         <label class="form-label" for="website">Site Web : </label>
-        <input class="form-control" type="website" id="website" name="website">
+        <input class="form-control" type="website" id="website" name="website" value="{{$website}}">
     </div>
 
     <div class="p-3">
         <label class="form-label" for="statut">Statut : </label>
-        <input class="form-control" type="statut" id="statut" name="statut" value="{{$status}}">
+        <input readonly class="form-control" type="statut" id="statut" name="statut" value="{{$status}}">
     </div>
 
     <div class="p-3">

@@ -11,7 +11,7 @@
 <form method="post" action="{{route('Fournisseurs.store')}}">
 @csrf
     <div class="p-3">
-        <label class="form-label" for="neq">NEQ: </label>
+        <label class="form-label" for="neq">NEQ (si vous détenez une licence RBQ): </label>
 
                 @livewire('validation-r-b-q')
     </div>

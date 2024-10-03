@@ -35,11 +35,12 @@ class SupplierForm extends Component
             $city = $this->selected['Municipalite'];
             $region = $this->selected['Region administrative']. ' ('.$this->selected['Code de region administrative'] . ')';
             $postCode = Str::after($this->selected['Adresse'], 'CANADA ');
+            $website = "www." . Str::after($this->selected['Courriel'], '@');
 
             Log::Debug("Name");
             Log::Debug($name);
 
         }
-        return view('livewire.supplier-form', compact('name', 'address', 'email', 'status'), compact('rbq', 'city', 'region', 'postCode'));
+        return view('livewire.supplier-form', compact('name', 'address', 'email', 'status'), compact('rbq', 'city', 'region', 'postCode', 'website'));
     }
 }
