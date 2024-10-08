@@ -14,12 +14,12 @@ class ValidationRBQ extends Component
     public $search = '';
 
     public $rbq;
-    public $neq = '';
+    public $noNeq = '';
 
 
     public function render()
     {
-        $neq = '';
+        $noNeq = '';
         $name = '';
         $selected = '';
 
@@ -37,15 +37,15 @@ class ValidationRBQ extends Component
             $response = Http::get($url);
             $json = file_get_contents($url, false, $context);
             $jsons = json_decode($json, TRUE);
-            Log::Debug('Test');
-            Log::Debug($jsons['result']['records'][0]);
+            //Log::Debug('Test');
+            //Log::Debug($jsons['result']['records'][0]);
     
             $rbqCollections= collect(LazyCollection::fromJson($json, "*")->toArray());
             $rbqs = $rbqCollections->all();
             $rbqs = $jsons['result']['records'];
 
 
-            Log::Debug($rbqs);
+            //Log::Debug($rbqs);
             }
 
         

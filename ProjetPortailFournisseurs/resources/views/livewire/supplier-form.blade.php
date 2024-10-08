@@ -1,4 +1,5 @@
  <form method="post" action="{{route('Fournisseurs.store')}}">
+ @csrf
 
  <div class="p-3">
         <label class="form-label" for="name">Nom : </label>
@@ -9,6 +10,11 @@
     <div class="p-3">
     <label class="form-label" for="rbq">No Licence RBQ: </label>
     <input readonly class="form-control" type="rbq" id="rbq" name="rbq" wire:model="rbq" value="{{$rbq}}">
+</div>
+
+    <div class="p-3">
+    <label class="form-label" for="neq">No NEQ: </label>
+    <input readonly class="form-control" type="neq" id="neq" name="neq" wire:model="neq" value="{{$neq}}">
 </div>
     <div class="p-3">
         <label class="form-label" for="address">Adresse : </label>

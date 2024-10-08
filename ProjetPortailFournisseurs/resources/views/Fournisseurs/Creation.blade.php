@@ -8,20 +8,24 @@
 <div class="p-3 text-center"> <h1> Frame Inscription </h1></div>
 
 <!-- Section Inscription -->
-<form method="post" action="{{route('Fournisseurs.store')}}">
-@csrf
     <div class="p-3">
-        <label class="form-label" for="neq">NEQ (si vous détenez une licence RBQ): </label>
+        <label class="form-label" for="noNeq">Entrer NEQ ou nom de l'entreprise (si vous détenez une licence RBQ): </label>
 
                 @livewire('validation-r-b-q')
     </div>
-
+<form method="post" action="{{route('Fournisseurs.store')}}">
+@csrf
 
     <div class="p-3">
         <label class="form-label" for="name">Nom : </label>
         <input class="form-control" type="name" id="name" name="name" wire:model.live="name">
         
     </div>
+
+        <div class="p-3">
+    <label class="form-label" for="neq">No NEQ: </label>
+    <input class="form-control" type="neq" id="neq" name="neq">
+</div>
 
     <div class="p-3">
         <label class="form-label" for="address">Adresse : </label>
@@ -67,6 +71,11 @@
     <div class="p-3">
         <label class="form-label" for="personneContact">Personne Contact : </label>
         <input class="form-control" type="personneContact" id="personneContact" name="personneContact">
+    </div>
+        <div class="p-3">
+        <label class="form-label" for="noNeq">Nom : </label>
+        <input class="form-control" type="noNeq" id="noNeq" name="noNeq" wire:model.live="noNeq">
+        
     </div>
 
 

@@ -10,23 +10,23 @@ class SupplierForm extends Component
 {
     public $selected = '';
     //public $rbqs;
-    public $neq;
+    public $noNeq;
 
-    public function mount(/*$rbqs, */$neq){
+    public function mount(/*$rbqs, */$noNeq){
         //$this->rbqs = $rbqs;
-        $this->neq = $neq;
-        Log::Debug($neq);
+        $this->noNeq = $noNeq;
+        //Log::Debug($noNeq);
 
     }
     public function render()
     {
        // $this->selected = $this->rbqs[(int)($this->neq)-1];
-       $this->selected = $this->neq;
-       Log::Debug("NEQ");
-        Log::Debug($this->neq);
+       $this->selected = $this->noNeq;
+       //Log::Debug("NEQ");
+       //Log::Debug($this->noNeq);
         if(!empty($this->selected))
         {
-           Log::Debug($this->selected);
+           //Log::Debug($this->selected);
             $name = $this->selected['Nom de l\'intervenant'];
             $address = Str::before($this->selected['Adresse'], strtoupper($this->selected['Municipalite']));
             $email = $this->selected['Courriel'];
@@ -36,11 +36,12 @@ class SupplierForm extends Component
             $region = $this->selected['Region administrative']. ' ('.$this->selected['Code de region administrative'] . ')';
             $postCode = Str::after($this->selected['Adresse'], 'CANADA ');
             $website = "www." . Str::after($this->selected['Courriel'], '@');
+            $neq = $this->selected['NEQ'];
 
-            Log::Debug("Name");
-            Log::Debug($name);
+            //Log::Debug("Name");
+            //Log::Debug($name);
 
         }
-        return view('livewire.supplier-form', compact('name', 'address', 'email', 'status'), compact('rbq', 'city', 'region', 'postCode', 'website'));
+        return view('livewire.supplier-form', compact('name', 'address', 'email', 'status', 'neq'), compact('rbq', 'city', 'region', 'postCode', 'website'));
     }
 }
