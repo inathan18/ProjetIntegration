@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', ()=> {
 
     const selectDrop = document.querySelector('#city');
-    const selectDrop2 = document.querySelector('#province');
+    const selectDrop2 = document.querySelector('#region');
 
     
 

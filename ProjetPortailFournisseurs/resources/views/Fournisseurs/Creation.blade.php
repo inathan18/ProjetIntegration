@@ -38,18 +38,26 @@
             <option value="city">Sélectionnez la ville</option>
         </select>
     </div>
-
-    <div class="p-3">
-    <label class="form-label" for="country">Pays : </label><br>
-        <select name="country" class="country " id="country" >
-            <option value="Canada">Canada</option>
+        <div class="p-3">
+        <label class="form-label" for="region">Région : </label><br>
+        <select name="region" class="region" id="region">
+            <option disabled selected value>Sélectionnez la région</option>
+            <option value="Autre">Autre</option>
         </select>
     </div>
+
 
     <div class="p-3">
         <label class="form-label" for="province">Province : </label>
         <select name="province" class="province " id="province">
-            <option value="province">Sélectionnez la province</option>
+            <option disabled selected value>Sélectionnez la province</option>
+            <option value='Québec'>Québec</option>
+        </select>
+    </div>
+        <div class="p-3">
+    <label class="form-label" for="country">Pays : </label><br>
+        <select name="country" class="country " id="country" >
+            <option value="Canada">Canada</option>
         </select>
     </div>
 
@@ -110,6 +118,6 @@
         </a>
     </div>
 
-    <script src="localisation.js"></script>
+    <script src="../localisation.js"></script>
 
 @endsection
