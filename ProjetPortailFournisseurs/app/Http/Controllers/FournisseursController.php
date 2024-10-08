@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\FournisseursRequest;
+use App\Http\Requests\FournisseurRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -76,7 +76,7 @@ class FournisseursController extends Controller
     }
 
     /* fonction utilisé pour la création de compte Fournisseur*/
-    public function store(Request $request)
+    public function store(FournisseurRequest $request)
     {
         try {
             $fournisseurs = new Fournisseur($request->all());
