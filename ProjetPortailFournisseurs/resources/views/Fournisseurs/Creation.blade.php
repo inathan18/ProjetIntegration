@@ -39,7 +39,7 @@
         </select>
     </div>
         <div class="p-3">
-        <label class="form-label" for="region">Région : </label><br>
+        <label class="form-label" for="region">Région administrative :</label><br>
         <select name="region" class="region" id="region">
             <option disabled selected value>Sélectionnez la région</option>
             <option value="Autre">Autre</option>
