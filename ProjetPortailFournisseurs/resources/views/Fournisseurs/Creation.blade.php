@@ -18,7 +18,7 @@
 
     <div class="p-3">
         <label class="form-label" for="name">Nom : </label>
-        <input class="form-control" type="name" id="name" name="name" wire:model.live="name">
+        <input class="form-control" type="name" id="name" name="name">
         
     </div>
 
@@ -29,20 +29,20 @@
 
     <div class="p-3">
         <label class="form-label" for="address">Adresse : </label>
-        <input class="form-control" type="address" id="address" name="address" wire:model="address">
+        <input class="form-control" type="address" id="address" name="address">
     </div>
 
     <div class="p-3">
         <label class="form-label" for="city">Ville : </label><br>
-        <select name="city" class="city " id="city" wire:model="city">
+        <select name="city" class="city" id="city">
             <option value="city">Sélectionnez la ville</option>
         </select>
     </div>
 
     <div class="p-3">
     <label class="form-label" for="country">Pays : </label><br>
-        <select name="country" class="country " id="country" wire:model="country">
-            <option value="Québec">Québec</option>
+        <select name="country" class="country " id="country" >
+            <option value="Canada">Canada</option>
         </select>
     </div>
 
@@ -74,7 +74,7 @@
     </div>
         <div class="p-3">
         <label class="form-label" for="noNeq">Nom : </label>
-        <input class="form-control" type="noNeq" id="noNeq" name="noNeq" wire:model.live="noNeq">
+        <input class="form-control" type="noNeq" id="noNeq" name="noNeq">
         
     </div>
 
