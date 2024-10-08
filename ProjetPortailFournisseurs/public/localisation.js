@@ -52,3 +52,10 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
 
 });
+
+
+
+document.addEventListener('DOMContentLoaded', ()=> {
+
+    fetch('https://www.donneesquebec.ca/recherche/api/3/action/datastore_search?resource_id=32f6ec46-85fd-45e9-945b-965d9235840a&q=')
+});

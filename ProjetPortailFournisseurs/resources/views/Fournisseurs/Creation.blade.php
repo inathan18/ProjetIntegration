@@ -8,29 +8,40 @@
 <div class="p-3 text-center"> <h1> Frame Inscription </h1></div>
 
 <!-- Section Inscription -->
+    <div class="p-3">
+        <label class="form-label" for="noNeq">Entrer NEQ ou nom de l'entreprise (si vous détenez une licence RBQ): </label>
+
+                @livewire('validation-r-b-q')
+    </div>
 <form method="post" action="{{route('Fournisseurs.store')}}">
 @csrf
 
     <div class="p-3">
         <label class="form-label" for="name">Nom : </label>
-        <input class="form-control" type="name" id="name" name="name">
+        <input class="form-control" type="name" id="name" name="name" wire:model.live="name">
+        
     </div>
+
+        <div class="p-3">
+    <label class="form-label" for="neq">No NEQ: </label>
+    <input class="form-control" type="neq" id="neq" name="neq">
+</div>
 
     <div class="p-3">
         <label class="form-label" for="address">Adresse : </label>
-        <input class="form-control" type="address" id="address" name="address">
+        <input class="form-control" type="address" id="address" name="address" wire:model="address">
     </div>
 
     <div class="p-3">
         <label class="form-label" for="city">Ville : </label><br>
-        <select name="city" class="city " id="city">
+        <select name="city" class="city " id="city" wire:model="city">
             <option value="city">Sélectionnez la ville</option>
         </select>
     </div>
 
     <div class="p-3">
     <label class="form-label" for="country">Pays : </label><br>
-        <select name="country" class="country " id="country">
+        <select name="country" class="country " id="country" wire:model="country">
             <option value="Québec">Québec</option>
         </select>
     </div>
@@ -61,11 +72,13 @@
         <label class="form-label" for="personneContact">Personne Contact : </label>
         <input class="form-control" type="personneContact" id="personneContact" name="personneContact">
     </div>
-
-    <div class="p-3">
-        <label class="form-label" for="neq">NEQ : </label>
-        <input class="form-control" type="neq" id="neq" name="neq">
+        <div class="p-3">
+        <label class="form-label" for="noNeq">Nom : </label>
+        <input class="form-control" type="noNeq" id="noNeq" name="noNeq" wire:model.live="noNeq">
+        
     </div>
+
+
 
     <div class="p-3">
         <label class="form-label" for="email">Courriel : </label>

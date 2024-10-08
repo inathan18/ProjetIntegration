@@ -81,6 +81,7 @@ class FournisseursController extends Controller
         try {
             $fournisseurs = new Fournisseur($request->all());
             Log::debug($fournisseurs);
+            $fournisseurs->postCode = str_replace(' ', '', $fournisseurs->postcode);
             $fournisseurs->save();
             }
                 
