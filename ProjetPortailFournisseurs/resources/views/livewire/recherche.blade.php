@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-3" wire:ignore>
             <div class="col-12 col-md-6 col-lg-3 mb-2">
                 <select id="produitsServices" class="selectpicker" multiple wire:model="filtre.service" data-live-search="true" title="Produits et Services" data-selected-text-format="static">
                     <option value="pelouse">Pelouse</option>
@@ -58,7 +58,7 @@
             </div>
 
             <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <select id="regions" class="selectpicker" multiple wire:model="filtre.region" data-live-search="true" title="Régions administratives" data-selected-text-format="static">
+                <select id="regions" class="selectpicker" multiple wire:model="filtre.region" data-live-search="true" title="Régions administratives" data-selected-text-format="static" wire:change="chargerVilles" >
                     @foreach($regions as $region)
                         <option value="{{ $region }}">{{ $region }}</option>
                     @endforeach
@@ -66,7 +66,7 @@
             </div>
 
             <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <select id="villes" class="selectpicker" multiple wire:model="filtre.ville" data-live-search="true" title="Villes" data-selected-text-format="static">
+                <select id="villes" class="selectpicker" multiple wire:model.defer="filtre.ville" data-live-search="true" title="Villes" data-selected-text-format="static">
                     @foreach($villes as $ville)
                         <option value="{{ $ville['value'] }}">{{ $ville['value'] }}</option>
                     @endforeach
@@ -133,10 +133,20 @@
 @section('scripts')
 
 <script>
-Livewire.hook('message.processed', () => {
-    $('.selectpicker').selectpicker('refresh');
-});
-</script>
+document.addEventListener('DOMContentLoaded', function () {
+    $('.selectpicker').selectpicker();
 
+    // Événement Livewire
+    Livewire.on('villes-chargées', () => {
+        $('#villes').html('');
+        @this.villes.forEach(ville => {
+            $('#villes').append(new Option(ville.value, ville.value));
+        });
+        $('#villes').selectpicker('refresh');
+    });
+});
+
+
+</script>
 
 @endsection

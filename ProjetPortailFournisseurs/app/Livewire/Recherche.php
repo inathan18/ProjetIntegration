@@ -30,6 +30,11 @@ class Recherche extends Component
     {
         $this->recherche();
         $this->chargerRegionsEtVilles();
+        $this->chargerVilles();
+        $this->filtre['region'] = [];
+        Log::info('Régions après chargement', ['regions' => $this->regions]);
+        Log::info('Filtre avant chargement des villes', ['filtre' => $this->filtre['region']]);
+
     }
 
     public function updatedRechercheTerm()
@@ -57,22 +62,6 @@ class Recherche extends Component
             $query->where('name', 'like', '%' . $this->rechercheTerm . '%');
         }
 
-        // Filtres supplémentaires
-        /*
-        if (!empty($this->filtre['service'])) {
-            $query->whereIn('service', $this->filtre['service']);
-        }
-        if (!empty($this->filtre['categorie'])) {
-            $query->whereIn('categorie', $this->filtre['categorie']);
-        }
-        if (!empty($this->filtre['region'])) {
-            $query->whereIn('region', $this->filtre['region']);
-        }
-        if (!empty($this->filtre['ville'])) {
-            $query->whereIn('ville', $this->filtre['ville']);
-        }
-        */
-
         $this->fournisseurs = $query->get();
     }
 
@@ -83,10 +72,10 @@ class Recherche extends Component
 
         // Utilisation de Cache pour récupérer les données
         $data = Cache::remember($cacheKey, $cacheTime, function () {
-            // Faire l'appel à l'API si les données ne sont pas en cache
             $response = file_get_contents('https://www.donneesquebec.ca/recherche/api/3/action/datastore_search_sql?sql=SELECT%20munnom%2C%20regadm%20FROM%20%2219385b4e-5503-4330-9e59-f998f5918363%22');
             return json_decode($response, true);
         });
+
         $municipalitesDB = Cache::remember('municipalites_db', 60, function () {
             return Fournisseur::distinct()->pluck('city')->toArray();
         });
@@ -98,8 +87,7 @@ class Recherche extends Component
         $municipalitesSet = array_flip($municipalitesDB);
 
         foreach ($data['result']['records'] as $item) {
-            // Ajouter la ville si elle est dans la base de données
-            if (isset($municipalitesSet[$item['munnom']])) {
+            if (in_array($item['munnom'], $municipalitesDB)) {
                 $this->villes[] = [
                     'value' => $item['munnom'],
                     'region' => $item['regadm']
@@ -109,6 +97,9 @@ class Recherche extends Component
         }
 
         $this->regions = array_keys($regionsTemp);
+
+        Log::info('Régions chargées', ['regions' => $this->regions]);
+        Log::info('Villes chargées', ['villes' => $this->villes]);
 
         // Tri des villes et des régions par numéro
         $this->villes = $this->sortByRegionNumber($this->villes);
@@ -124,23 +115,30 @@ class Recherche extends Component
         });
         return $array;
     }
-    
-    public function updatedFiltreRegion()
-    {
-        Log::info('Filtre région mis à jour', ['regions' => $this->filtre['region']]);
-        $this->filtre['ville'] = [];
-        $this->chargerVilles();
-    }
-    
 
     public function chargerVilles()
     {
+        Log::info('Régions sélectionnées pour le filtrage', ['regions' => $this->filtre['region']]);
+
+        // Si aucune région n'est sélectionnée, videz la liste des villes
+        if (empty($this->filtre['region'])) {
+            $this->villes = [];
+            $this->dispatch('villes-chargées');
+            return;
+        }
+
         // Filtrer les villes selon les régions sélectionnées
         $this->villes = collect($this->villes)->filter(function ($ville) {
             return in_array($ville['region'], $this->filtre['region']);
         })->values()->toArray();
+
+        Log::info('Villes après filtrage', ['villes' => $this->villes]);
+
+        $this->dispatch('villes-chargées');
     }
 
+    
+    
     public function ExporterSelection()
     {
         Log::info('Exportation des fournisseurs sélectionnés', ['selection' => $this->FournisseursSelectionnes]);
