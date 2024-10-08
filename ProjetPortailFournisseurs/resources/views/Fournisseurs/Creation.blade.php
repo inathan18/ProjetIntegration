@@ -80,7 +80,23 @@
         <label class="form-label" for="personneContact">Personne Contact : </label>
         <input class="form-control" type="personneContact" id="personneContact" name="personneContact">
     </div>
-        <div class="p-3">
+
+    <div class="p-3 row">
+        <label class="form-label" for="phone">Telephone : </label>
+        <div class="col-3">
+        <input class="form-control" type="phone" id="phone" name="phone">
+        </div>
+        <div class="col-1"></div>
+        <div class="col-3">
+        <select name="type" class="type " id="type" >
+            <option value="Bureau">Bureau</option>
+            <option value="Domicile">Domicile</option>
+            <option value="Cellulaire">Cellulaire</option>
+        </select>
+        </div>
+    </div>
+
+    <div class="p-3">
         <label class="form-label" for="noNeq">Nom : </label>
         <input class="form-control" type="noNeq" id="noNeq" name="noNeq">
         
