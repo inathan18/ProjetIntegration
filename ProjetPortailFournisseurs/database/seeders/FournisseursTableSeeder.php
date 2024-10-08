@@ -20,6 +20,7 @@ class FournisseursTableSeeder extends Seeder
             'address' => '4025 Boulevard des Récollets',
             'city' => 'Trois-Rivières',
             'province' => 'Québec',
+            'region' => 'Mauricie (04)',
             'country' => 'Canada',
             'phone' => json_encode(['8196930855', 'Bureau']),
             'postCode' => 'g9a6m1',

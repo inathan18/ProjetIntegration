@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('address', 100);
             $table->string('city', 100);
             $table->string('province', 100);
+            $table->string('region', 100)->nullable();
             $table->string('country', 100);
             $table->json('phone')->nullable();
             $table->string('postCode', 10);
@@ -25,7 +26,7 @@ return new class extends Migration
             $table->string('email', 100);
             $table->json('files')->nullable();
             $table->string('statut', 10);
-            $table->string('neq', 100)->unique();
+            $table->string('neq', 100)->nullable()->unique();
             $table->string('rbq', 100)->nullable();
             $table->string('personneContact', 100);
             $table->timestamps();
