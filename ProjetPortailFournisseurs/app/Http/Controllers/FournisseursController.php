@@ -59,6 +59,10 @@ class FournisseursController extends Controller
         return view('Fournisseurs.Creation');
     }
 
+    public function unspsc(){
+        return view('Fournisseurs.UNSPSC');
+    }
+
 
     /* Fonction utilisé pour connecter le Fournisseur a son compte */
     public function login(Request $request)
