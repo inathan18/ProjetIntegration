@@ -18,7 +18,7 @@
     @if(!empty($search))
         <div class="w-1/3 bg-white rounded-lg shadow" wire:ignore>
             @if(!empty($tests))
-                <select data-pharaonic="select2"  wire:model.change="unspsc" name="unspsc" class="unspsc" id="unspsc" multiple>
+                <select wire:model="unspsc" name="unspsc[]" class="form-control" id="unspsc" multiple>
                 <option disabled selected value>Choisir un ou des UNSPSC</option>
                 @php $key=0 @endphp
                     @foreach($tests as $unspsc)
@@ -33,4 +33,15 @@
             @endif
         </div>
     @endif
+@push('scripts')
+<script>
+        $(document).ready(function () {
+            $('#unspsc').select2();
+            $('#unspsc').on('change', function (e) {
+                var data = $('#unspsc').select2("val");
+            @this.set('selectedUnspscs', data);
+            });
+        });
+    </script>
+@endpush
 </div>

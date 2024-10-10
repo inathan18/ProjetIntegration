@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\State;
+use Livewire\Attributes\Url;
 
 use function Cerbero\LazyJson\lazyJson;
 
@@ -25,6 +26,7 @@ class RechercheUNSPSC extends Component
 {
     public $search = '';
     public $unspscs;
+    public $selectedUnspscs =[];
 
     public function updatedTerm(){
 
