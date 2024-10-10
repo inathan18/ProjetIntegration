@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('postCode', 10);
             $table->json('unspsc')->nullable();
             $table->string('website', 255);
-            $table->string('email', 100);
+            $table->string('email', 100)->unique();
             $table->json('files')->nullable();
             $table->string('statut', 10);
             $table->string('neq', 100)->nullable()->unique();

@@ -64,7 +64,7 @@ class FournisseursController extends Controller
     public function login(Request $request)
     {
         $reussi = (auth()->guard('fournisseur')->attempt(['email' => $request->email, 'password' => $request->password]));
-        Log::debug(''.$reussi);
+        Log::debug('Réussi: '.$reussi);
 
         if($reussi){
             $fournisseur = Fournisseur::Where('email', $request->email)->firstOrFail();
@@ -76,20 +76,41 @@ class FournisseursController extends Controller
     }
 
     /* fonction utilisé pour la création de compte Fournisseur*/
-    public function store(FournisseurRequest $request)
+    public function store(Request $request)
     {
+        $ctrPhone = 0 ;
+
+        if (isset($_POST['phone']) && isset($_POST['type'])) {
+            $phoneNumbers = $_POST['phone']; // Array of phone numbers
+            $types = $_POST['type'];
+            Log::debug(count($phoneNumbers));
+            $ctrPhone = count($phoneNumbers);
+        }
+
+        for($i = 0 ; $i < $ctrPhone; $i++) {
+            Log::debug($phoneNumbers[$i]);
+        }
+
+
         try {
-            $fournisseurs = new Fournisseur($request->all());
-            Log::debug($fournisseurs);
-            $fournisseurs->postCode = str_replace(' ', '', $fournisseurs->postcode);
-            $fournisseurs->save();
+            $fournisseur = new Fournisseur($request->all());
+            Log::debug($fournisseur);
+
+
+            foreach ($_POST['phone'] as $numPhone) {
+
+            }
+
+
+            $fournisseur->postCode = str_replace(' ', '', $fournisseur->postcode);
+            $fournisseur->save();
             }
                 
             catch (\Throwable $e) {
                 Log::debug($e);
-                return redirect()->route('Fournisseurs.login');
+                return redirect()->route('Fournisseurs.creation');
             }
-            return redirect()->route('Fournisseurs.login');
+            return redirect()->route('Fournisseurs.connexion');
     }
 
     

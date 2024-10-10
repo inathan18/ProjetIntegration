@@ -25,15 +25,12 @@ class FournisseurRequest extends FormRequest
         return [
             'name' => 'required|min:3',
             'address' => 'required',
-            'city' => 'required',
-            'province' => 'required',
-            'region' => 'required',
-            'country' => 'required',
-            'phone' => 'required|min:10|max:12',
-            'country' => 'required',
             'phone' => 'required',
             'postCode' => 'required',
-            'unspsc' => 'required',
+            'website' => 'required',
+            'personneContact' => 'required',
+            'email' => 'required',
+            'password' => 'required',
         ];
     }
 
@@ -42,6 +39,13 @@ class FournisseurRequest extends FormRequest
         return 
         [
             'nom.required' => 'Erreur nom',
+            'address.required' => 'Erreur address',
+            'phone.required' => 'Erreur phone',
+            'postCode.required' => 'Erreur postCode',
+            'website.required' => 'Erreur website',
+            'email.required' => 'Erreur email',
+            'personneContact.required' => 'Erreur personneContact',
+            'password.required' => 'Erreur password',
         ];
     }
 }
