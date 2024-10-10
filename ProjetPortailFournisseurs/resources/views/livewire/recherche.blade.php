@@ -133,20 +133,19 @@
 @section('scripts')
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    $('.selectpicker').selectpicker();
-
-    // Événement Livewire
-    Livewire.on('villes-chargées', () => {
-        $('#villes').html('');
-        @this.villes.forEach(ville => {
-            $('#villes').append(new Option(ville.value, ville.value));
-        });
-        $('#villes').selectpicker('refresh');
+Livewire.on('villes-chargées', () => {
+    let selectElement = $('#villes');
+    selectElement.empty();
+    selectElement.selectpicker('destroy'); 
+    
+    @this.villes.forEach(ville => {
+        if (!selectElement.find(`option[value="${ville.value}"]`).length) {
+            selectElement.append(new Option(ville.value, ville.value));
+        }
     });
+    
+    selectElement.selectpicker('render');
+    selectElement.selectpicker('refresh');
 });
-
-
 </script>
-
 @endsection
