@@ -1,8 +1,10 @@
 <div class="container mt-5">
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <strong>Rechercher et Filtrer</strong>
+            <button class="btn btn-secondary ms-auto" wire:click="resetFiltres">Réinitialiser les filtres</button>
         </div>
+
         <div class="card-body">
             <div class="row mb-3 align-items-center">
                 <div class="col-12 col-md-8 mb-2">
@@ -76,8 +78,9 @@
     </div>
 
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <strong>Liste des Fournisseurs</strong>
+            <button class="btn btn-secondary ms-auto" wire:click="ExporterSelection">Liste des fournisseurs sélectionnés</button>
         </div>
         <div class="card-body">
             <table class="table table-bordered">
@@ -125,9 +128,6 @@
             </table>
         </div>
     </div>
-    <div class="text-end mt-3">
-        <button class="btn btn-success" wire:click="ExporterSelection">Liste des fournisseurs sélectionnés</button>
-    </div>
 </div>
 
 @section('scripts')
@@ -136,16 +136,29 @@
 Livewire.on('villes-chargées', () => {
     let selectElement = $('#villes');
     selectElement.empty();
-    selectElement.selectpicker('destroy'); 
-    
+
     @this.villes.forEach(ville => {
-        if (!selectElement.find(`option[value="${ville.value}"]`).length) {
-            selectElement.append(new Option(ville.value, ville.value));
-        }
+        selectElement.append(new Option(ville.value, ville.value));
     });
     
-    selectElement.selectpicker('render');
-    selectElement.selectpicker('refresh');
+    if (selectElement.data('selectpicker')) 
+    {
+        selectElement.selectpicker('destroy');
+    }
+
+    selectElement.selectpicker('render'); 
+    selectElement.selectpicker('refresh'); 
 });
+
+Livewire.on('resetSelects',  () => {
+        $('#produitsServices').selectpicker('val', ''); 
+        $('#categories').selectpicker('val', ''); 
+        $('#regions').selectpicker('val', ''); 
+        $('#villes').selectpicker('val', '');
+        
+        $('.selectpicker').selectpicker('refresh');
+    });
 </script>
+
+
 @endsection

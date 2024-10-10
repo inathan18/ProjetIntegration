@@ -137,6 +137,25 @@ class Recherche extends Component
 
         $this->dispatch('villes-chargées');
     }
+
+    public function resetFiltres()
+    {
+        // Réinitialise les filtres
+        $this->filtre = [
+            'attente' => false,
+            'accepte' => false,
+            'refuse' => false,
+            'reviser' => false,
+            'service' => [],
+            'categorie' => [],
+            'region' => [],
+            'ville' => []
+        ];
+
+        $this->rechercheTerm = '';
+        $this->recherche();
+        $this->dispatch('resetSelects');
+    }
     
     public function ExporterSelection()
     {
