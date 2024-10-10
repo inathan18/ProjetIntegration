@@ -16,19 +16,18 @@
     </div>
 
     @if(!empty($search))
-        <div class="w-1/3 bg-white rounded-lg shadow">
-  
+        <div class="w-1/3 bg-white rounded-lg shadow" wire:ignore>
             @if(!empty($tests))
-                <ul class="divide-y-2 divide-gray-100">
+                <select data-pharaonic="select2"  wire:model.change="unspsc" name="unspsc" class="unspsc" id="unspsc" multiple>
+                <option disabled selected value>Choisir un ou des UNSPSC</option>
+                @php $key=0 @endphp
                     @foreach($tests as $unspsc)
-                        <li class="p-2 hover:bg-blue-600 hover:text-blue-200" wire:key="{{ $unspsc['codeUnspsc']}}">
-                            <a
-                                href="https://www.google.com"
-                                class="padding-top-5 list-item "
-                            >{{ $unspsc['codeUnspsc'] }} - {{ $unspsc['descUnspsc'] }}</a>
-                        </li>
+                    {{$key++}}
+                        <option value="{{$key}}">
+                            {{ $unspsc['codeUnspsc'] }} - {{ $unspsc['detailUnspsc'] }}
+                        </option>
                     @endforeach
-                </ul>
+                </select>
             @else
                 <div class="list-item">No results!</div>
             @endif

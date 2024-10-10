@@ -9,7 +9,7 @@ use App\Http\Controllers\AdminsController;
 
 // Route pour Usagers
 
-Route::get('/connexionUsagers', 
+Route::get('/usagers/connexion', 
 [UsagersController::class, 'index'])->name('Usagers.connexion');
 
 Route::post('/LoginUsagers', 
@@ -23,23 +23,47 @@ Route::get('/', function () {
 
 // Routes pour fournisseurs
 
-Route::get('/Accueil', 
+Route::get('/fournisseur/accueil', 
 [FournisseursController::class, 'accueil'])->name('Fournisseurs.accueil');
 
-Route::get('/connexionNEQ', 
+Route::get('/fournisseur/statut', 
+[FournisseursController::class, 'statut'])->name('Fournisseurs.statut');
+
+Route::get('/fournisseur/edit', 
+[FournisseursController::class, 'edit'])->name('Fournisseurs.edit');
+
+Route::get('/fournisseur/connexionNEQ', 
 [FournisseursController::class, 'connexionNEQ'])->name('Fournisseurs.connexionNEQ');
 
-Route::get('/connexion', 
+Route::get('/fournisseur/connexion', 
 [FournisseursController::class, 'index'])->name('Fournisseurs.connexion');
 
-Route::get('/inscription', 
+Route::get('/fournisseur/inscription', 
 [FournisseursController::class, 'create'])->name('Fournisseurs.creation');
 
-Route::post('/inscription', 
+Route::get('/fournisseur/unspsc', 
+[FournisseursController::class, 'unspsc'])->name('Fournisseurs.UNSPSC');
+
+Route::post('/fournisseur/inscription', 
 [FournisseursController::class, 'store'])->name('Fournisseurs.store');
+
+Route::post('/fournisseur/upload', 
+[FournisseursController::class, 'upload'])->name('Fournisseurs.fichier.upload');
 
 Route::post('/loginFournisseur', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
+
+Route::get('/fournisseur/deleteFichier', 
+[FournisseursController::class, 'fichierDelete'])->name('Fournisseurs.fichier.delete');
+
+Route::get('/fournisseur/monDossier', 
+[FournisseursController::class, 'show'])->name('Fournisseurs.dossier');
+
+Route::get('/fournisseur/modification', 
+[FournisseursController::class, 'edit'])->name('Fournisseurs.edit');
+
+Route::patch('/fournisseur/{fournisseur}/modification', 
+[FournisseursController::class, 'update'])->name('Fournisseurs.update');
 
 
 
