@@ -45,7 +45,7 @@ class Recherche extends Component
     {
         $query = Fournisseur::query();
 
-        // Cases à cocher
+        // Filtres de statut
         $statuts = [];
         if ($this->filtre['attente']) $statuts[] = 'AT';
         if ($this->filtre['accepte']) $statuts[] = 'A';
@@ -61,7 +61,33 @@ class Recherche extends Component
             $query->where('name', 'like', '%' . $this->rechercheTerm . '%');
         }
 
+        $villesAutorisees = collect($this->toutesLesVilles);
+        
+        // Filtre par région
+        if (!empty($this->filtre['region'])) {
+            $villesAutorisees = $villesAutorisees->filter(function ($ville) {
+                return in_array($ville['region'], $this->filtre['region']);
+            });
+        }
+        
+        // Filtre par villes spécifiques si sélectionnées
+        if (!empty($this->filtre['ville'])) {
+            $villesFinales = $this->filtre['ville'];
+        } else {
+            $villesFinales = $villesAutorisees->pluck('value')->unique()->values()->toArray();
+        }
+
+        if (!empty($villesFinales)) {
+            $query->whereIn('city', $villesFinales);
+        }
+
         $this->fournisseurs = $query->get();
+        
+        Log::info('Recherche effectuée', [
+            'régions' => $this->filtre['region'],
+            'villes' => $villesFinales,
+            'résultats' => count($this->fournisseurs)
+        ]);
     }
 
     public function chargerRegionsEtVilles()
@@ -93,7 +119,7 @@ class Recherche extends Component
                     'region' => $item['regadm']
                 ];
                 $this->villes[] = $ville;
-                $this->toutesLesVilles[] = $ville;  // Ajout ici
+                $this->toutesLesVilles[] = $ville; 
                 $regionsTemp[$item['regadm']] = true;
             }
         }
@@ -122,20 +148,22 @@ class Recherche extends Component
 
     public function chargerVilles()
     {
-        Log::info('Régions sélectionnées pour le filtrage', ['regions' => $this->filtre['region']]);
-        Log::info('Toutes les villes disponibles', ['villes' => $this->toutesLesVilles]);
-
         if (empty($this->filtre['region'])) {
             $this->villes = $this->toutesLesVilles;
         } else {
-            $this->villes = collect($this->toutesLesVilles)->filter(function ($ville) {
-                return in_array($ville['region'], $this->filtre['region']);
-            })->values()->toArray();
+            $this->villes = collect($this->toutesLesVilles)
+                ->filter(function ($ville) {
+                    return in_array($ville['region'], $this->filtre['region']);
+                })
+                ->values()
+                ->toArray();
         }
 
-        Log::info('Villes après filtrage', ['villes' => $this->villes]);
-
+        $villesDisponibles = collect($this->villes)->pluck('value')->toArray();
+        $this->filtre['ville'] = array_values(array_intersect($this->filtre['ville'], $villesDisponibles));
+        
         $this->dispatch('villes-chargées');
+        $this->recherche();
     }
 
     public function chargerToutesLesVilles()

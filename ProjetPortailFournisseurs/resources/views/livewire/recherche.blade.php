@@ -45,7 +45,8 @@
 
         <div class="row mb-3" wire:ignore>
             <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <select id="produitsServices" class="selectpicker" multiple wire:model="filtre.service" data-live-search="true" title="Produits et Services" data-selected-text-format="static">
+                <select id="produitsServices" class="selectpicker" multiple wire:model="filtre.service" data-live-search="true"
+                 title="Produits et Services" data-selected-text-format="static">
                     <option value="pelouse">Pelouse</option>
                     <option value="rouleuses">Rouleuses pour pelouses</option>
                     <option value="scarificateur">Scarificateur de pelouse</option>
@@ -53,14 +54,16 @@
             </div>
 
             <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <select id="categoriesTravaux" class="selectpicker" multiple wire:model="filtre.categorie" data-live-search="true" title="Catégories de Travaux" data-selected-text-format="static">
+                <select id="categoriesTravaux" class="selectpicker" multiple wire:model="filtre.categorie" data-live-search="true"
+                 title="Catégories de Travaux" data-selected-text-format="static">
                     <option value="general">Entrepreneur général</option>
                     <option value="specialise">Entrepreneur spécialisé</option>
                 </select>
             </div>
 
             <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <select id="regions" class="selectpicker" multiple wire:model="filtre.region" data-live-search="true" title="Régions administratives" data-selected-text-format="static" wire:change="chargerVilles" >
+                <select id="regions" class="selectpicker" multiple wire:model="filtre.region" data-live-search="true"
+                 title="Régions administratives" data-selected-text-format="static" wire:change="chargerVilles">
                     @foreach($regions as $region)
                         <option value="{{ $region }}">{{ $region }}</option>
                     @endforeach
@@ -68,7 +71,8 @@
             </div>
 
             <div class="col-12 col-md-6 col-lg-3 mb-2">
-                <select id="villes" class="selectpicker" multiple wire:model.defer="filtre.ville" data-live-search="true" title="Villes" data-selected-text-format="static">
+                <select id="villes" class="selectpicker" multiple wire:model.live="filtre.ville" data-live-search="true"
+                 title="Villes" data-selected-text-format="static" wire:change="recherche">
                     @foreach($villes as $ville)
                         <option value="{{ $ville['value'] }}">{{ $ville['value'] }}</option>
                     @endforeach
@@ -99,7 +103,8 @@
                     @foreach ($fournisseurs as $fournisseur)
                     <tr>
                         <td>
-                            <span class="text-{{ $fournisseur->statut == 'AT' ? 'warning' : ($fournisseur->statut == 'A' ? 'success' : ($fournisseur->statut == 'R' ? 'danger' : 'secondary')) }}">
+                            <span class="text-{{ $fournisseur->statut == 'AT' ? 'warning' : 
+                                ($fournisseur->statut == 'A' ? 'success' : ($fournisseur->statut == 'R' ? 'danger' : 'secondary')) }}">
                                 @if ($fournisseur->statut == 'AT')
                                     <i class="fas fa-hourglass-half"></i>
                                 @elseif ($fournisseur->statut == 'A')
@@ -131,37 +136,53 @@
 </div>
 
 @section('scripts')
-
 <script>
-Livewire.on('villes-chargées', () => {
-    let selectElement = $('#villes');
-    selectElement.empty();
+$(document).ready(function() {
+    $('.selectpicker').selectpicker();
 
-    @this.villes.forEach(ville => {
-        selectElement.append(new Option(ville.value, ville.value));
+    // Gestion du changement de région
+    $('#regions').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+        let selectedRegions = $(this).val() || [];
+        
+        @this.set('filtre.region', selectedRegions);
+        
+        // Déclencher la mise à jour des villes
+        @this.chargerVilles();
     });
-    
-    if (selectElement.data('selectpicker')) 
-    {
+
+    // Gestion du changement de ville
+    $('#villes').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+        let selectedVilles = $(this).val() || [];
+        @this.set('filtre.ville', selectedVilles);
+        @this.recherche();
+    });
+
+    Livewire.on('villes-chargées', () => {
+        let selectElement = $('#villes');
+        selectElement.empty();
+
+        @this.villes.forEach(ville => {
+            selectElement.append(new Option(ville.value, ville.value));
+        });
+        
+        selectElement.val(@this.filtre.ville);
+        
         selectElement.selectpicker('destroy');
-    }
+        selectElement.selectpicker('render');
+        selectElement.selectpicker('refresh');
+    });
 
-    selectElement.selectpicker('render'); 
-    selectElement.selectpicker('refresh'); 
-});
-
-Livewire.on('resetSelects',  () => {
-        $('#produitsServices').selectpicker('val', ''); 
-        $('#categories').selectpicker('val', ''); 
-        $('#regions').selectpicker('val', ''); 
+    // Bouton reset
+    Livewire.on('resetSelects', () => {
+        $('#produitsServices').selectpicker('val', '');
+        $('#categoriesTravaux').selectpicker('val', '');
+        $('#regions').selectpicker('val', '');
         $('#villes').selectpicker('val', '');
         
         @this.chargerToutesLesVilles();
-
-        $('.selectpicker').selectpicker('refresh');
         
+        $('.selectpicker').selectpicker('refresh');
     });
+});
 </script>
-
-
 @endsection
