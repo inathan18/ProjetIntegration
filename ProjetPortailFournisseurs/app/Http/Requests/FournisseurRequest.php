@@ -12,7 +12,7 @@ class FournisseurRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /*
@@ -25,10 +25,10 @@ class FournisseurRequest extends FormRequest
         return [
             'name' => 'required|min:3',
             'address' => 'required',
-            'phone' => 'required',
             'postCode' => 'required',
             'website' => 'required',
             'personneContact' => 'required',
+            'phone' => 'required',
             'email' => 'required',
             'password' => 'required',
         ];
@@ -38,9 +38,8 @@ class FournisseurRequest extends FormRequest
     {
         return 
         [
-            'nom.required' => 'Erreur nom',
+            'name.required' => 'Erreur nom',
             'address.required' => 'Erreur address',
-            'phone.required' => 'Erreur phone',
             'postCode.required' => 'Erreur postCode',
             'website.required' => 'Erreur website',
             'email.required' => 'Erreur email',

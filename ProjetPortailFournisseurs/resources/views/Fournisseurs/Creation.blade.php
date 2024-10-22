@@ -84,13 +84,13 @@
     <div class="col-6 p-3">
         <div id="phoneNumbers">
         <div class="phone-number-container col-12" style="margin-bottom: 7px;">
-            <label for="phone1">Telephone No.1:</label>
-            <input type="text" name="phone[]" id="phone" required>
-            <select name="type[]" class="type " id="type">
+            <label for="phone1">Telephone</label>
+            <select name="phone[]" class="phone " id="phone">
                 <option value="Bureau">Bureau</option>
                 <option value="Domicile">Domicile</option>
                 <option value="Cellulaire">Cellulaire</option>
             </select>
+            <input type="text" name="phone[]" id="phone" min="10" max="12" required>
         </div>
     </div>
     <button type="button" class="btn btn-primary" style="transform:scale(0.6);"onclick="addPhoneNumber()">+</button>

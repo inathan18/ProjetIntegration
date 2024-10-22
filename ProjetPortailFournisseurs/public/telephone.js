@@ -11,13 +11,13 @@ function addPhoneNumber() {
     addTelephoneDiv.classList.add('col-12');
     addTelephoneDiv.id = `phone-${phoneCtr}`;
     addTelephoneDiv.innerHTML = `
-        <label for="phone${phoneCtr}">Telephone No.${phoneCtr}:</label>
-        <input type="text" name="phone[]" id="phone" required>
-        <select name="type[]" class="type " id="type">
-        <option value="Bureau">Bureau</option>
-        <option value="Domicile">Domicile</option>
-        <option value="Cellulaire">Cellulaire</option>
+        <label for="phone${phoneCtr}">Telephone</label>
+        <select name="phone[]" class="phone " id="phone">
+            <option value="Bureau">Bureau</option>
+            <option value="Domicile">Domicile</option>
+            <option value="Cellulaire">Cellulaire</option>
         </select>
+        <input type="text" name="phone[]" id="phone" required>
         <button class="btn btn-danger" style="transform:scale(0.6);" onclick="removePhoneNumber('phone-${phoneCtr}')"> - </button>
     `;
     

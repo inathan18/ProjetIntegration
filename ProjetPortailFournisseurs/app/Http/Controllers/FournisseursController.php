@@ -76,33 +76,14 @@ class FournisseursController extends Controller
     }
 
     /* fonction utilisé pour la création de compte Fournisseur*/
-    public function store(Request $request)
+    public function store(FournisseurRequest $request)
     {
-        $ctrPhone = 0 ;
-
-        if (isset($_POST['phone']) && isset($_POST['type'])) {
-            $phoneNumbers = $_POST['phone']; // Array of phone numbers
-            $types = $_POST['type'];
-            Log::debug(count($phoneNumbers));
-            $ctrPhone = count($phoneNumbers);
-        }
-
-        for($i = 0 ; $i < $ctrPhone; $i++) {
-            Log::debug($phoneNumbers[$i]);
-        }
-
-
         try {
             $fournisseur = new Fournisseur($request->all());
             Log::debug($fournisseur);
 
+            $fournisseur['postCode'] = trim($fournisseur->postCode);
 
-            foreach ($_POST['phone'] as $numPhone) {
-
-            }
-
-
-            $fournisseur->postCode = str_replace(' ', '', $fournisseur->postcode);
             $fournisseur->save();
             }
                 
