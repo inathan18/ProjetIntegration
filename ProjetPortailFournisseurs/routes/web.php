@@ -47,6 +47,7 @@ Route::post('/loginFournisseur',
 
 Route::get('/Recherche', Recherche::class);
 
+Route::get('/fournisseurs/selection', [FournisseursController::class, 'showSelected'])->name('fournisseurs.selectionnes');
 
 // Routes admin
 Route::get('/admin', 

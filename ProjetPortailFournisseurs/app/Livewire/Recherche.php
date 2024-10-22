@@ -194,9 +194,14 @@ class Recherche extends Component
     
     public function ExporterSelection()
     {
-        Log::info('Exportation des fournisseurs sélectionnés', ['selection' => $this->FournisseursSelectionnes]);
+        if (empty($this->FournisseursSelectionnes)) {
+            session()->flash('message', 'Veuillez sélectionner au moins un fournisseur.');
+            return;
+        }
+        session()->put('selected_fournisseurs', $this->FournisseursSelectionnes);
+        
+        return redirect()->route('fournisseurs.selectionnes');
     }
-
     public function render()
     {
         return view('livewire.recherche', [

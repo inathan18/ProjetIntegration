@@ -1,4 +1,11 @@
 <div class="container mt-5">
+@if (session()->has('message'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ session('message') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <strong>Rechercher et Filtrer</strong>
@@ -145,8 +152,6 @@ $(document).ready(function() {
         let selectedRegions = $(this).val() || [];
         
         @this.set('filtre.region', selectedRegions);
-        
-        // Déclencher la mise à jour des villes
         @this.chargerVilles();
     });
 
