@@ -156,7 +156,10 @@ Livewire.on('resetSelects',  () => {
         $('#regions').selectpicker('val', ''); 
         $('#villes').selectpicker('val', '');
         
+        @this.chargerToutesLesVilles();
+
         $('.selectpicker').selectpicker('refresh');
+        
     });
 </script>
 

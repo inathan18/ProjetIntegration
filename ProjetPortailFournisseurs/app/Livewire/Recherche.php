@@ -138,6 +138,13 @@ class Recherche extends Component
         $this->dispatch('villes-chargées');
     }
 
+    public function chargerToutesLesVilles()
+    {
+        $this->villes = $this->toutesLesVilles;
+        $this->dispatch('villes-chargées');
+    }
+    
+
     public function resetFiltres()
     {
         // Réinitialise les filtres
