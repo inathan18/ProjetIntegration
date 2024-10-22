@@ -26,10 +26,14 @@ class RechercheUNSPSC extends Component
 {
     public $search = '';
     public $unspscs;
-    public $selectedUnspscs =[];
+    public $selectedUnspscs = [];
 
     public function updatedTerm(){
 
+    }
+
+    public function hydrate(){
+        $this->dispatch('select2Hydrate');
     }
     public function render()
     {
