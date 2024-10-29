@@ -8,6 +8,7 @@
 <div class="p-3 text-center"> <h1> Frame Inscription </h1></div>
 
 <!-- Section Inscription -->
+<div id="inscription">
     <div class="p-3">
         <label class="form-label" for="noNeq">Entrer NEQ ou nom de l'entreprise (si vous détenez une licence RBQ): </label>
 
@@ -108,7 +109,7 @@
 
     <div class="align-items-center text-center">
 
-        <button class="btn" style="background-color: rgba(255,192,203,0.5); border-color: black;" type="submit"
+        <button disabled class="btn" id="submit" style="background-color: rgba(255,192,203,0.5); border-color: black;" type="submit"
         onclick="var val= document.getElementById('password').value; document.getElementById('password').value(sha512(val));">
 
             S'inscrire
@@ -116,6 +117,7 @@
         </button>
 
     </div>
+</div>
 </form>
 
     <!-- Fin de la Section Inscription -->
@@ -128,6 +130,9 @@
 
     <script src="../localisation.js"></script>
     <script src="../telephone.js"></script>
+
+    <script src="../Confirmation.js"></script>
+
 
 @endsection
 
