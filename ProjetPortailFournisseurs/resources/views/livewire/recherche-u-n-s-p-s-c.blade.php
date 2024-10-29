@@ -18,7 +18,7 @@
     @if(!empty($search))
         <div class="w-1/3 bg-white rounded-lg shadow">
             @if(!empty($tests))
-                <select wire:model.change="unspscs" name="unspsc[]" class="w-full unspsc form-select" id="unspsc">
+                {{--<select wire:model.change="unspscs" name="unspsc[]" class="w-full unspsc form-select" id="unspsc" multiple>
                 <option disabled selected value>Choisir un ou des UNSPSC</option>
                 @php $key=0 @endphp
                     @foreach($tests as $unspsc)
@@ -27,18 +27,19 @@
                             {{ $unspsc['codeUnspsc'] }} - {{ $unspsc['detailUnspsc'] }}
                         </option>
                     @endforeach
-                </select>
+                </select>--}}
+                @foreach($tests as $unspsc)
+                <div class="flex justify-between">
+                <label for="{{$unspsc['codeUnspsc']}}">{{ $unspsc['codeUnspsc'] }} - {{ $unspsc['detailUnspsc'] }}</label>
+                <input class="rounded form-checkbox" id="{{$unspsc['codeUnspsc']}}" type="checkbox"
+                value="{{$unspsc['codeUnspsc']}}" wire:model.lazy="unspscs"/>
+                </div>
+                @endforeach
+
             @else
                 <div class="list-item">Aucun résultat!</div>
             @endif
         </div>
     @endif
-<script>
-$(document).ready(function(){
-$('#unspsc').select2();
-$('#unspsc').on('change', function(){
-console.log('hi');
-});
-});
-</script>
+
 </div>
