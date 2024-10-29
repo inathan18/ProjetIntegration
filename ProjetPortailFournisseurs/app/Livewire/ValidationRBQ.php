@@ -41,7 +41,7 @@ class ValidationRBQ extends Component
             //Log::Debug($jsons['result']['records'][0]);
     
             $rbqCollections= collect(LazyCollection::fromJson($json, "*")->toArray());
-            $rbqs = $rbqCollections->all();
+            $rbqs = $rbqCollections;
             $rbqs = $jsons['result']['records'];
 
 
