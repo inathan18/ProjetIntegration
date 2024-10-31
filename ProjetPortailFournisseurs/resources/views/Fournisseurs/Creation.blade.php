@@ -77,16 +77,49 @@
         <input class="form-control" type="statut" id="statut" name="statut">
     </div>
 
-    <div class="p-3">
-        <label class="form-label" for="personneContact">Personne Contact : </label>
-        <input class="form-control" type="personneContact" id="personneContact" name="personneContact">
-    </div>
+    <div class="container-fluid"  id="Contact">
+        <div class="row">
+            <div class="p-3 col-4">
+                <label class="form-label" for="personneContact">Personne Contact : </label>
+                <input class="form-control" type="personneContact" id="personneContact" name="personneContact[]">
+            </div>
 
-    <div class="col-6 p-3">
+            <div class="col-4 p-3 align-self-center text-center">
+                <div id="PhonePersonnel">
+                <div class="phone-number-container col-12" style="margin-top: 10px;">
+                    <label for="phone1">Telephone Personnel</label>
+                    <select name="phone[]" class="phone">
+                        <option value="Bureau">Bureau</option>
+                        <option value="Domicile">Domicile</option>
+                        <option value="Cellulaire">Cellulaire</option>
+                    </select>
+                    <input type="text" name="personneContact[]" min="10" max="12" required>
+                </div>
+                <div class="phone-number-container col-12" style="margin-top: 10px;">
+                    <label for="phone1">Telephone Personnel</label>
+                    <select name="phone[]" class="phone">
+                        <option value="Bureau">Bureau</option>
+                        <option value="Domicile">Domicile</option>
+                        <option value="Cellulaire">Cellulaire</option>
+                    </select>
+                    <input type="text" name="personneContact[]" min="10" max="12" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-3 col-4">
+            <label class="form-label" for="email">Courriel : </label>
+            <input class="form-control" type="email" id="email" name="personneContact[]">
+        </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary" style="transform:scale(0.6);"onclick="addPersonneContact()">+</button>
+
+    <div class="col-4 p-3">
         <div id="phoneNumbers">
         <div class="phone-number-container col-12" style="margin-bottom: 7px;">
-            <label for="phone1">Telephone</label>
-            <select name="phone[]" class="phone " id="phone">
+            <label for="phone1">Telephone Compagnie</label>
+            <select name="phone[]" class="phone">
                 <option value="Bureau">Bureau</option>
                 <option value="Domicile">Domicile</option>
                 <option value="Cellulaire">Cellulaire</option>
@@ -94,12 +127,13 @@
             <input type="text" name="phone[]" id="phone" min="10" max="12" required>
         </div>
     </div>
+    </div>
     <button type="button" class="btn btn-primary" style="transform:scale(0.6);"onclick="addPhoneNumber()">+</button>
     </div>
 
-    <div class="p-3">
-        <label class="form-label" for="email">Courriel : </label>
-        <input class="form-control" type="email" id="email" name="email">
+    <div class="p-3 col-4">
+        <label class="form-label" for="email">Courriel compagnie (Connexion au site) : </label>
+        <input class="form-control" type="email" id="emailCompagnie" name="email">
     </div>
 
     <div class="p-3">

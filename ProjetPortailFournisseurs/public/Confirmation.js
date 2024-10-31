@@ -8,11 +8,11 @@ const form = document.getElementById("inscription");
 
 
 
-input1.addEventListener("keyup", (e) => {
+personneContact.addEventListener("keyup", (e) => {
     const value = e.currentTarget.value;
     submitButton.disabled = false;
 
-    if (input1.value === "") {
+    if (personneContact.value === "") {
         submitButton.disabled = true;
     }
 
