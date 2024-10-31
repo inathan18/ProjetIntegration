@@ -28,11 +28,13 @@ class RechercheUNSPSC extends Component
     public $unspscs;
     public $selectedUnspscs = [];
 
-    public function updatedTerm(){
+    public function updatedTerm()
+    {
 
     }
 
-    public function hydrate(){
+    public function hydrate()
+    {
         $this->dispatch('select2Hydrate');
     }
     public function render()
@@ -42,15 +44,15 @@ class RechercheUNSPSC extends Component
         $context = stream_context_create($options);
         $jsonPath = public_path('unspsc.json');
         $json = file_get_contents($jsonPath, false, $context);
-        $jsons = json_decode($json, TRUE);
-        
-        $unspscCollections= collect(LazyCollection::fromJson($json, "*")->toArray());
+        $jsons = json_decode($json, true);
+
+        $unspscCollections = collect(LazyCollection::fromJson($json, "*")->toArray());
         //Log::Debug($json);
 
         //$unspscCollections= collect(LazyCollection::fromJson($json, "value.*")->toArray());
 
 
-        
+
         //Log::Debug($json);
         //$unspscCollection = collect($jsons);
 
@@ -65,32 +67,31 @@ class RechercheUNSPSC extends Component
         }*/
         //Log::Debug($json);
         //$unspscCollection = Unspsc::hydrate($json);
-       // $unspscCollection = $unspscCollection->flatten();
-       //$unspscCollection = collect($json);
+        // $unspscCollection = $unspscCollection->flatten();
+        //$unspscCollection = collect($json);
         //Log::Debug($unspscCollection);
 
 
-           /* $unspscs = $unspscCollection->where('Id', 'like', '%' . $this->search . '%')
-            //->orWhere('Title', 'like', '%' . $this->search . '%')
-            ->get(10);*/
+        /* $unspscs = $unspscCollection->where('Id', 'like', '%' . $this->search . '%')
+         //->orWhere('Title', 'like', '%' . $this->search . '%')
+         ->get(10);*/
 
 
-                /*Log::Debug($unspscCollections->where('descUnspsc','Ruxolitinib'));
-                Log::Debug($unspscCollections->filter(function($unspscCollection){
-                    return str_contains($unspscCollection['descUnspsc'], 'police');
-                }));*/
-            if(!empty($this->search)){
-                $unspscs = $unspscCollections->filter(function($unspscCollection){
-                    return str_contains($unspscCollection['descUnspsc'], $this->search);
-                })->all();
-            }
-                else {
-                    $unspscs = NULL;
-                }
-            
+        /*Log::Debug($unspscCollections->where('descUnspsc','Ruxolitinib'));
+        Log::Debug($unspscCollections->filter(function($unspscCollection){
+            return str_contains($unspscCollection['descUnspsc'], 'police');
+        }));*/
+        if (!empty($this->search)) {
+            $unspscs = $unspscCollections->filter(function ($unspscCollection) {
+                return str_contains($unspscCollection['descUnspsc'], $this->search);
+            })->all();
+        } else {
+            $unspscs = null;
+        }
 
-                Log::Debug($unspscs);
-                $tests = $unspscs;
+
+        Log::Debug($unspscs);
+        $tests = $unspscs;
 
 
         return view('livewire.recherche-u-n-s-p-s-c', compact('tests'));
