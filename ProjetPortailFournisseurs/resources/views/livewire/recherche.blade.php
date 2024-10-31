@@ -128,8 +128,9 @@
                         <td>{{ $fournisseur->city }}</td>
                         <td></td>
                         <td></td>
+                        
                         <td>
-                            <a href="" class="btn btn-secondary btn-sm">Ouvrir</a>
+                            <a href="{{ route('fournisseurs.showFiche', $fournisseur->id) }}" class="btn btn-primary btn-sm">Ouvrir</a>
                         </td>
                         <td>
                             <input type="checkbox" wire:model="FournisseursSelectionnes" value="{{ $fournisseur->id }}">

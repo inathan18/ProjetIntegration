@@ -22,7 +22,7 @@
                     <tr>
                         <th>Nom</th>
                         <th>Email</th>
-                        <th>Téléphone</th>
+                        <th>Personne Contact</th>
                         <th>Contacté</th>
                     </tr>
                 </thead>
@@ -33,6 +33,7 @@
                         </tr>
                     @else
                         @foreach ($fournisseurs as $fournisseur)
+
                             <tr>
                                 <td>{{ $fournisseur->name }}</td>
                                 <td>{{ $fournisseur->email }}</td>
@@ -45,7 +46,9 @@
                     @endif
                 </tbody>
             </table>
-            <a href="{{ url()->previous() }}" class="btn btn-primary">Retour à la recherche</a>
+            <a href="{{ route('fournisseurs.recherche') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour à la recherche
+            </a>
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

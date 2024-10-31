@@ -77,23 +77,23 @@ class FournisseursController extends Controller
     // Fournisseurs selectionnés sur la page de recherche
     public function showSelected(Request $request)
     {
-        // Récupérer les IDs des fournisseurs sélectionnés depuis la session
         $selectedIds = $request->session()->get('selected_fournisseurs', []);
-        
-        // Vérifiez le contenu de la session
-        \Log::info('IDs sélectionnés : ', $selectedIds);
-        
-        // Récupérer les fournisseurs en fonction des IDs
         $fournisseurs = Fournisseur::whereIn('id', $selectedIds)->get();
         
-        // Retourner la vue avec les fournisseurs
         return view('GestionFournisseurs.Selectionnes', [
             'fournisseurs' => $fournisseurs
         ]);
     }
     
+    public function showFiche($id)
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
 
-    
+        return view('GestionFournisseurs.FicheFournisseur', [
+            'fournisseur' => $fournisseur
+        ]);
+    }
+
 
     /**
      * Display the specified resource.

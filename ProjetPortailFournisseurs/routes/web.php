@@ -45,9 +45,11 @@ Route::post('/loginFournisseur',
 
 // Routes pour responsables
 
-Route::get('/Recherche', Recherche::class);
+Route::get('/Recherche', Recherche::class)->name('fournisseurs.recherche');
 
 Route::get('/fournisseurs/selection', [FournisseursController::class, 'showSelected'])->name('fournisseurs.selectionnes');
+
+Route::get('/fournisseurs/{id}', [FournisseursController::class, 'showFiche'])->name('fournisseurs.showFiche');
 
 // Routes admin
 Route::get('/admin', 
