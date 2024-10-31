@@ -25,6 +25,7 @@ class Fournisseur extends Authenticatable
         'files',
         'neq',
         'rbq',
+        'typesRbq',
         'password',
         'personneContact',
         'statut'
@@ -41,6 +42,7 @@ class Fournisseur extends Authenticatable
         'phone' => 'array',
         'files' => 'array',
         'unspsc' => 'array',
+        'typesRbq' => 'array',
         'raisonRefus' => 'encrypted'
 
     ];

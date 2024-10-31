@@ -43,6 +43,19 @@ class ValidationRBQ extends Component
             $rbqCollections= collect(LazyCollection::fromJson($json, "*")->toArray());
             $rbqs = $rbqCollections;
             $rbqs = $jsons['result']['records'];
+            $typesRbq = [];
+            //Log::Debug($rbqs);
+            
+            foreach($rbqs as $temp){
+                $typesRbq []= $temp['Sous-categories'];
+                /*
+                $rbqs = $rbqs + [
+                    'typesRbq'[$i] => $temp['Sous-categories']
+                ];*/
+                
+                
+            }
+            array_push($rbqs[0], $typesRbq);
 
 
             //Log::Debug($rbqs);
