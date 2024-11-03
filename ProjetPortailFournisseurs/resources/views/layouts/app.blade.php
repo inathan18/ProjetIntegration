@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{asset('app.css')}}">
 
 </head>
-<body>
+<body class="@yield('body')">
     <main>
         @include("partials.navbarUsager") 
 

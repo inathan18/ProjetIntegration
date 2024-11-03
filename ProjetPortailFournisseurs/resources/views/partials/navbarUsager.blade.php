@@ -1,16 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="{{ route('Fournisseurs.accueil') }}">Accueil</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="{{route('Fournisseurs.statut')}}">Statut</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{route('Fournisseurs.dossier')}}">Mes documents</a>
-      </li>
-    </ul>
+<div class="Navbar-Fournisseur paddingNav V3R-Blanc">
+  <div class="col-1 text-center V3R-Blanc Standard-logo" style="height:100%;">
+    <a href="{{ route('Fournisseurs.accueil') }}"><img src="{{asset('images/logo.png')}}" width="90" height="90" style="margin-top: 5px;"></a>
   </div>
-</nav>
+</div>
