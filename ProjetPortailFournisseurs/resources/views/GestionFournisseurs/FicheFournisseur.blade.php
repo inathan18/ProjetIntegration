@@ -50,10 +50,12 @@
                         </div>
                     </div>
 
-                    <a href="#" class="text-primary" onclick="toggleHistorique(event)">Historique</a>
+                    <a href="{{ route('fournisseurs.historique', $fournisseur->id) }}" class="text-primary">Historique</a>
                 </div>
             </div>
         </div>
+
+
 
         <!-- Identification -->
         <div class="col-md-4 mb-3">
@@ -146,48 +148,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Historique des modifications-->
-        <div class="col-md-12 mt-4" id="historiqueSection" style="display: none;">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Historique des modifications</h5>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Date de modification</th>
-                                <th>État de la demande</th>
-                                <th>Modifié par</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-
-                            </tr>
-                            <tr>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
-
-<script>
-    function toggleHistorique(event) {
-        event.preventDefault();
-        var historiqueSection = document.getElementById('historiqueSection');
-        
-        if (historiqueSection.style.display === 'none') {
-            historiqueSection.style.display = 'block';
-
-            historiqueSection.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            historiqueSection.style.display = 'none';
-        }
-    }
-</script>
 
 @endsection

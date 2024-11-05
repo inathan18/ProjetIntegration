@@ -51,6 +51,8 @@ Route::get('/fournisseurs/selection', [FournisseursController::class, 'showSelec
 
 Route::get('/fournisseurs/{id}', [FournisseursController::class, 'showFiche'])->name('fournisseurs.showFiche');
 
+Route::get('/fournisseurs/{id}/historique', [FournisseursController::class, 'showHistorique'])->name('fournisseurs.historique');
+
 // Routes admin
 Route::get('/admin', 
 [AdminsController::class, 'index'])->name('Admins.Panel');

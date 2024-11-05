@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\FournisseursRequest;
+use App\Http\Requests\HistoriqueRequest;
+use App\Models\Fournisseur;
+use App\Models\Historique;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 
-use App\Models\Fournisseur;
 
 class FournisseursController extends Controller
 {
@@ -84,13 +86,28 @@ class FournisseursController extends Controller
             'fournisseurs' => $fournisseurs
         ]);
     }
-    
+
     public function showFiche($id)
     {
+        // Récupérer le fournisseur associé à cet ID
         $fournisseur = Fournisseur::findOrFail($id);
-
+        
         return view('GestionFournisseurs.FicheFournisseur', [
             'fournisseur' => $fournisseur
+        ]);
+    }
+    
+      
+    public function showHistorique($id)
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
+        $historique = Historique::where('fournisseur_id', $id)
+            ->orderBy('created_at', 'asc') 
+            ->get();
+
+        return view('GestionFournisseurs.historique', [
+            'fournisseur' => $fournisseur,
+            'historique' => $historique,
         ]);
     }
 
