@@ -30,8 +30,11 @@ class FournisseursController extends Controller
     {
         $fournisseurs = Fournisseur::all();
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
+        $telephone = json_decode($fournisseur_actuel->phone[0], true);
+        $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
+        $fichier = $this->IniFichier($fournisseur_actuel);
 
-    return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel'));
+    return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'unspsc', 'fichier'));
     }
 
 
@@ -109,21 +112,20 @@ class FournisseursController extends Controller
         $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
 
         try {
-
-
             $ctr = count($fournisseur_actuel->files);
 
             Log::debug($ctr);
 
-            Log::debug($fournisseur_actuel->files[2]);
+            Log::debug($fournisseur_actuel->files[0]);
 
             $fichier = "";
-            
+
+
             for( $i = 0; $i < $ctr; $i++ ) {
                 $fichier .= $fournisseur_actuel->files[$i] . " | " ;
             }
             
-            if($fichier == "") {
+            if($fichier == "" || $fichier == " | ") {
                 $fichier = "Aucun Fichier Envoyé";
             }
         }
@@ -155,6 +157,10 @@ class FournisseursController extends Controller
     {
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
 
+        $telephone = json_decode($fournisseur_actuel->phone[0], true);
+
+        $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
+
         $ctr = count($fournisseur_actuel->files);
         
         for( $i = 0; $i < $ctr; $i++ ) {
@@ -169,9 +175,11 @@ class FournisseursController extends Controller
 
         ]);
 
+        $fichier = $this->IniFichier($fournisseur_actuel);
 
 
-        return view('Fournisseurs.accueil');
+
+        return redirect()->back();
     }
 
     /**
@@ -235,6 +243,36 @@ class FournisseursController extends Controller
     {
         
     }
+
+//--------------------------------Fonction pour alèger le code-------------------------------------------------
+
+    public function IniFichier($fournisseur) {
+        try {
+
+
+            $ctr = count($fournisseur->files);
+
+            Log::debug($ctr);
+
+            $fichier = "";
+            
+            for( $i = 0; $i < $ctr; $i++ ) {
+                $fichier .= $fournisseur->files[$i] . " | " ;
+            }
+            
+            if($fichier == "" || $fichier == " | ") {
+                $fichier = "Aucun Fichier Envoyé";
+            }
+        }
+        catch (\Throwable $e) {
+            $fichier = "Aucun Fichier Envoyé";
+        }
+        return $fichier;
+        echo $fichier;
+    }
+
+//--------------------------------Fonction pour alèger le code-------------------------------------------------
+
 
 
 }
