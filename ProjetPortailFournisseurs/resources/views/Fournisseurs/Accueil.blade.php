@@ -80,8 +80,11 @@
 
                 <p> Fichier: <br> {{$fichier}} </p><hr>
                 
+
+                </div>
+                <div class="card-bot text-center align-self-center">
                 <?php if( $fichier != "Aucun Fichier Envoyé") { ?>
-                 <a href="{{route('Fournisseurs.fichier.delete')}}" class="btn btn-danger"> Supprimer le fichier </a>
+                 <a href="{{route('Fournisseurs.fichier.delete')}}" class="btn align-self-center"> Supprimer le fichier </a>
                 <?php } ?>
 
                 </div>
@@ -102,7 +105,7 @@
             <div class="card-container">
                 <div class="persoCard">
                 <div class="card-top text-center">
-                <h3> Compagnie </h3>
+                <h3> Personne Contact </h3>
                 </div>
                 <div class="card-content">
 
