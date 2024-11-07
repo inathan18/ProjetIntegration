@@ -30,11 +30,12 @@
 
                         </option>
                         @endif
+                        
                     @endforeach
         </select>
         <div>
         @if(!empty($noNeq))
-            <livewire:supplier-form :noNeq="$tests[$noNeq]"/>
+            <livewire:supplier-form :noNeq="$tests[$noNeq]" :types_rbq="$tests[0][0]"/>
         @endif
         </div>
 

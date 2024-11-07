@@ -9,7 +9,7 @@
 
 <!-- Section Inscription -->
     <div class="p-3">
-        <label class="form-label" for="noNeq">Entrer NEQ (si vous détenez une licence RBQ): </label>
+        <label class="form-label" for="noNeq">Entrer RBQ (si vous détenez une licence RBQ): </label>
 
                 @livewire('validation-r-b-q')
     </div>
