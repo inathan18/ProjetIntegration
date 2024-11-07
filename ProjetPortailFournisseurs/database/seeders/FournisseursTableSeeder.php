@@ -35,6 +35,7 @@ class FournisseursTableSeeder extends Seeder
             'raisonRefus' => '',
             'personneContact' => 'Directeur',
             'statut'=> 'A',
+            'email_verified_at'=>'',
         ]);
 
         DB::table('fournisseurs')->insert([

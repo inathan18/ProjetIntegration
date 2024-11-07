@@ -6,6 +6,13 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UsagersController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+use App\Models\Fournisseur;
+use App\Models\Usager;
+use App\Notifications\BienvenueNotification;
+use App\Notifications\ChangementFournisseur;
+use App\Notifications\NouveauFournisseur;
 
 // Route pour Usagers
 
@@ -64,6 +71,52 @@ Route::get('/fournisseur/modification',
 
 Route::patch('/fournisseur/{fournisseur}/modification', 
 [FournisseursController::class, 'update'])->name('Fournisseurs.update');
+
+//Routes validation courriel
+Route::get('/email/verify', function(){
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/fournisseur/accueil');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request){
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Courriel de vérification envoyé!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+//Tests notifications
+Route::get('notification/bienvenue', function (){
+    $fournisseur = Fournisseur::find(1);
+
+    return (new BienvenueNotification($fournisseur))
+    ->toMail($fournisseur);
+});
+
+Route::get('notification/modification', function (){
+    $fournisseur = Fournisseur::find(1);
+
+    return (new ChangementFournisseur($fournisseur))
+    ->toMail($fournisseur);
+});
+
+Route::get('notification/nouveau', function (){
+    $usager = Usager::find(1);
+
+    return (new NouveauFournisseur($usager))
+    ->toMail($usager);
+});
+
+Route::get('notification/validation', function(){
+    $fournisseur = Fournisseur::find(1);
+    return (new Illuminate\Auth\Notifications\VerifyEmail())->toMail($fournisseur);
+});
+
+
+
 
 
 

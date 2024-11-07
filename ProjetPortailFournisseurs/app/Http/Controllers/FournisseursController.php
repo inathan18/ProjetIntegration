@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File; 
+use Illuminate\Auth\Events\Registered;
 
 
 use App\Models\Fournisseur;
@@ -87,6 +88,7 @@ class FournisseursController extends Controller
             Log::debug($fournisseurs);
             $fournisseurs->postCode = str_replace(' ', '', $fournisseurs->postcode);
             $fournisseurs->save();
+            event(new Registered($fournisseurs));
             }
                 
             catch (\Throwable $e) {

@@ -33,6 +33,9 @@ return new class extends Migration
             $table->timestamps();
             $table->string('raisonRefus', 255)->nullable();
             $table->string('password', 255);
+            $table->datetime('email_verified_at')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
         });
     }
 
