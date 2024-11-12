@@ -15,9 +15,9 @@ class Historique extends Model
 
     protected $fillable = [
         'fournisseur_id',
-        'etat',           
+        'statut',           
         'modifie_par',
-        'raison_refus',
+        'raisonRefus',
         'modifications',
     ];
 
@@ -26,13 +26,15 @@ class Historique extends Model
         try {
             return Crypt::decryptString($value);
         } catch (DecryptException $e) {
+            \Log::error('Erreur de décryptage : ' . $e->getMessage());
             return null;
         }
     }
+    
 
     public function setRaisonRefusAttribute($value)
     {
-        $this->attributes['raison_refus'] = Crypt::encryptString($value);
+        $this->attributes['raisonRefus'] = Crypt::encryptString($value);
     }
 
     protected $casts = [

@@ -27,21 +27,21 @@
             <tr>
                 <td>{{ $item->created_at->format('j F Y H:i:s') }}</td>
                 <td>
-                    @if ($item->etat == 'A') 
+                    @if ($item->statut == 'A') 
                         <i class="fas fa-check-circle text-success"></i> Acceptée
-                    @elseif ($item->etat == 'AT') 
+                    @elseif ($item->statut == 'AT') 
                         <i class="fas fa-clock text-warning"></i> En attente
-                    @elseif ($item->etat == 'AR') 
+                    @elseif ($item->statut == 'AR') 
                         <i class="fas fa-exclamation-circle text-info"></i> À réviser
-                    @elseif ($item->etat == 'R') 
+                    @elseif ($item->statut == 'R') 
                         <i class="fas fa-times-circle text-danger"></i>
                         <span class="text-primary cursor-pointer text-decoration-underline" onclick="toggleDetails('refus-{{ $item->id }}')"> Refusée</span>
                         <div id="refus-{{ $item->id }}" style="display:none;">
-                            <strong>Raison du refus :</strong> {{ $item->raison_refus }}
+                            <strong>Raison du refus :</strong> {{ $item->raisonRefus }}
                         </div>
-                    @elseif ($item->etat == 'D') 
+                    @elseif ($item->statut == 'D') 
                         <i class="fas fa-ban text-secondary"></i> Désactivée
-                    @elseif ($item->etat == 'M') 
+                    @elseif ($item->statut == 'M') 
                         <i class="fas fa-edit text-info"></i>
                         <span class="text-primary cursor-pointer text-decoration-underline" onclick="toggleDetails('modif-{{ $item->id }}')"> Modifiée</span>
                         <div id="modif-{{ $item->id }}" style="display:none;">
