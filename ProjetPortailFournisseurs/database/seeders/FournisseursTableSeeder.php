@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 
 class FournisseursTableSeeder extends Seeder
 {
@@ -30,7 +31,7 @@ class FournisseursTableSeeder extends Seeder
             'neq' => '1171854699',
             'rbq' => '',
             'password' => Hash::make('rona'),
-            'raisonRefus' => '',
+            'raisonRefus' => null,
             'personneContact' => 'Directeur',
             'statut'=> 'A',
         ]);
@@ -51,7 +52,7 @@ class FournisseursTableSeeder extends Seeder
             'neq' => '1146438586',
             'rbq' => '',
             'password' => Hash::make('ford'),
-            'raisonRefus' => '',
+            'raisonRefus' => null,
             'personneContact' => 'Directeur',
             'statut'=> 'A',
         ]);
@@ -72,7 +73,7 @@ class FournisseursTableSeeder extends Seeder
             'neq' => '3',
             'rbq' => '',
             'password' => Hash::make('nathan'),
-            'raisonRefus' => '',
+            'raisonRefus' => null,
             'personneContact' => 'Nathan',
             'statut'=> 'A',
         ]);
@@ -93,7 +94,7 @@ class FournisseursTableSeeder extends Seeder
             'neq' => '4',
             'rbq' => '',
             'password' => Hash::make('nathan'),
-            'raisonRefus' => '',
+            'raisonRefus' => null,
             'personneContact' => 'Nathan',
             'statut'=> 'AT',
         ]);
@@ -114,7 +115,7 @@ class FournisseursTableSeeder extends Seeder
             'neq' => '5',
             'rbq' => '',
             'password' => Hash::make('nathan'),
-            'raisonRefus' => '',
+            'raisonRefus' => Crypt::encryptString('Raison du refus '),
             'personneContact' => 'Nathan',
             'statut'=> 'R',
         ]);
@@ -135,7 +136,7 @@ class FournisseursTableSeeder extends Seeder
             'neq' => '6',
             'rbq' => '',
             'password' => Hash::make('nathan'),
-            'raisonRefus' => '',
+            'raisonRefus' => null,
             'personneContact' => 'Nathan',
             'statut'=> 'AR',
         ]);

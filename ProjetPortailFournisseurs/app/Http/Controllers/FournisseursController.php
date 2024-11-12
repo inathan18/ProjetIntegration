@@ -101,15 +101,21 @@ class FournisseursController extends Controller
     public function showHistorique($id)
     {
         $fournisseur = Fournisseur::findOrFail($id);
+    
         $historique = Historique::where('fournisseur_id', $id)
-            ->orderBy('created_at', 'asc') 
-            ->get();
-
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->map(function ($item) {
+                $item->raisonRefus = $item->raisonRefus; 
+                return $item;
+            });
+    
         return view('GestionFournisseurs.historique', [
             'fournisseur' => $fournisseur,
             'historique' => $historique,
         ]);
     }
+    
 
 
     /**

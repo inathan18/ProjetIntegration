@@ -11,7 +11,6 @@ class FournisseurObserver
 {
     public function updating(Fournisseur $fournisseur)
     {
-        // Récupérer les valeurs modifiées
         $modifications = $fournisseur->getDirty();
         $changes = [];
 
@@ -27,13 +26,17 @@ class FournisseurObserver
 
         // Vérifier si le statut est modifié à "R" pour chiffrer la raison du refus
         $raisonRefus = null;
-        if (array_key_exists('statut', $modifications) && $modifications['statut'] === 'R' && !empty($fournisseur->raisonRefus)) {
-            try {
+
+        if (array_key_exists('statut', $modifications) && $modifications['statut'] === 'R') {
+            if (!empty($fournisseur->raisonRefus)) {
                 $raisonRefus = Crypt::encryptString($fournisseur->raisonRefus);
-            } catch (\Exception $e) {
+            } else {
                 $raisonRefus = null;
-                \Log::error("Erreur de chiffrement de la raison de refus: " . $e->getMessage());
             }
+        }
+
+        if (empty($fournisseur->raisonRefus)) {
+            $fournisseur->raisonRefus = null; 
         }
 
         // Enregistrer les modifications dans l'historique
@@ -43,7 +46,7 @@ class FournisseurObserver
                 'statut' => $fournisseur->statut, 
                 'modifie_par' => Auth::user()->name ?? 'systeme',
                 'modifications' => json_encode($changes),
-                'raisonRefus' => $raisonRefus,
+                'raisonRefus' => $raisonRefus,  
             ]);
         }
     }

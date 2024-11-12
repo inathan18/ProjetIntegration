@@ -23,19 +23,23 @@ class Historique extends Model
 
     public function getRaisonRefusAttribute($value)
     {
+        if (empty($value)) {
+            return null; 
+        }
         try {
             return Crypt::decryptString($value);
         } catch (DecryptException $e) {
-            \Log::error('Erreur de décryptage : ' . $e->getMessage());
+            \Log::error('Erreur de décryptage pour raisonRefus: ' . $e->getMessage());
             return null;
         }
     }
     
-
+    
     public function setRaisonRefusAttribute($value)
     {
-        $this->attributes['raisonRefus'] = Crypt::encryptString($value);
+        $this->attributes['raisonRefus'] = $value ? Crypt::encryptString($value) : null;
     }
+    
 
     protected $casts = [
         'modifications' => 'array',
