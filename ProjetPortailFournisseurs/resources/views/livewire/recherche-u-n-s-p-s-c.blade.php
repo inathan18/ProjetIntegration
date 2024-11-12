@@ -18,23 +18,21 @@
     @if(!empty($search))
         <div class="w-1/3 bg-white rounded-lg shadow">
             @if(!empty($tests))
-                {{--<select wire:model.change="unspscs" name="unspsc[]" class="w-full unspsc form-select" id="unspsc" multiple>
+                <select wire:model="unspscs" name="unspsc[]" data-live-search="true" data-selected-text-format="static" class="w-full unspsc form-select selectpicker" id="unspsc" multiple title="UNSPSC">
                 <option disabled selected value>Choisir un ou des UNSPSC</option>
-                @php $key=0 @endphp
                     @foreach($tests as $unspsc)
-                    {{$key++}}
-                        <option value="{{$key}}">
+                        <option value="{{$unspsc['codeUnspsc']}}">
                             {{ $unspsc['codeUnspsc'] }} - {{ $unspsc['detailUnspsc'] }}
                         </option>
                     @endforeach
-                </select>--}}
-                @foreach($tests as $unspsc)
+                </select>
+                {{--@foreach($tests as $unspsc)
                 <div class="flex justify-between">
                 <label for="{{$unspsc['codeUnspsc']}}">{{ $unspsc['codeUnspsc'] }} - {{ $unspsc['detailUnspsc'] }}</label>
                 <input class="rounded form-checkbox" id="{{$unspsc['codeUnspsc']}}" type="checkbox"
                 value="{{$unspsc['codeUnspsc']}}" wire:model.lazy="unspscs"/>
                 </div>
-                @endforeach
+                @endforeach--}}
 
             @else
                 <div class="list-item">Aucun résultat!</div>
@@ -43,3 +41,11 @@
     @endif
 
 </div>
+@section('scripts')
+<script>
+$(document).ready(function() {
+    $('.selectpicker').selectpicker();
+
+    });
+</script>
+@endsection
