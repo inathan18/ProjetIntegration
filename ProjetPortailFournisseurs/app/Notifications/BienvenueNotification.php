@@ -35,6 +35,7 @@ class BienvenueNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
+                    ->greeting('Bonjour, ' . $notifiable->name . ' !')
                     ->subject('Bienvenue')
                     ->line('Bienvenue sur le Portail des fournisseurs de la ville de Trois-Rivières !')
                     ->action('Connexion au portail', url('/fournisseur/connexion'))

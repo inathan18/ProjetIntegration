@@ -1,0 +1,1039 @@
+							
+
+									First of All we setup Mail Smtp
+
+Create a New Project 
+
+
+			composer create-project --prefer-dist laravel/laravel SendMailgunEmailLaravel11
+
+
+Install Composer
+
+
+
+
+			composer require symfony/mailgun-mailer
+
+			composer require symfony/http-client
+
+
+
+
+Configuration 
+
+	
+MAIL_MAILER=mailgun
+MAIL_HOST=smtp.mailgun.org
+MAIL_PORT=587
+MAILGUN_DOMAIN=sandboxe3522eeba4354af895bead05918f864f.mailgun.org
+MAILGUN_SECRET=3de3021b8e7ecefc0ab3aafdda1fb16f-4e034d9e-83cdefcb
+MAIL_USERNAME=postmaster@sandboxe3522eeba4354af895bead05918f864f.mailgun.org
+MAIL_PASSWORD=c708476c3496f6158d146890dacb2c1f-4e034d9e-9d1aab40
+
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=afnantariq715@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+
+
+
+
+config/mail.php
+
+
+'mailgun' => [
+    'transport' => 'mailgun',
+    'domain' => env('MAILGUN_DOMAIN'),
+    'secret' => env('MAILGUN_SECRET'),
+    'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+    'scheme' => 'https',
+],
+
+
+
+
+
+config/sercies.php
+
+
+'mailgun' => [
+    'domain' => env('MAILGUN_DOMAIN'),
+    'secret' => env('MAILGUN_SECRET'),
+    'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+    'scheme' => 'https',
+],
+
+		
+
+
+							
+
+Make a New Mail File
+
+
+
+		php artisan make:mail Email
+
+<?php
+
+namespace App\Mail;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+
+class Email extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    /**
+     * Create a new message instance.
+     */
+    public function __construct()
+    {
+        // No need for token or any other data
+    }
+
+    /**
+     * Build the message.
+     */
+    public function build()
+    {
+        return $this->subject('Simple Test Email')
+                    ->view('emails.test');
+    }
+}
+
+
+
+
+
+										Model/User.php
+class User  extends Authenticatable implements MustVerifyEmail
+
+
+
+
+									mails.welcome
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test Email</title>
+</head>
+<body>
+    <p>Hello,</p>
+
+    <p>This is a simple test email.</p>
+
+    <p>Best regards,<br>Your Company</p>
+</body>
+</html>
+
+
+										Routes
+
+
+ 
+
+
+
+
+Route::get('/send', function() {
+    Mail::to('afnantariq132@gmail.com')->send(new Email());
+    return "Email Sent!";
+});
+	
+
+
+Route::post('/user/save', [UsersController::class, 'save'])->name('user.save');
+Route::post('/user/check', [UsersController::class, 'check'])->name('user.check');
+Route::get('/user/logout', [UsersController::class, 'logout'])->name('user.logout');
+
+
+
+Route::get('/user/login', [UsersController::class, 'login'])->name('user.login');
+Route::get('/user/register', [UsersController::class, 'register'])->name('user.register');
+Route::get('/user/dashboard', [UsersController::class, 'dashboard'])->name('user.dashboard');
+
+
+
+// Verfications
+Route::get('email/verify', [UsersController::class, 'show'])->name('verification.notice');
+Route::get('email/verify/{id}/{hash}', [UsersController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
+Route::post('email/resend', [UsersController::class, 'resend'])->name('verification.resend');
+
+
+									
+
+
+
+
+
+ 
+
+
+
+	
+
+
+
+									UsersController
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\Request;
+use Monolog\Registry;
+use Illuminate\Support\Facades\Hash;
+
+class UsersController extends Controller
+{
+    
+    public function verify(Request $request, $id, $hash)
+    {
+        $user = User::findOrFail($id);
+    
+        // Check if the hash in the URL matches the user's email hash
+        if (!hash_equals(sha1($user->getEmailForVerification()), $hash)) {
+            return redirect()->route('user.login')->with('fail', 'Invalid verification link.');
+        }
+    
+        // Check if the user has already verified their email
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('user.login')->with('status', 'Email already verified.');
+        }
+    
+        // Mark the email as verified
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+        }
+    
+        return redirect()->route('user.login')->with('success', 'Your email has been verified!');
+    }
+    
+     
+  
+    public function check(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:5|max:12'
+        ]);
+    
+        $userInfo = User::where('email', $request->email)->first();
+    
+        if (!$userInfo) {
+            return back()->withInput()->withErrors(['email' => 'Email not found']);
+        }
+    
+        // Check if the user's email is verified
+        if (!$userInfo->hasVerifiedEmail()) {
+            return back()->withInput()->withErrors(['email' => 'Please verify your email to log in.'])
+                         ->with('resend_email', true); // This will indicate that the Resend Email button should be shown
+        }
+     
+    
+        // Check if the password is correct
+        if (!Hash::check($request->password, $userInfo->password)) {
+            return back()->withInput()->withErrors(['password' => 'Incorrect password']);
+        }
+    
+        // Set session data
+        session([
+            'LoggedUserInfo' => $userInfo->id,
+            'LoggedUserName' => $userInfo->name,  
+        ]);
+    
+        return redirect()->route('user.dashboard');
+    }
+
+  
+    
+    public function register() {
+        return view("user.register");
+    }
+    public function login() {
+        return view("user.login");
+    }
+     
+    
+    
+    public function dashboard()
+    {
+        $userId = session('LoggedUserInfo');
+    
+        // Check if the session has the correct user ID
+        if (!$userId) {
+            return redirect('user/login')->with('fail', 'You must be logged in to access the dashboard');
+        }
+    
+        $LoggedUserInfo = User::find($userId);
+    
+       
+     
+    
+        return view('user.dashboard', [
+            'LoggedUserInfo' => $LoggedUserInfo,
+       
+        ]);
+    }
+    
+    
+
+    
+
+    
+
+    public function logout()
+    {
+         if (session()->has('LoggedUserInfo')) {
+             session()->forget('LoggedUserInfo');
+        }
+        session()->flush();
+
+         return redirect()->route('user.dashboard');
+    }
+    
+ 
+
+
+    public function save(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|regex:/^\S*$/',
+        ], [
+            'email.unique' => 'This email is already registered.',
+            'password.min' => 'Password must be at least 8 characters long.',
+        ]);
+    
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+    
+        event(new Registered($user));
+    
+        return redirect()->route('user.login')->with('success', 'We have sent an email to verify your account.');
+    }
+
+     
+
+}
+			
+
+										Views
+
+
+
+									user/register.blade.php
+
+
+
+ 
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/vendors/feather/feather.css">
+    <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="/js/select.dataTables.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/images/favicon.png" />
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="content-wrapper d-flex align-items-center auth px-0">
+                <div class="row w-100 mx-0">
+                    <div class="col-lg-4 mx-auto">
+                        <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                            <div class="brand-logo">
+                                <img src="/images/logo.svg" alt="logo">
+                            </div>
+                            <h4>New here?</h4>
+                            <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
+                            @if (session('success'))
+                            <div>{{ session('success') }}</div>
+                            @endif
+                            <form action="{{ route('user.save') }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password (min. 6 characters)</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </form>
+
+                            <div class="text-center mt-4 font-weight-light">
+                                Already have an account? <a href="/user/login" class="text-primary">Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+    < %
+    if (typeof errorMessage !== 'undefined') {
+        %
+        >
+        toastr.error("<%= errorMessage %>"); <
+        %
+    } % >
+    </script>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="/js/off-canvas.js"></script>
+    <script src="/js/hoverable-collapse.js"></script>
+    <script src="/js/template.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/todolist.js"></script>
+</body>
+
+</html>	 
+
+
+
+
+
+
+
+
+								user/login.blade.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/vendors/feather/feather.css">
+    <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/usertemplate/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="/js/select.dataTables.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/images/favicon.png" />
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="content-wrapper d-flex align-items-center auth px-0">
+                <div class="row w-100 mx-0">
+                    <div class="col-lg-4 mx-auto">
+                        <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                            <div class="brand-logo">
+                                <img src="/images/logo.svg" alt="logo">
+                            </div> @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+                            <h4>Hello! let's get started</h4>
+                            <h6 class="font-weight-light">Sign in to continue.</h6>
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form action="{{ route('user.check') }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </form>
+
+
+                            <div class="text-center mt-4 font-weight-light">
+    Don't have an account? <a href="/user/register" class="text-primary">Create</a>
+</div>
+ 
+
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+    < %
+    if (typeof errorMessage !== 'undefined') {
+        % >
+                toastr.error("<%= errorMessage %>"); <
+        %
+    } % >
+    </script>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="/usertemplate/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="/usertemplate/js/off-canvas.js"></script>
+    <script src="/usertemplate/js/hoverable-collapse.js"></script>
+    <script src="/usertemplate/js/template.js"></script>
+    <script src="/usertemplate/js/settings.js"></script>
+    <script src="/usertemplate/js/todolist.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+								includes/navbar
+
+
+
+
+<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="/images/logo.svg" class="mr-2" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="/images/logo-mini.svg" alt="logo"/></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="icon-menu"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-search d-none d-lg-block">
+            <div class="input-group">
+              <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                <span class="input-group-text" id="search">
+                  <i class="icon-search"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown">
+            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+              <i class="icon-bell mx-0"></i>
+              <span class="count"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-success">
+                    <i class="ti-info-alt mx-0"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Just now
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-warning">
+                    <i class="ti-settings mx-0"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <h6 class="preview-subject font-weight-normal">Settings</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Private message
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-info">
+                    <i class="ti-user mx-0"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    2 days ago
+                  </p>
+                </div>
+              </a>
+            </div>
+          </li>
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="/images/faces/face28.jpg" alt="profile"/>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item">
+                <i class="ti-settings text-primary"></i>
+                Settings
+              </a>
+              <form id="logout-form" action="{{ route('user.logout') }}" method="GET" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                <i class="ti-power-off text-primary"></i>
+                                Logout
+                            </button>
+                        </form>
+            </div>
+          </li>
+          <li class="nav-item nav-settings d-none d-lg-flex">
+            <a class="nav-link" href="#">
+              <i class="icon-ellipsis"></i>
+            </a>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="icon-menu"></span>
+        </button>
+      </div>
+    </nav>
+
+
+
+
+
+
+
+
+
+
+										includes/sidebar
+
+
+
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="icon-layout menu-icon"></i>
+              <span class="menu-title">UI Elements</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+              <i class="icon-columns menu-icon"></i>
+              <span class="menu-title">Form elements</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="form-elements">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"><a class="nav-link" href="pages/forms/basic_elements.html">Basic Elements</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
+              <i class="icon-bar-graph menu-icon"></i>
+              <span class="menu-title">Charts</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="charts">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+              <i class="icon-grid-2 menu-icon"></i>
+              <span class="menu-title">Tables</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="tables">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/tables/basic-table.html">Basic table</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
+              <i class="icon-contract menu-icon"></i>
+              <span class="menu-title">Icons</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="icons">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">Mdi icons</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">User Pages</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
+              <i class="icon-ban menu-icon"></i>
+              <span class="menu-title">Error pages</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="error">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pages/documentation/documentation.html">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Documentation</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+
+
+
+									user/dashboard
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Skydash Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <link rel="stylesheet" href="/vendors/feather/feather.css">
+    <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
+    <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="/usertemplate/js/select.dataTables.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/images/favicon.png" />
+</head>
+
+<body>
+
+    <div class="container-scroller">
+        <!-- partial:partials/_navbar.html -->
+        @include('user.includes.navbar')
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_settings-panel.html -->
+            <div class="theme-setting-wrapper">
+                <div id="settings-trigger"><i class="ti-settings"></i></div>
+                <div id="theme-settings" class="settings-panel">
+                    <i class="settings-close ti-close"></i>
+                    <p class="settings-heading">SIDEBAR SKINS</p>
+                    <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+                        <div class="img-ss rounded-circle bg-light border mr-3"></div>Light
+                    </div>
+                    <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                        <div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark
+                    </div>
+                    <p class="settings-heading mt-2">HEADER SKINS</p>
+                    <div class="color-tiles mx-0 px-4">
+                        <div class="tiles success"></div>
+                        <div class="tiles warning"></div>
+                        <div class="tiles danger"></div>
+                        <div class="tiles info"></div>
+                        <div class="tiles dark"></div>
+                        <div class="tiles default"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- partial -->
+            <!-- partial:partials/_sidebar.html -->
+            @include('user.includes.sidebar')
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-md-12 grid-margin">
+                            <div class="row">
+                                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                                    <h3 class="font-weight-bold">Welcome @if($LoggedUserInfo)
+                                        <span>{{ $LoggedUserInfo ['name'] }}</span>
+                                        <span class="badge badge-primary">{{ $LoggedUserInfo ['role'] }}</span>
+
+                                        @endif
+                                    </h3>
+
+                                    <h6 class="font-weight-normal mb-0">All systems are running smoothly! </h6>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <div class="card tale-bg">
+                                <div class="card-people mt-auto">
+                                <img src="/usertemplate/images/dashboard/people.svg" alt="people">
+                                <div class="weather-info">
+                                        <div class="d-flex">
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 grid-margin mt-6 transparent">
+                            <div class="row">
+                                <br>
+                                <div class="col-md-6 mb-4 mt-4 stretch-card transparent">
+                                    <div class="card card-tale">
+                                        <a href="{{ url('user/purchases') }}"
+                                            style="text-decoration: none; color: inherit;">
+                                            <div class="card-body">
+                                                <p class="mb-4">Total Purchases</p>
+                                                <p class="fs-30 mb-2"> </p>
+                                                <p>10.00% (30 days)</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4 mt-4 stretch-card transparent">
+                                    <div class="card card-dark-blue">
+                                        <a href="{{ url('user/questions') }}"
+                                            style="text-decoration: none; color: inherit;">
+                                            <div class="card-body">
+                                                <p class="mb-4">Total Ask Questions</p>
+                                                <p class="fs-30 mb-2"> </p>
+                                                <p>22.00% (30 days)</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+                                    <div class="card card-light-blue">
+                                        <a href="{{ url('user/questions') }}"
+                                            style="text-decoration: none; color: inherit;">
+                                            <div class="card-body">
+                                                <p class="mb-4">Total Likes On Questions</p>
+                                                <p class="fs-30 mb-2"> </p>
+                                                <p>2.00% (30 days)</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 stretch-card transparent">
+                                    <div class="card card-light-danger">
+                                        <a href="{{ url('user/likes/products') }}"
+                                            style="text-decoration: none; color: inherit;">
+                                            <div class="card-body">
+                                                <p class="mb-4">Products U Like</p>
+                                                <p class="fs-30 mb-2"> </p>
+                                                <p>0.22% (30 days)</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+
+                        </div>
+                    </div>
+
+                    <!-- content-wrapper ends -->
+                    <!-- partial:partials/_footer.html -->
+                    <footer class="footer">
+                        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright ©
+                                2021. Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin
+                                    template</a> from BootstrapDash. All rights reserved.</span>
+                            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made
+                                with <i class="ti-heart text-danger ml-1"></i></span>
+                        </div>
+                    </footer>
+                    <!-- partial -->
+                </div>
+                <!-- main-panel ends -->
+            </div>
+            <!-- page-body-wrapper ends -->
+        </div>
+        <!-- container-scroller -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        
+
+        <!-- plugins:js -->
+        <script src="/vendors/js/vendor.bundle.base.js"></script>
+        <!-- endinject -->
+        <!-- Plugin js for this page -->
+        <script src="/vendors/chart.js/Chart.min.js"></script>
+        <script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+        <script src="/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+        <script src="/js/dataTables.select.min.js"></script>
+
+        <!-- End plugin js for this page -->
+        <!-- inject:js -->
+        <script src="/js/off-canvas.js"></script>
+        <script src="/js/hoverable-collapse.js"></script>
+        <script src="/js/template.js"></script>
+        <script src="/js/settings.js"></script>
+        <script src="/js/todolist.js"></script>
+        <!-- endinject -->
+        <!-- Custom js for this page-->
+        <script src="/js/dashboard.js"></script>
+        <script src="/js/Chart.roundedBarCharts.js"></script>
+        <!-- End custom js for this page-->
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+

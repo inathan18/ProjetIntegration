@@ -35,6 +35,7 @@ class ChangementFournisseur extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
+                    ->greeting('Bonjour, ' . $notifiable->name . ' !')
                     ->subject('Changement à votre profil')
                     ->line('Un modification a été effectué sur votre profil fournisseur.')
                     ->action('Accédez à mon dossier', url('/fournisseur/monDossier'))

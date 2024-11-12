@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UsagersController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
+use App\Http\Controllers\EmailVerificationController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Models\Fournisseur;
@@ -73,13 +74,11 @@ Route::patch('/fournisseur/{fournisseur}/modification',
 [FournisseursController::class, 'update'])->name('Fournisseurs.update');
 
 //Routes validation courriel
-Route::get('/email/verify', function(){
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+Route::get('/email/verify', [EmailVerificationController::class, 'show'])->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect('/fournisseur/accueil');
+    return redirect('/fournisseur/connexion');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request){
@@ -113,6 +112,14 @@ Route::get('notification/nouveau', function (){
 Route::get('notification/validation', function(){
     $fournisseur = Fournisseur::find(1);
     return (new Illuminate\Auth\Notifications\VerifyEmail())->toMail($fournisseur);
+});
+
+Route::get('/send-mail', function(){
+    \Mail::raw('This is a test email', function($message){
+        $message->to('nathan.lafreniere@gmail.com')->subject('Test Email');
+        
+    });
+    return 'Email sent!';
 });
 
 
