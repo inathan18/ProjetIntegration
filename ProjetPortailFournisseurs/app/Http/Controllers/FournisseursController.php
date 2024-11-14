@@ -136,7 +136,47 @@ class FournisseursController extends Controller
         ]);
     }
     
+    public function editFiche($id)
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
+        
+        return view('GestionFournisseurs.editFiche', compact('fournisseur'));
+    }
 
+    public function updateFiche(Request $request, $id)
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
+
+        // Validation des données
+        $request->validate([
+
+        ]);
+
+        $fournisseur->update($request->all());
+
+        return redirect()->route('GestionFournisseurs.showFiche', $fournisseur->id)
+                        ->with('success', 'Fiche fournisseur mise à jour avec succès');
+    }
+
+    public function modifierEtat(Request $request, $id)
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
+        $fournisseur->statut = $request->input('statut');
+        
+        // Si l'état est refusé, stocker la raison du refus
+        if ($fournisseur->statut == 'R') {
+            $fournisseur->raisonRefus = $request->input('raison');
+        } else {
+            $fournisseur->raisonRefus = null;
+        }
+        
+        $fournisseur->save();
+    
+        return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
+                         ->with('success', 'L\'état de la demande a été modifié avec succès');
+    }
+    
+    
 
     /**
      * Display the specified resource.

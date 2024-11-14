@@ -79,6 +79,12 @@ Route::get('/fournisseurs/{id}', [FournisseursController::class, 'showFiche'])->
 
 Route::get('/fournisseurs/{id}/historique', [FournisseursController::class, 'showHistorique'])->name('fournisseurs.historique');
 
+Route::get('/fournisseurs/{id}/edit', [FournisseursController::class, 'editFiche'])->name('fournisseurs.editFiche');
+
+Route::put('/fournisseurs/{id}', [FournisseursController::class, 'updateFiche'])->name('fournisseurs.updateFiche');
+
+Route::post('/fournisseurs/modifierEtat/{id}', [FournisseursController::class, 'modifierEtat'])->name('fournisseurs.modifierEtat');
+
 // Routes admin
 Route::get('/admin', 
 [AdminsController::class, 'index'])->name('Admins.Panel');
