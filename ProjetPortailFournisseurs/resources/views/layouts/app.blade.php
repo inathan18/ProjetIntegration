@@ -31,6 +31,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/i18n/defaults-fr_FR.min.js"></script>
     @yield("scripts")
     @stack('scripts')
-    <x:pharaonic-select2::scripts />
+
 </body>
 </html>

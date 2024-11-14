@@ -15,41 +15,30 @@ class FournisseurObserver
         $changes = [];
 
         foreach ($modifications as $key => $newValue) {
-            // Récupérer l'ancienne valeur avant la modification
             $oldValue = $fournisseur->getOriginal($key);
-            
             $changes[$key] = [
                 'old' => "- $oldValue",
                 'new' => "+ $newValue"
             ];
         }
 
-        // Vérifier si le statut est modifié à "R" pour chiffrer la raison du refus
         $raisonRefus = null;
 
         if (array_key_exists('statut', $modifications) && $modifications['statut'] === 'R') {
-            if (!empty($fournisseur->raisonRefus)) {
-                $raisonRefus = Crypt::encryptString($fournisseur->raisonRefus);
-            } else {
-                $raisonRefus = null;
-            }
+            $raisonRefus = $fournisseur->raisonRefus ?: null;
         }
 
-        if (empty($fournisseur->raisonRefus)) {
-            $fournisseur->raisonRefus = null; 
-        }
-
-        // Enregistrer les modifications dans l'historique
         if (!empty($changes)) {
             Historique::create([
                 'fournisseur_id' => $fournisseur->id,
-                'statut' => $fournisseur->statut, 
+                'statut' => $fournisseur->statut,
                 'modifie_par' => Auth::user()->name ?? 'systeme',
                 'modifications' => json_encode($changes),
                 'raisonRefus' => $raisonRefus,  
             ]);
         }
     }
+
 
     /**
      * Handle the Fournisseur "created" event.
