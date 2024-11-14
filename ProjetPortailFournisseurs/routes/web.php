@@ -83,7 +83,7 @@ Route::get('/fournisseurs/{id}/edit', [FournisseursController::class, 'editFiche
 
 Route::put('/fournisseurs/{id}', [FournisseursController::class, 'updateFiche'])->name('fournisseurs.updateFiche');
 
-Route::post('/fournisseurs/modifierEtat/{id}', [FournisseursController::class, 'modifierEtat'])->name('fournisseurs.modifierEtat');
+Route::post('/fournisseurs/modifierFournisseur/{id}', [FournisseursController::class, 'modifierFournisseur'])->name('fournisseurs.modifierFournisseur');
 
 // Routes admin
 Route::get('/admin', 

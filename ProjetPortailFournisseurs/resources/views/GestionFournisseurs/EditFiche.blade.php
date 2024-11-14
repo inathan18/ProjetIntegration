@@ -5,24 +5,27 @@
 @section('contenu')
 
 <div class="container mt-5">
-    <!-- Bouton de retour -->
+    <!-- Bouton de retour et de confirmation-->
     <div class="row mb-4">
-        <div class="col-12 text-right">
+        <div class="col-12 d-flex gap-2">
             <a href="{{ route('fournisseurs.showFiche', ['id' => $fournisseur->id]) }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Retour à la fiche
             </a>
+            <form action="{{ route('fournisseurs.modifierFournisseur', ['id' => $fournisseur->id]) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-primary">Sauvegarder les modifications</button>
+            </form>
         </div>
     </div>
 
     <h1 class="mb-4">Fiche Fournisseur</h1>
+
     <div class="row">
         <!-- État de la demande -->
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">État de la demande</h5>
-                    
-                    <!-- Statut et icône -->
                     <p class="card-text 
                         @if ($fournisseur->statut == 'A') text-success
                         @elseif ($fournisseur->statut == 'AT') text-warning
@@ -42,31 +45,59 @@
                             <i class="fas fa-info-circle"></i> Statut inconnu
                         @endif
                     </p>
-                    
-                    <!-- Dates de création et de dernière modification -->
+
                     <div class="d-flex justify-content-between">
                         <div>
                             <p>Dernière modification : <span>{{ date('d-m-y', strtotime($fournisseur->updated_at)) }}</span></p>
                         </div>
                     </div>
-                                            
-                    <a href="#" class="btn btn-secondary mt-3" data-bs-toggle="modal" data-bs-target="#modaleEtatDemande">
-                        Modifier l'état de la demande
-                    </a>
+
+                    <form action="{{ route('fournisseurs.modifierFournisseur', ['id' => $fournisseur->id]) }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="etatDemande" class="form-label">Sélectionner l'état</label>
+                            <select class="form-select" id="etatDemande" name="statut" required>
+                                <option value="A" @if($fournisseur->statut == 'A') selected @endif>Acceptée</option>
+                                <option value="AT" @if($fournisseur->statut == 'AT') selected @endif>En attente</option>
+                                <option value="AR" @if($fournisseur->statut == 'AR') selected @endif>À réviser</option>
+                                <option value="R" @if($fournisseur->statut == 'R') selected @endif>Refusée</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="raisonRefus" style="display: none;">
+                            <label for="raison" class="form-label">Raison du refus</label>
+                            <textarea class="form-control" id="raison" name="raison" rows="3" placeholder="Indiquer la raison du refus"></textarea>
+                        </div>
+
+                        <div class="form-check" id="inclusRaison" style="display: none;">
+                            <input class="form-check-input" type="checkbox" id="checkboxRaison" name="inclusRaison">
+                            <label class="form-check-label" for="checkboxRaison">
+                                Inclure la raison du refus dans le courriel
+                            </label>
+                        </div>
+
+                    </form>
                 </div>
             </div>
         </div>
-
-
 
         <!-- Identification -->
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Identification</h5>
-                    <p>NEQ : {{ $fournisseur->neq }}</p>
-                    <p>Nom : {{ $fournisseur->name }}</p>
-                    <p>Courriel : {{ $fournisseur->email }}</p>
+                    <div class="mb-3">
+                        <label for="neq" class="form-label">NEQ</label>
+                        <input type="text" class="form-control" id="neq" name="neq" value="{{ $fournisseur->neq }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ $fournisseur->name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Courriel</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ $fournisseur->email }}" required>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,7 +113,9 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="row">
         <!-- Contacts -->
         <div class="col-md-6 mb-3">
             <div class="card">
@@ -153,51 +186,6 @@
     </div>
 </div>
 
-<!-- Modale pour modifier l'état de la demande -->
-<div class="modal fade" id="modaleEtatDemande" tabindex="-1" aria-labelledby="modaleEtatDemandeLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modaleEtatDemandeLabel">Modifier l'état de la demande</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Formulaire pour modifier l'état -->
-                <form action="{{ route('fournisseurs.modifierEtat', ['id' => $fournisseur->id]) }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="etatDemande" class="form-label">Sélectionner l'état</label>
-                        <select class="form-select" id="etatDemande" name="statut" required>
-                            <option value="A" @if($fournisseur->statut == 'A') selected @endif>Acceptée</option>
-                            <option value="AT" @if($fournisseur->statut == 'AT') selected @endif>En attente</option>
-                            <option value="AR" @if($fournisseur->statut == 'AR') selected @endif>À réviser</option>
-                            <option value="R" @if($fournisseur->statut == 'R') selected @endif>Refusée</option>
-                        </select>
-                    </div>
-
-                    <!-- Champ texte pour raison de refus (affiché uniquement si l'état est "Refusée") -->
-                    <div class="mb-3" id="raisonRefus" style="display: none;">
-                        <label for="raison" class="form-label">Raison du refus</label>
-                        <textarea class="form-control" id="raison" name="raison" rows="3" placeholder="Indiquer la raison du refus"></textarea>
-                    </div>
-
-                    <!-- Case à cocher pour ajouter la raison au courriel -->
-                    <div class="form-check" id="inclusRaison" style="display: none;">
-                        <input class="form-check-input" type="checkbox" id="checkboxRaison" name="inclusRaison">
-                        <label class="form-check-label" for="checkboxRaison">
-                            Inclure la raison du refus dans le courriel
-                        </label>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                <button type="submit" class="btn btn-primary">Sauvegarder les modifications</button>
-            </div>
-                </form>
-        </div>
-    </div>
-</div>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const etatDemandeSelect = document.getElementById('etatDemande');
@@ -218,6 +206,5 @@
         etatDemandeSelect.addEventListener('change', toggleRefusFields);
     });
 </script>
-
 
 @endsection

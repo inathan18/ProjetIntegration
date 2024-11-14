@@ -158,24 +158,36 @@ class FournisseursController extends Controller
                         ->with('success', 'Fiche fournisseur mise à jour avec succès');
     }
 
-    public function modifierEtat(Request $request, $id)
+    public function modifierFournisseur(Request $request, $id)
     {
         $fournisseur = Fournisseur::findOrFail($id);
+    
+        // Validation des données
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'statut' => 'required|string|max:1',
+            'neq' => 'nullable|integer',
+        ]);
+    
+        // Mise à jour des informations
+        $fournisseur->name = $request->input('name');
+        $fournisseur->email = $request->input('email');
         $fournisseur->statut = $request->input('statut');
-        
+    
         // Si l'état est refusé, stocker la raison du refus
         if ($fournisseur->statut == 'R') {
             $fournisseur->raisonRefus = $request->input('raison');
         } else {
             $fournisseur->raisonRefus = null;
         }
-        
+    
+        $fournisseur->neq = $request->input('neq');
         $fournisseur->save();
     
         return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
-                         ->with('success', 'L\'état de la demande a été modifié avec succès');
+                         ->with('success', 'Les informations ont été modifiées avec succès');
     }
-    
     
 
     /**
