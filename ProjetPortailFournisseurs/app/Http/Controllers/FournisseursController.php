@@ -82,6 +82,7 @@ class FournisseursController extends Controller
     public function store(FournisseurRequest $request)
     {
         try {
+            session()->put($request->all());
             $fournisseur = new Fournisseur($request->all());
             Log::debug($fournisseur);
 
