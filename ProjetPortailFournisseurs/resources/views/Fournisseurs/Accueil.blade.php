@@ -82,12 +82,27 @@
                 
 
                 </div>
-                <div class="card-bot text-center align-self-center">
-                <?php if( $fichier != "Aucun Fichier Envoyé") { ?>
-                 <a href="{{route('Fournisseurs.fichier.delete')}}" class="btn align-self-center"> Supprimer le fichier </a>
-                <?php } ?>
+                    <div class="card-bot text-center align-self-center"     <?php if( $fichier != "Aucun Fichier Envoyé") { ?> style="height: 100px; !important"                         <?php } ?>>
+                        <div class="col-12">
+                            <form action="{{route('Fournisseurs.fichier.upload')}}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                                <div class="row align-self-center">
+                                    <div class="form-group col-6">
+                                        <input type="file" accept=" .pdf, .png, .txt, .docx " class="form-control-file" id="file" name="file[]" style="color:white;" multiple>
+                                    </div>
 
-                </div>
+                                    <div class="col-6">
+                                        <button type="submit" class="btn" style="background-color: #FFFFFF; border-color: black; color:black;">Enregistrer</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <?php if( $fichier != "Aucun Fichier Envoyé") { ?>
+                            <div class="col-12 align-self-center">
+                                <a href="{{route('Fournisseurs.fichier.delete')}}" class="btn align-self-center"> Supprimer le fichier </a>     
+                            </div>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
 

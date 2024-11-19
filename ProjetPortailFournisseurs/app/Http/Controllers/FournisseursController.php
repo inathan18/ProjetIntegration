@@ -79,7 +79,7 @@ class FournisseursController extends Controller
     }
 
     /* fonction utilisé pour la création de compte Fournisseur*/
-    public function store(FournisseurRequest $request)
+    public function store(Request $request)
     {
         try {
             session()->put($request->all());
@@ -87,6 +87,8 @@ class FournisseursController extends Controller
             Log::debug($fournisseur);
 
             $fournisseur['postCode'] = trim($fournisseur->postCode);
+
+            $fournisseur['personneContact'] = "ah";
 
             $fournisseur->save();
             }
@@ -105,38 +107,16 @@ class FournisseursController extends Controller
      */
     public function show()
     {
-
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
 
         $telephone = json_decode($fournisseur_actuel->phone[0], true);
 
         $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
 
-        try {
-            $ctr = count($fournisseur_actuel->files);
-
-            Log::debug($ctr);
-
-            Log::debug($fournisseur_actuel->files[0]);
-
-            $fichier = "";
-
-
-            for( $i = 0; $i < $ctr; $i++ ) {
-                $fichier .= $fournisseur_actuel->files[$i] . " | " ;
-            }
-            
-            if($fichier == "" || $fichier == " | ") {
-                $fichier = "Aucun Fichier Envoyé";
-            }
-        }
-        catch (\Throwable $e) {
-            $fichier = "Aucun Fichier Envoyé";
-        }
+        $fichier = $this->IniFichier($fournisseur_actuel);
 
         return view('Fournisseurs.MonDossier', compact('fournisseur_actuel', 'telephone', 'unspsc', 'fichier'));
  
-
     }
 
     /**
@@ -162,23 +142,9 @@ class FournisseursController extends Controller
 
         $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
 
-        $ctr = count($fournisseur_actuel->files);
-        
-        for( $i = 0; $i < $ctr; $i++ ) {
-            $filename = $fournisseur_actuel->files[$i];
-
-            unlink(storage_path('app/fournisseur/' .$filename));
-            Storage::delete($filename);
-        }
-
-        $fournisseur_actuel->update([
-            'files' => [""],
-
-        ]);
-
         $fichier = $this->IniFichier($fournisseur_actuel);
 
-
+        $this->DelFichier($fournisseur_actuel);
 
         return redirect()->back();
     }
@@ -190,7 +156,6 @@ class FournisseursController extends Controller
     {
         try
         {
-
             $fournisseur->update([
                 'personneContact' => $request->personneContact,
                 'website' => $request->website,
@@ -208,9 +173,9 @@ class FournisseursController extends Controller
 
     public function upload(Request $request) {
 
-        
-
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
+
+        $this->DelFichier($fournisseur_actuel);
 
         if ($request->hasfile('file')) {
             $fileJSON = array();
@@ -233,7 +198,7 @@ class FournisseursController extends Controller
             ]);
         }
 
-        return redirect()->route('Fournisseurs.accueil');
+        return redirect()->back();
 
     }
 
@@ -253,8 +218,6 @@ class FournisseursController extends Controller
 
             $ctr = count($fournisseur->files);
 
-            Log::debug($ctr);
-
             $fichier = "";
             
             for( $i = 0; $i < $ctr; $i++ ) {
@@ -270,6 +233,27 @@ class FournisseursController extends Controller
         }
         return $fichier;
         echo $fichier;
+    }
+
+
+
+    public function DelFichier($fournisseur) {
+        try {
+        $ctr = count($fournisseur->files);
+        
+        for( $i = 0; $i < $ctr; $i++ ) {
+            $filename = $fournisseur->files[$i];
+
+            unlink(storage_path('app/fournisseur/' .$filename));
+            Storage::delete($filename);
+        }
+
+        $fournisseur->update([
+            'files' => [""],
+        ]);
+    }
+    catch (\Throwable $e) { }
+        
     }
 
 //--------------------------------Fonction pour alèger le code-------------------------------------------------

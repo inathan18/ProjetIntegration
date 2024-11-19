@@ -45,6 +45,11 @@ html, body,main {
     margin-top: 25px;
 }
 
+.FormInscription {
+    padding-top: 1.8%;
+    padding-bottom: 1.8%;
+}
+
 .Standard-logo {
     position: relative; 
     left: calc(100% / 23);
@@ -128,8 +133,22 @@ hr {
 
 
 .beaulabel {
-    background-color: #003399;
+background-color: #003399;
 border-radius: 20px;
 padding: 10px;
+margin-bottom: 8px;
 color: white;
+}
+
+.beaulabelSelect {
+    background-color: #003399;
+    border-radius: 20px;
+    padding: 10px;
+    color: white;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.input {
+border-radius: 25px;
 }
