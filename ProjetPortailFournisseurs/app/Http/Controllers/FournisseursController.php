@@ -89,7 +89,8 @@ class FournisseursController extends Controller
             $fournisseurs->postCode = str_replace(' ', '', $fournisseurs->postcode);
             $fournisseurs->save();
             event(new Registered($fournisseurs));
-            return redirect()->route('Fournisseur.connexion')->with('success', 'Nous vous avons envoyé un courriel de vérification. Veuillez cliquer sur le lien reçu par courriel pour confirmer.');
+            Auth::guard('fournisseur')->login($fournisseurs);
+            return redirect()->route('verification.notice')->with('success', 'Nous vous avons envoyé un courriel de vérification. Veuillez cliquer sur le lien reçu par courriel pour confirmer.');
             }
                 
             catch (\Throwable $e) {
@@ -252,7 +253,7 @@ class FournisseursController extends Controller
         if ($request->fournisseur()->markEmailAsVerified()){
             event(new Verified($fournisseur));
         }
-        return redirect()->route('Fournisseur.connexion')->with('verified', true);
+        return redirect()->route('Fournisseurs.connexion')->with('verified', true);
     }
 
     public function check(Request $request){

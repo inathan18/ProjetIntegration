@@ -30,7 +30,8 @@ class Fournisseur extends Authenticatable implements MustVerifyEmail
         'typesRbq',
         'password',
         'personneContact',
-        'statut'
+        'statut',
+
     ];
 
     protected $hidden = [

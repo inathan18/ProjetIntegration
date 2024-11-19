@@ -14,6 +14,7 @@ use App\Models\Usager;
 use App\Notifications\BienvenueNotification;
 use App\Notifications\ChangementFournisseur;
 use App\Notifications\NouveauFournisseur;
+use Illuminate\Support\Facades\Log;
 
 // Route pour Usagers
 
@@ -74,18 +75,16 @@ Route::patch('/fournisseur/{fournisseur}/modification',
 [FournisseursController::class, 'update'])->name('Fournisseurs.update');
 
 //Routes validation courriel
-Route::get('/email/verify', [EmailVerificationController::class, 'show'])->middleware('auth')->name('verification.notice');
+Route::get('/email/verify', [EmailVerificationController::class, 'show'])->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('/fournisseur/connexion');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request){
     $request->user()->sendEmailVerificationNotification();
+    Log::Debug($request);
 
     return back()->with('message', 'Courriel de vérification envoyé!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+})->middleware(['auth:fournisseur', 'throttle:6,1'])->name('verification.send');
 
 //Tests notifications
 Route::get('notification/bienvenue', function (){
