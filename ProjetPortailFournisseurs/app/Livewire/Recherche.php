@@ -32,8 +32,6 @@ class Recherche extends Component
         $this->chargerRegionsEtVilles();
         $this->recherche();
         $this->filtre['region'] = [];
-        Log::info('Régions après chargement', ['regions' => $this->regions]);
-        Log::info('Filtre avant chargement des villes', ['filtre' => $this->filtre['region']]);
     }
 
     public function updatedRechercheTerm()
@@ -82,12 +80,6 @@ class Recherche extends Component
         }
 
         $this->fournisseurs = $query->get();
-        
-        Log::info('Recherche effectuée', [
-            'régions' => $this->filtre['region'],
-            'villes' => $villesFinales,
-            'résultats' => count($this->fournisseurs)
-        ]);
     }
 
     public function chargerRegionsEtVilles()
@@ -125,11 +117,7 @@ class Recherche extends Component
         }
     
         $this->regions = array_keys($regionsTemp);
-    
-        Log::info('Régions chargées', ['regions' => $this->regions]);
-        Log::info('Villes chargées', ['villes' => $this->villes]);
-        Log::info('Toutes les villes chargées', ['toutesLesVilles' => $this->toutesLesVilles]);
-    
+
         // Tri des villes et des régions par numéro
         $this->villes = $this->sortByRegionNumber($this->villes);
         $this->toutesLesVilles = $this->sortByRegionNumber($this->toutesLesVilles);

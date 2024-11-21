@@ -5,55 +5,54 @@
 @section('contenu')
 
 <div class="container mt-5">
-    <!-- Bouton de retour et de confirmation-->
-    <div class="row mb-4">
-        <div class="col-12 d-flex gap-2">
-            <a href="{{ route('fournisseurs.showFiche', ['id' => $fournisseur->id]) }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Retour à la fiche
-            </a>
-            <form action="{{ route('fournisseurs.modifierFournisseur', ['id' => $fournisseur->id]) }}" method="POST">
-                @csrf
+    <form action="{{ route('fournisseurs.modifierFournisseur', ['id' => $fournisseur->id]) }}" method="POST">
+        @csrf
+        @method('PUT')
+
+        <!-- Boutons en haut -->
+        <div class="row mb-4">
+            <div class="col-12 d-flex gap-2 justify-content-between">
+                <a href="{{ route('fournisseurs.showFiche', ['id' => $fournisseur->id]) }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour à la fiche
+                </a>
                 <button type="submit" class="btn btn-primary">Sauvegarder les modifications</button>
-            </form>
+            </div>
         </div>
-    </div>
 
-    <h1 class="mb-4">Fiche Fournisseur</h1>
+        <h1 class="mb-4">Fiche Fournisseur</h1>
 
-    <div class="row">
-        <!-- État de la demande -->
-        <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">État de la demande</h5>
-                    <p class="card-text 
-                        @if ($fournisseur->statut == 'A') text-success
-                        @elseif ($fournisseur->statut == 'AT') text-warning
-                        @elseif ($fournisseur->statut == 'AR') text-primary
-                        @elseif ($fournisseur->statut == 'R') text-danger
-                        @endif">
-                        
-                        @if ($fournisseur->statut == 'A')
-                            <i class="fas fa-check-circle"></i> Acceptée
-                        @elseif ($fournisseur->statut == 'AT')
-                            <i class="fas fa-hourglass-half"></i> En attente
-                        @elseif ($fournisseur->statut == 'AR')
-                            <i class="fas fa-exclamation-circle"></i> À réviser
-                        @elseif ($fournisseur->statut == 'R')
-                            <i class="fas fa-times-circle"></i> Refusée
-                        @else
-                            <i class="fas fa-info-circle"></i> Statut inconnu
-                        @endif
-                    </p>
+        <div class="row">
+            <!-- État de la demande -->
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">État de la demande</h5>
+                        <p class="card-text 
+                            @if ($fournisseur->statut == 'A') text-success
+                            @elseif ($fournisseur->statut == 'AT') text-warning
+                            @elseif ($fournisseur->statut == 'AR') text-primary
+                            @elseif ($fournisseur->statut == 'R') text-danger
+                            @endif">
+                            
+                            @if ($fournisseur->statut == 'A')
+                                <i class="fas fa-check-circle"></i> Acceptée
+                            @elseif ($fournisseur->statut == 'AT')
+                                <i class="fas fa-hourglass-half"></i> En attente
+                            @elseif ($fournisseur->statut == 'AR')
+                                <i class="fas fa-exclamation-circle"></i> À réviser
+                            @elseif ($fournisseur->statut == 'R')
+                                <i class="fas fa-times-circle"></i> Refusée
+                            @else
+                                <i class="fas fa-info-circle"></i> Statut inconnu
+                            @endif
+                        </p>
 
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <p>Dernière modification : <span>{{ date('d-m-y', strtotime($fournisseur->updated_at)) }}</span></p>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p>Dernière modification : <span>{{ date('d-m-y', strtotime($fournisseur->updated_at)) }}</span></p>
+                            </div>
                         </div>
-                    </div>
 
-                    <form action="{{ route('fournisseurs.modifierFournisseur', ['id' => $fournisseur->id]) }}" method="POST">
-                        @csrf
                         <div class="mb-3">
                             <label for="etatDemande" class="form-label">Sélectionner l'état</label>
                             <select class="form-select" id="etatDemande" name="statut" required>
@@ -75,54 +74,53 @@
                                 Inclure la raison du refus dans le courriel
                             </label>
                         </div>
-
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Identification -->
-        <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Identification</h5>
-                    <div class="mb-3">
-                        <label for="neq" class="form-label">NEQ</label>
-                        <input type="text" class="form-control" id="neq" name="neq" value="{{ $fournisseur->neq }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nom</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ $fournisseur->name }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Courriel</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ $fournisseur->email }}" required>
                     </div>
                 </div>
             </div>
-        </div>
 
+            <!-- Identification -->
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Identification</h5>
+                        <div class="mb-3">
+                            <label for="neq" class="form-label">NEQ</label>
+                            <input type="text" class="form-control" id="neq" name="neq" value="{{ $fournisseur->neq }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ $fournisseur->name }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Courriel</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ $fournisseur->email }}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
         <!-- Adresse -->
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Adresse</h5>
                     <p>{{ $fournisseur->address }}, {{ $fournisseur->city }}</p>
-                    <p>Site internet : </p>
+                    <p>Site internet : {{ $fournisseur->website }}</p>
                     <p>Téléphone : </p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
         <!-- Contacts -->
         <div class="col-md-6 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Contacts</h5>
                     <p>{{ $fournisseur->personneContact }}</p>
-                    <p>Email : </p>
+                    <p>Courriel : </p>
                     <p>Téléphone : </p>
                 </div>
             </div>
@@ -192,7 +190,7 @@
         const raisonRefus = document.getElementById('raisonRefus');
         const inclusRaison = document.getElementById('inclusRaison');
 
-        // Fonction pour afficher/masquer les champs en fonction de l'état sélectionné
+        // Afficher/masquer les champs en fonction de l'état sélectionné
         function toggleRefusFields() {
             if (etatDemandeSelect.value === 'R') {
                 raisonRefus.style.display = 'block';
@@ -206,5 +204,4 @@
         etatDemandeSelect.addEventListener('change', toggleRefusFields);
     });
 </script>
-
 @endsection

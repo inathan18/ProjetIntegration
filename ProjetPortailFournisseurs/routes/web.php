@@ -81,9 +81,8 @@ Route::get('/fournisseurs/{id}/historique', [FournisseursController::class, 'sho
 
 Route::get('/fournisseurs/{id}/edit', [FournisseursController::class, 'editFiche'])->name('fournisseurs.editFiche');
 
-Route::put('/fournisseurs/{id}', [FournisseursController::class, 'updateFiche'])->name('fournisseurs.updateFiche');
+Route::put('/fournisseurs/{id}/modifier', [FournisseursController::class, 'modifierFournisseur'])->name('fournisseurs.modifierFournisseur');
 
-Route::post('/fournisseurs/modifierFournisseur/{id}', [FournisseursController::class, 'modifierFournisseur'])->name('fournisseurs.modifierFournisseur');
 
 // Routes admin
 Route::get('/admin', 

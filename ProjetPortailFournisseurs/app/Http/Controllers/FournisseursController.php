@@ -143,20 +143,6 @@ class FournisseursController extends Controller
         return view('GestionFournisseurs.editFiche', compact('fournisseur'));
     }
 
-    public function updateFiche(Request $request, $id)
-    {
-        $fournisseur = Fournisseur::findOrFail($id);
-
-        // Validation des données
-        $request->validate([
-
-        ]);
-
-        $fournisseur->update($request->all());
-
-        return redirect()->route('GestionFournisseurs.showFiche', $fournisseur->id)
-                        ->with('success', 'Fiche fournisseur mise à jour avec succès');
-    }
 
     public function modifierFournisseur(Request $request, $id)
     {
@@ -164,10 +150,11 @@ class FournisseursController extends Controller
     
         // Validation des données
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'statut' => 'required|string|max:1',
-            'neq' => 'nullable|integer',
+            'name' => 'required|string|max:100',
+            'email' => 'required|string|max:100',
+            'statut' => 'required|string|max:10',
+            'neq' => 'nullable|string',
+            'raison' => $request->input('statut') === 'R' ? 'required|string|max:255' : 'nullable|string|max:255',
         ]);
     
         // Mise à jour des informations

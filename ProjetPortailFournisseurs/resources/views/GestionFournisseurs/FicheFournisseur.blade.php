@@ -76,8 +76,21 @@
                 <div class="card-body">
                     <h5 class="card-title">Adresse</h5>
                     <p>{{ $fournisseur->address }}, {{ $fournisseur->city }}</p>
-                    <p>Site internet : </p>
-                    <p>Téléphone : </p>
+                    <p>Site internet : {{ $fournisseur->website }}</p>
+                    <p>Téléphone : 
+                        @if ($fournisseur->phone)
+                            @php
+                                $phoneData = is_array($fournisseur->phone) ? $fournisseur->phone : json_decode($fournisseur->phone, true);
+                            @endphp
+                            @if (isset($phoneData[0]) && isset($phoneData[1]))
+                                {{ $phoneData[0] }} ({{ $phoneData[1] }})
+                            @else
+                                Téléphone non disponible
+                            @endif
+                        @else
+                            Téléphone non disponible
+                        @endif
+                    </p>
                 </div>
             </div>
         </div>
