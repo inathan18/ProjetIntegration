@@ -35,12 +35,15 @@ class BienvenueNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $imagePath = public_path('images/logo.png');
+        $imageCid = 'v3r-logo';
         return (new MailMessage)
                     ->greeting('Bonjour, ' . $notifiable->name . ' !')
                     ->subject('Bienvenue')
                     ->line('Bienvenue sur le Portail des fournisseurs de la ville de Trois-Rivières !')
                     ->action('Connexion au portail', url('/fournisseur/connexion'))
                     ->line('Merci de votre intérêt pour notre ville!');
+
     }
 
     /**

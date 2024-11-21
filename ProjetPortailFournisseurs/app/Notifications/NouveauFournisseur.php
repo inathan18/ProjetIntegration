@@ -6,17 +6,19 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\Fournisseur;
 
 class NouveauFournisseur extends Notification
 {
     use Queueable;
+    protected $fournisseur;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(Fournisseur $fournisseur)
     {
-        //
+        $this->fournisseur = $fournisseur;
     }
 
     /**
@@ -34,10 +36,16 @@ class NouveauFournisseur extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $imagePath = public_path('images/logo.png');
+        $imageCid = 'v3r-logo';
         return (new MailMessage)
                     ->subject('Nouveau fournisseur inscrit.')
                     ->line('Un nouveau fournisseur s\'est inscrit sur le portail.')
-                    ->action('Notification Action', url('/'));
+                    ->line('Nom du fournisseur: ' . $this->fournisseur->name)
+                    ->line('Courriel du fournisseur: ' . $this->fournisseur->email)
+                    ->action('Voir la fiche du fournisseur', url('/fournisseur/' . $this->fournisseur->id))
+                    ->line('Merci de prendre en charge la demande.');
+
     }
 
     /**

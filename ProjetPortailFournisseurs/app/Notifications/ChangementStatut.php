@@ -7,17 +7,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ChangementFournisseur extends Notification
+class ChangementStatut extends Notification
 {
     use Queueable;
-    
 
     /**
      * Create a new notification instance.
      */
     public function __construct()
     {
-        
+        //
     }
 
     /**
@@ -37,12 +36,26 @@ class ChangementFournisseur extends Notification
     {
         $imagePath = public_path('images/logo.png');
         $imageCid = 'v3r-logo';
-        return (new MailMessage)
-                    ->greeting('Bonjour, ' . $notifiable->name . ' !')
-                    ->subject('Changement à votre profil')
-                    ->line('Un modification a été effectué sur votre profil fournisseur.')
-                    ->action('Accédez à mon dossier', url('/fournisseur/monDossier'))
-                    ->line('Merci de votre collaboration!');
+        $mail = (new MailMessage)
+        ->greeting('Bonjour, ' . $notifiable->name . ' !')
+        ->subject('Changement à votre statut de fournisseur')
+        ->line('Votre statut de fournisseur a été modifié sur votre profil fournisseur.');
+            if ($notifiable->statut == 'A' ){
+                $mail->line('Nouveau statut: Actif');
+            }
+            elseif ($notifiable->statut == 'AR') {
+                $mail->line('Nouveau statut: En Révision');
+            }
+            elseif ($notifiable->statut == 'AT') {
+                $mail->line('Nouveau statut: En Attente');
+            }
+            elseif ($notifiable->statut == 'R') {
+                $mail->line('Nouveau statut: Refusé');
+            }
+        
+        $mail->action('Accédez à mon dossier', url('/fournisseur/monDossier'));
+        $mail->line('Merci de votre collaboration!');
+        return $mail;
 
     }
 

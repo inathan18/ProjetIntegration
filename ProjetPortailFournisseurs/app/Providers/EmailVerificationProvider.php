@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
+use App\Events\AccountModified;
+use App\Listeners\SendAccountModificationEmail;
+use App\Events\AccountCreated;
+use App\Listeners\SendNewAccountEmail;
+use App\Events\StatusChanged;
+use App\Listeners\SendStatusChangeEmail;
 class EmailVerificationProvider extends ServiceProvider
 {
     /**
@@ -19,7 +25,17 @@ class EmailVerificationProvider extends ServiceProvider
     protected $listen = [
         Verified::class => [
             SendWelcomeEmail::class,
+        ],
+        AccountModified::class => [
+            SendAccountModificationEmail::class,
+        ],
+        AccountCreated::class => [
+            SendNewAccountEmail::class,
+        ],
+        StatusChanged::class => [
+            SendStatusChangeEmail::class,
         ]
+
         ];
     public function register(): void
     {
@@ -31,6 +47,8 @@ class EmailVerificationProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $imagePath = public_path('images/logo.png');
+        $imageCid = 'v3r-logo';
 
         VerifyEmail::toMailUsing(function (object $notifiable, string $url){
             return (new MailMessage)
@@ -38,6 +56,7 @@ class EmailVerificationProvider extends ServiceProvider
             ->subject('Validation de votre adresse courriel')
             ->line('Cliquer sur le bouton ci-dessous pour valider votre adresse courriel.')
             ->action('Valider votre adresse courriel', $url);
+
         });
 
         VerifyEmail::createUrlUsing(function($notifiable){

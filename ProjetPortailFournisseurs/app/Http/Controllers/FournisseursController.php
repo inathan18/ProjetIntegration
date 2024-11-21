@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Auth\Events\Registered;
-
+use App\Events\AccountModified;
+use App\Events\AccountCreated;
 
 use App\Models\Fournisseur;
 use Illuminate\Support\Facades\Storage;
@@ -89,6 +90,7 @@ class FournisseursController extends Controller
             $fournisseurs->postCode = str_replace(' ', '', $fournisseurs->postcode);
             $fournisseurs->save();
             event(new Registered($fournisseurs));
+            event(new AccountCreated($fournisseurs));
             Auth::guard('fournisseur')->login($fournisseurs);
             return redirect()->route('verification.notice')->with('success', 'Nous vous avons envoyé un courriel de vérification. Veuillez cliquer sur le lien reçu par courriel pour confirmer.');
             }
@@ -187,13 +189,16 @@ class FournisseursController extends Controller
     {
         try
         {
-
+            $oldData = $fournisseur->only(['personneContact', 'website']);
             $fournisseur->update([
                 'personneContact' => $request->personneContact,
                 'website' => $request->website,
 
             ]);
-
+            $changes = array_diff($fournisseur->only(['personneContact', 'website']), $oldData);
+            if(!empty($changes)){
+                event(new AccountModified($fournisseur));
+            }
             return redirect()->route('fournisseur.accueil')->with('message', "Modification de " . $fournisseur->name . " réussi!");
         }
         catch(\Throwable $e)

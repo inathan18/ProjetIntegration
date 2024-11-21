@@ -15,6 +15,7 @@ use App\Notifications\BienvenueNotification;
 use App\Notifications\ChangementFournisseur;
 use App\Notifications\NouveauFournisseur;
 use Illuminate\Support\Facades\Log;
+use App\Http\Middleware\EnsureEmailIsNotVerified;
 
 // Route pour Usagers
 
@@ -84,7 +85,7 @@ Route::post('/email/verification-notification', function (Request $request){
     Log::Debug($request);
 
     return back()->with('message', 'Courriel de vérification envoyé!');
-})->middleware(['auth:fournisseur', 'throttle:6,1'])->name('verification.send');
+})->middleware(['auth:fournisseur', 'throttle:6,1', EnsureEmailIsNotVerified::class])->name('verification.send');
 
 //Tests notifications
 Route::get('notification/bienvenue', function (){

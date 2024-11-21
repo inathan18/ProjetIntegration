@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Notifications\BienvenueNotification;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Models\Fournisseur;
 
 class SendWelcomeEmail
@@ -22,9 +23,11 @@ class SendWelcomeEmail
     /**
      * Handle the event.
      */
-    public function handle(Verified $event): void
+    public function handle(Verified $event)
     {
-        $user = $event->fournisseur;
-        Mail::to($user->email)->send(new BienvenueNotification($user));
+        //Log::Debug($event);
+        $user = $event->user;
+        //Log::Debug($user);
+        $user->notify(new BienvenueNotification());
     }
 }
