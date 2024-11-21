@@ -34,7 +34,16 @@ class HistoriqueEtatsSeeder extends Seeder
                 'statut' => 'M',
                 'modifie_par' => 'Admin',
                 'raisonRefus' => null,
-                'modifications' => json_encode(['champ1' => 'modifié', 'champ2' => 'ajouté']),
+                'modifications' => json_encode([
+                    'champ1' => [
+                        'old' => '- ancienne valeur', 
+                        'new' => '+ nouvelle valeur'
+                    ], 
+                    'champ2' => [
+                        'old' => '- valeur précédente', 
+                        'new' => '+ nouvelle valeur ajoutée'
+                    ]
+                ]),                
                 'created_at' => '2024-03-10 09:15:00', 
                 'updated_at' => '2024-03-10 09:15:00', 
             ],
