@@ -145,36 +145,45 @@ class FournisseursController extends Controller
 
 
     public function modifierFournisseur(Request $request, $id)
-    {
-        $fournisseur = Fournisseur::findOrFail($id);
+{
+    $fournisseur = Fournisseur::findOrFail($id);
     
-        // Validation des données
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|string|max:100',
-            'statut' => 'required|string|max:10',
-            'neq' => 'nullable|string',
-            'raison' => $request->input('statut') === 'R' ? 'required|string|max:255' : 'nullable|string|max:255',
-        ]);
+    // Validation des données
+    $request->validate([
+        'name' => 'required|string|max:100',
+        'email' => 'required|string|max:100',
+        'statut' => 'required|string|max:10',
+        'neq' => 'nullable|string',
+        'raison' => $request->input('statut') === 'R' ? 'required|string' : 'nullable|string',
+        'address' => 'nullable|string|max:100',
+        'city' => 'nullable|string|max:100',
+        'website' => 'nullable|string|max:255',
+    ]);
+
+    // Mise à jour des informations
+    $fournisseur->name = $request->input('name');
+    $fournisseur->email = $request->input('email');
+    $fournisseur->statut = $request->input('statut');
     
-        // Mise à jour des informations
-        $fournisseur->name = $request->input('name');
-        $fournisseur->email = $request->input('email');
-        $fournisseur->statut = $request->input('statut');
-    
-        // Si l'état est refusé, stocker la raison du refus
-        if ($fournisseur->statut == 'R') {
-            $fournisseur->raisonRefus = $request->input('raison');
-        } else {
-            $fournisseur->raisonRefus = null;
-        }
-    
-        $fournisseur->neq = $request->input('neq');
-        $fournisseur->save();
-    
-        return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
-                         ->with('success', 'Les informations ont été modifiées avec succès');
+    // Si l'état est refusé, stocker la raison du refus
+    if ($fournisseur->statut == 'R') {
+        $fournisseur->raisonRefus = $request->input('raison');
+    } else {
+        $fournisseur->raisonRefus = null;
     }
+
+    // Mise à jour des champs
+    $fournisseur->neq = $request->input('neq');
+    $fournisseur->address = $request->input('address');
+    $fournisseur->city = $request->input('city');
+    $fournisseur->website = $request->input('website');
+
+    $fournisseur->save();
+
+    return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
+                     ->with('success', 'Les informations ont été modifiées avec succès');
+}
+
     
 
     /**
