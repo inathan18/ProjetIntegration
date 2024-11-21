@@ -41,14 +41,21 @@
                         </div>
                     @elseif ($item->statut == 'D') 
                         <i class="fas fa-ban text-secondary"></i> Désactivée
-                    @elseif ($item->statut == 'M') 
+                        @elseif ($item->statut == 'M') 
                         <i class="fas fa-edit text-info"></i>
                         <span class="text-primary cursor-pointer text-decoration-underline" onclick="toggleDetails('modif-{{ $item->id }}')"> Modifiée</span>
                         <div id="modif-{{ $item->id }}" style="display:none;">
                             <strong>Modifications :</strong>
                             <ul>
-                                @foreach ($item->modifications as $key => $modif)
-                                    <li>{{ ucfirst($key) }} : {{ $modif }}</li>
+                                @php
+                                    $modifications = json_decode($item->modifications, true);
+                                @endphp
+                                @foreach ($modifications as $key => $modif)
+                                    <li>
+                                        <strong>{{ ucfirst($key) }}:</strong> <br>
+                                        <span style="color: red;">{{ $modif['old'] }}</span> <br>
+                                        <span style="color: green;">{{ $modif['new'] }}</span>
+                                    </li>
                                 @endforeach
                             </ul>
                         </div>
