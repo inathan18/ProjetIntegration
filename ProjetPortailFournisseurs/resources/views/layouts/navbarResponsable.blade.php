@@ -12,7 +12,7 @@
 
         <!-- Liens de navigation -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto d-flex align-items-center">
                 <!-- Bouton Liste des Fournisseurs -->
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center" href="{{ route('fournisseurs.recherche') }}">
@@ -30,8 +30,8 @@
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}" class="d-flex align-items-center">
                         @csrf
-                        <button type="submit" class="btn btn-link nav-link" style="display: inline; padding: 0; margin: 0; border: none;">
-                            <i class="fas fa-sign-out-alt me-2"></i> 
+                        <button type="submit" class="btn btn-link nav-link d-flex align-items-center" style="display: inline; padding: 0; margin: 0; border: none;">
+                            <i class="fas fa-sign-out-alt me-2"></i>
                             Déconnexion
                         </button>
                     </form>
