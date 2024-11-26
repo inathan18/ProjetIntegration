@@ -1,4 +1,5 @@
-<div class="container mt-5">
+<div class="container">
+@include('layouts.navbarResponsable')
 @if (session()->has('message'))
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             {{ session('message') }}

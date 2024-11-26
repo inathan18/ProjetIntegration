@@ -16,6 +16,7 @@
 <body>
     <main>
         <div class="container mt-5">
+        @include('layouts.navbarResponsable')
             <h2>Liste des Fournisseurs Sélectionnés</h2>
             <table class="table table-bordered">
                 <thead>

@@ -5,6 +5,7 @@
 @section('contenu')
 
 <div class="container mt-5">
+@include('layouts.navbarResponsable')
     <!-- Bouton de retour -->
     <div class="row mb-4">
         <div class="col-12 text-right">
@@ -49,9 +50,12 @@
                             <p>Dernière modification : <span>{{ date('d-m-y', strtotime($fournisseur->updated_at)) }}</span></p>
                         </div>
                     </div>
+                    @if(auth()->guard('usager')->user()->role === 'responsable')
+                        <!-- Boutons réservés aux responsables -->
+                        <a href="{{ route('fournisseurs.historique', $fournisseur->id) }}" class="btn btn-secondary mt-3">Historique des modifications</a>
+                        <a href="{{ route('fournisseurs.editFiche', $fournisseur->id) }}" class="btn btn-secondary mt-3">Modifier la fiche</a>
+                    @endif
 
-                    <a href="{{ route('fournisseurs.historique', $fournisseur->id) }}" class="btn btn-secondary mt-3">Historique des modifications</a>
-                    <a href="{{ route('fournisseurs.editFiche', $fournisseur->id) }}" class="btn btn-secondary mt-3">Modifier la fiche</a>
                 </div>
             </div>
         </div>

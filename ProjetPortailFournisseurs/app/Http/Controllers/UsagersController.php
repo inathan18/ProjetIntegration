@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
-
 use App\Models\Usager;
 
 class UsagersController extends Controller
@@ -38,16 +37,35 @@ class UsagersController extends Controller
 
     public function login(Request $request)
     {
-        $reussi = (auth()->guard('usager')->attempt(['email' => $request->email]));
-        Log::debug(''.$reussi);
+        $credentials = [
+            'email' => $request->email,
+            'role' => $request->role,
+        ];
+        $usager = Usager::where($credentials)->first();
 
-        if($reussi){
-            return redirect()->route('Fournisseurs.accueil')->with('message', "Connexion réussi");
-        }
-        else{
-            return redirect()->route('Usagers.login')->withErrors(['Informations invalides']);
+        if ($usager) {
+            auth()->guard('usager')->login($usager);
+
+            // Redirection selon le rôle
+            if ($usager->role === 'administrateur') {
+                return redirect()->route('Admins.Panel')->with('message', "Connexion réussie");
+            } else {
+                return redirect()->route('fournisseurs.recherche');
+            }
+        } else {
+            // Redirection en cas d'échec
+            return redirect()->route('Usagers.connexion')->withErrors(['Informations invalides']);
         }
     }
+
+    public function logout(Request $request)
+    {
+        auth()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+    
+        return redirect()->route('Usagers.connexion');
+    }    
 
     /**
      * Store a newly created resource in storage.

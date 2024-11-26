@@ -16,6 +16,9 @@
             overflow-y: auto;
             transition: width 0.3s; /* Animation de transition */
             z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .sidebar ul {
@@ -82,6 +85,10 @@
         .sidebar-toggle .bi {
             font-size: 1.5rem;
         }
+
+        .sidebar .p-3 {
+            margin-top: auto; /* Pousse le bouton vers le bas */
+        }
     </style>
 
     <!-- Sidebar -->
@@ -95,7 +102,18 @@
             <li><a href="{{ route('Admins.Parametres') }}"><i class="bi bi-gear-fill"></i> Paramètres</a></li>
             <li><a href="{{ route('Admins.Courriel') }}"><i class="bi bi-envelope"></i> Modèles Courriel</a></li>
         </ul>
+        <!-- Bouton de déconnexion -->
+        <div class="p-3">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-danger w-100 d-flex align-items-center justify-content-center">
+                    <i class="bi bi-box-arrow-right me-2"></i> Déconnexion
+                </button>
+            </form>
+        </div>
     </div>
+
+
 
     <!-- Contenu principal -->
     <div class="content">

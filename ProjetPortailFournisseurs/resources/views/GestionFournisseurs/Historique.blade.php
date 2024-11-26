@@ -5,6 +5,7 @@
 @section('contenu')
 
 <div class="container mt-5">
+@include('layouts.navbarResponsable')
     <div class="row mb-4">
         <div class="col-12 text-right">
             <a href="{{ route('fournisseurs.showFiche', $fournisseur->id) }}" class="btn btn-secondary">

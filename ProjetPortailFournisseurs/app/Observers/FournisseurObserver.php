@@ -21,12 +21,11 @@ class FournisseurObserver
         unset($modifications['updated_at']);
     
         foreach ($modifications as $key => $newValue) {
-            // Récupérer l'ancienne valeur
             $oldValue = $fournisseur->getOriginal($key);
     
             // Vérifier si l'ancienne valeur et la nouvelle valeur sont différentes
             if ($oldValue !== $newValue) {
-                // Ajouter à la liste des changements, avec "-" pour l'ancienne valeur et "+" pour la nouvelle
+                // Ajouter à la liste des changements
                 $changes[$key] = [
                     'old' => "- $oldValue",
                     'new' => "+ $newValue" 

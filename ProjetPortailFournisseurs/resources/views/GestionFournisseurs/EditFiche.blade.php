@@ -5,6 +5,7 @@
 @section('contenu')
 
 <div class="container mt-5">
+@include('layouts.navbarResponsable')
     <form action="{{ route('fournisseurs.modifierFournisseur', ['id' => $fournisseur->id]) }}" method="POST">
         @csrf
         @method('PUT')
