@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 
 class FournisseursTableSeeder extends Seeder
 {
@@ -30,9 +31,9 @@ class FournisseursTableSeeder extends Seeder
             'files' => json_encode(['']),
             'neq' => '1171854699',
             'rbq' => '',
-            'typesRbq' => json_encode(['']),
+            'typesRbq' => '',
             'password' => Hash::make('rona'),
-            'raisonRefus' => '',
+            'raisonRefus' => null,
             'personneContact' => 'Directeur',
             'statut'=> 'A',
 
@@ -54,9 +55,9 @@ class FournisseursTableSeeder extends Seeder
             'files' => json_encode(['']),
             'neq' => '1146438586',
             'rbq' => '',
-            'typesRbq' => json_encode(['']),
+            'typesRbq' => '',
             'password' => Hash::make('ford'),
-            'raisonRefus' => '',
+            'raisonRefus' => null,
             'personneContact' => 'Directeur',
             'statut'=> 'A',
 
@@ -66,7 +67,7 @@ class FournisseursTableSeeder extends Seeder
             'id' => '3',
             'name'=> 'Test Fournisseur',
             'address' => 'Test',
-            'city' => 'Trois-Rivieres',
+            'city' => 'Abercorn',
             'province' => 'Quebec',
             'country' => 'Canada',
             'phone' => json_encode(['18005653673', 'Bureau']),
@@ -75,16 +76,81 @@ class FournisseursTableSeeder extends Seeder
             'website' => 'ford.ca',
             'email' => 'nathan.lafreniere@gmail.com',
             'files' => json_encode(['']),
-            'neq' => '',
+            'neq' => '3',
             'rbq' => '',
-            'typesRbq' => json_encode(['']),
+            'typesRbq' => '',
             'password' => Hash::make('nathan'),
-            'raisonRefus' => '',
+            'raisonRefus' => null,
             'personneContact' => 'Nathan',
             'statut'=> 'A',
 
         ]);
 
+        DB::table('fournisseurs')->insert([
+            'id' => '4',
+            'name'=> 'Test Attente',
+            'address' => 'Test',
+            'city' => 'Acton Vale',
+            'province' => 'Quebec',
+            'country' => 'Canada',
+            'phone' => json_encode(['18005653673', 'Bureau']),
+            'postCode' => 'L6J5E4',
+            'unspsc' => json_encode(['25101702']),
+            'website' => 'ford.ca',
+            'email' => 'nathan.lafreniere@gmail.com',
+            'files' => json_encode(['']),
+            'neq' => '4',
+            'rbq' => '',
+            'typesRbq' => json_encode([]),
+            'password' => Hash::make('nathan'),
+            'raisonRefus' => null,
+            'personneContact' => 'Nathan',
+            'statut'=> 'AT',
+        ]);
+
+        DB::table('fournisseurs')->insert([
+            'id' => '5',
+            'name'=> 'Test Refus',
+            'address' => 'Test',
+            'city' => 'Litchfield',
+            'province' => 'Quebec',
+            'country' => 'Canada',
+            'phone' => json_encode(['18005653673', 'Bureau']),
+            'postCode' => 'L6J5E4',
+            'unspsc' => json_encode(['25101702']),
+            'website' => 'ford.ca',
+            'email' => 'nathan.lafreniere@gmail.com',
+            'files' => json_encode(['']),
+            'neq' => '5',
+            'rbq' => '',
+            'typesRbq' => json_encode([]),
+            'password' => Hash::make('nathan'),
+            'raisonRefus' => Crypt::encryptString('Raison du refus '),
+            'personneContact' => 'Nathan',
+            'statut'=> 'R',
+        ]);
+
+        DB::table('fournisseurs')->insert([
+            'id' => '6',
+            'name'=> 'Test Révision',
+            'address' => 'Test',
+            'city' => 'Noyan',
+            'province' => 'Quebec',
+            'country' => 'Canada',
+            'phone' => json_encode(['18005653673', 'Bureau']),
+            'postCode' => 'L6J5E4',
+            'unspsc' => json_encode(['25101702']),
+            'website' => 'ford.ca',
+            'email' => 'nathan.lafreniere@gmail.com',
+            'files' => json_encode(['']),
+            'neq' => '6',
+            'rbq' => '',
+            'typesRbq' => json_encode([]),
+            'password' => Hash::make('nathan'),
+            'raisonRefus' => null,
+            'personneContact' => 'Nathan',
+            'statut'=> 'AR',
+        ]);
         
     }
 }

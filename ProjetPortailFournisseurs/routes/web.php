@@ -17,6 +17,8 @@ use App\Notifications\NouveauFournisseur;
 use App\Notifications\ChangementStatut;
 use Illuminate\Support\Facades\Log;
 use App\Http\Middleware\EnsureEmailIsNotVerified;
+use App\Http\Controllers\ResponsablesController;
+use App\Livewire\Recherche;
 
 // Route pour Usagers
 
@@ -63,6 +65,7 @@ Route::post('/fournisseur/upload',
 
 Route::post('/loginFournisseur', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
+
 
 Route::get('/fournisseur/deleteFichier', 
 [FournisseursController::class, 'fichierDelete'])->name('Fournisseurs.fichier.delete');
@@ -135,6 +138,20 @@ Route::get('/send-mail', function(){
 
 
 
+// Routes pour responsables
+
+
+Route::get('/Recherche', Recherche::class)->name('fournisseurs.recherche');
+
+Route::get('/fournisseurs/selection', [FournisseursController::class, 'showSelected'])->name('fournisseurs.selectionnes');
+
+Route::get('/fournisseurs/{id}', [FournisseursController::class, 'showFiche'])->name('fournisseurs.showFiche');
+
+Route::get('/fournisseurs/{id}/historique', [FournisseursController::class, 'showHistorique'])->name('fournisseurs.historique');
+
+Route::get('/fournisseurs/{id}/edit', [FournisseursController::class, 'editFiche'])->name('fournisseurs.editFiche');
+
+Route::put('/fournisseurs/{id}/modifier', [FournisseursController::class, 'modifierFournisseur'])->name('fournisseurs.modifierFournisseur');
 
 
 // Routes admin

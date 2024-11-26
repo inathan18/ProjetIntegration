@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\FournisseursRequest;
+use App\Http\Requests\HistoriqueRequest;
+use App\Models\Fournisseur;
+use App\Models\Historique;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -13,7 +16,6 @@ use Illuminate\Auth\Events\Registered;
 use App\Events\AccountModified;
 use App\Events\AccountCreated;
 
-use App\Models\Fournisseur;
 use Illuminate\Support\Facades\Storage;
 
 class FournisseursController extends Controller
@@ -101,6 +103,94 @@ class FournisseursController extends Controller
             }
             return redirect()->route('Fournisseurs.connexion');
     }
+
+    // Fournisseurs selectionnés sur la page de recherche
+    public function showSelected(Request $request)
+    {
+        $selectedIds = $request->session()->get('selected_fournisseurs', []);
+        $fournisseurs = Fournisseur::whereIn('id', $selectedIds)->get();
+        
+        return view('GestionFournisseurs.Selectionnes', [
+            'fournisseurs' => $fournisseurs
+        ]);
+    }
+
+    public function showFiche($id)
+    {
+        // Récupérer le fournisseur associé à cet ID
+        $fournisseur = Fournisseur::findOrFail($id);
+        
+        return view('GestionFournisseurs.FicheFournisseur', [
+            'fournisseur' => $fournisseur
+        ]);
+    }
+    
+      
+    public function showHistorique($id)
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
+    
+        $historique = Historique::where('fournisseur_id', $id)
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->map(function ($item) {
+                $item->raisonRefus = $item->raisonRefus; 
+                return $item;
+            });
+    
+        return view('GestionFournisseurs.historique', [
+            'fournisseur' => $fournisseur,
+            'historique' => $historique,
+        ]);
+    }
+    
+    public function editFiche($id)
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
+        
+        return view('GestionFournisseurs.editFiche', compact('fournisseur'));
+    }
+
+
+    public function modifierFournisseur(Request $request, $id)
+{
+    $fournisseur = Fournisseur::findOrFail($id);
+    
+    // Validation des données
+    $request->validate([
+        'name' => 'required|string|max:100',
+        'email' => 'required|string|max:100',
+        'statut' => 'required|string|max:10',
+        'neq' => 'nullable|string',
+        'raison' => $request->input('statut') === 'R' ? 'required|string' : 'nullable|string',
+        'address' => 'nullable|string|max:100',
+        'city' => 'nullable|string|max:100',
+        'website' => 'nullable|string|max:255',
+    ]);
+
+    // Mise à jour des informations
+    $fournisseur->name = $request->input('name');
+    $fournisseur->email = $request->input('email');
+    $fournisseur->statut = $request->input('statut');
+    
+    // Si l'état est refusé, stocker la raison du refus
+    if ($fournisseur->statut == 'R') {
+        $fournisseur->raisonRefus = $request->input('raison');
+    } else {
+        $fournisseur->raisonRefus = null;
+    }
+
+    // Mise à jour des champs
+    $fournisseur->neq = $request->input('neq');
+    $fournisseur->address = $request->input('address');
+    $fournisseur->city = $request->input('city');
+    $fournisseur->website = $request->input('website');
+
+    $fournisseur->save();
+
+    return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
+                     ->with('success', 'Les informations ont été modifiées avec succès');
+}
 
     
 

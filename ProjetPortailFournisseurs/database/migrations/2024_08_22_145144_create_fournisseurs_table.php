@@ -31,7 +31,7 @@ return new class extends Migration
             $table->json('typesRbq')->nullable();
             $table->string('personneContact', 100);
             $table->timestamps();
-            $table->string('raisonRefus', 255)->nullable();
+            $table->text('raisonRefus')->nullable();
             $table->string('password', 255);
             $table->datetime('email_verified_at')->nullable();
             $table->rememberToken();
