@@ -28,7 +28,7 @@ class FournisseurRequest extends FormRequest
             'postCode' => 'required',
             'website' => 'required',
             'personneContact' => 'required',
-            'phone' => 'required',
+            'phone' => 'required', 'regex:/^\d{3}-\d{3}-\d{4}$/',
             'email' => 'required',
             'password' => 'required',
         ];
@@ -41,6 +41,8 @@ class FournisseurRequest extends FormRequest
             'name.required' => 'Erreur nom',
             'address.required' => 'Erreur address',
             'postCode.required' => 'Erreur postCode',
+            'phone.required' => 'le numero de Téléphone est requis',
+            'phone.regex' => 'le numero de Téléphone doit être dans ce format: 123-456-7890.',
             'website.required' => 'Erreur website',
             'email.required' => 'Erreur email',
             'personneContact.required' => 'Erreur personneContact',

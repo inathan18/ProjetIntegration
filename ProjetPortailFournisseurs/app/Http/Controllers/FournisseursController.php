@@ -79,7 +79,7 @@ class FournisseursController extends Controller
     }
 
     /* fonction utilisé pour la création de compte Fournisseur*/
-    public function store(Request $request)
+    public function store(FournisseurRequest $request)
     {
         try {
             session()->put($request->all());
