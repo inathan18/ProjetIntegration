@@ -24,4 +24,29 @@ class NotificationTemplateController extends Controller
 
         return redirect()->route('templates.index')->with('success', 'Modèle mis à jour avec succès.' );
     }
+
+    public function fetchTemplate(Request $request){
+        $templateId = $request->input('template_id');
+        $template = NotificationTemplate::find($templateId);
+
+        if($template){
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'subject' => $template->subject,
+                    'line1' => $template->line1,
+                    'line2' => $template->line2,
+                    'line3' => $template->line3,
+                ],
+                ]);
+        }
+        return response()->json(['success' => false, 'message' => 'Template not found']);
+    }
+
+    public function showForm()
+    {
+        $templates = NotificationTemplate::all();
+
+        return view('admins.courriel', compact('templates'));
+    }
 }

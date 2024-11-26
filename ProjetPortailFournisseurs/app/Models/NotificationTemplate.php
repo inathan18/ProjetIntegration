@@ -10,5 +10,5 @@ class NotificationTemplate extends Model
 {
     use HasFactory;
     protected $table = "mail_templates";
-    protected $fillable = ['type', 'subject', 'greeting', 'line1', 'line2'];
+    protected $fillable = ['type', 'name', 'subject', 'line1', 'line2', 'line3'];
 }

@@ -16,6 +16,6 @@ class SendAccountModificationEmail
      */
     public function handle(AccountModified $event)
     {
-        $event->user->notify(new ChangementFournisseur());
+        $event->fournisseur->notify(new ChangementFournisseur());
     }
 }

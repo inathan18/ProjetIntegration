@@ -18,6 +18,7 @@ use App\Notifications\ChangementStatut;
 use Illuminate\Support\Facades\Log;
 use App\Http\Middleware\EnsureEmailIsNotVerified;
 use App\Http\Controllers\ResponsablesController;
+use App\Http\Controllers\NotificationTemplateController;
 use App\Livewire\Recherche;
 
 // Route pour Usagers
@@ -138,6 +139,8 @@ Route::get('/send-mail', function(){
 
 
 
+
+
 // Routes pour responsables
 
 
@@ -171,11 +174,16 @@ Route::get('/admin/parametres',
 [AdminsController::class, 'parametres'])->name('Admins.Parametres');
 
 Route::get('/admin/courriel', 
-[AdminsController::class, 'modelesCourriel'])->name('Admins.Courriel');
+[NotificationTemplateController::class, 'showForm'])->name('NotificationTemplate.showForm');
 
 Route::delete('/admin/usagers/{id}',
 [UsagersController::class,'destroy'])->name('Admins.Usager.Supprimer');
 
 Route::put('/admin/usagers/{id}/update-role',
 [AdminsController::class, 'updateRole'])->name('Admins.Usager.UpdateRole');
+Route::post('/admin/courriel/fetchTemplate',
+[NotificationTemplateController::class, 'fetchTemplate'])->name('NotificationTemplate.fetchTemplate');
+Route::post('/admin/courriel/update', 
+[NotificationTemplateController::class, 'update'])->name('NotificationTemplate.update');
+
 

@@ -22,6 +22,6 @@ class SendStatusChangeEmail
      */
     public function handle(StatusChanged $event): void
     {
-        $event->user->notify(new ChangementStatut());
+        $event->fournisseur->notify(new ChangementStatut());
     }
 }

@@ -11,10 +11,11 @@ class CreateMailTemplatesTable extends Migration
         Schema::create('mail_templates', function (Blueprint $table) {
             $table->increments('id');
             $table->string('type');
+            $table->tring('name');
             $table->string('subject')->nullable();
-            $table->string('greeting')->nullable();
             $table->string('line1')->nullable();
             $table->string('line2')->nullable();
+            $table->string('line3')->nullable();
             $table->timestamps();
         });
     }

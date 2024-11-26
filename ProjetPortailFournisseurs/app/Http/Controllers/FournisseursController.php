@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Auth\Events\Registered;
 use App\Events\AccountModified;
 use App\Events\AccountCreated;
+use App\Events\StatusChanged;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -155,6 +156,7 @@ class FournisseursController extends Controller
     public function modifierFournisseur(Request $request, $id)
 {
     $fournisseur = Fournisseur::findOrFail($id);
+
     
     // Validation des données
     $request->validate([
@@ -186,8 +188,14 @@ class FournisseursController extends Controller
     $fournisseur->city = $request->input('city');
     $fournisseur->website = $request->input('website');
 
+    
+    if($fournisseur->isDirty('statut')){
+        event(new StatusChanged($fournisseur) );
+    }
+    else if($fournisseur->isDirty()){
+        event(new AccountModified($fournisseur));
+    }
     $fournisseur->save();
-
     return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
                      ->with('success', 'Les informations ont été modifiées avec succès');
 }
