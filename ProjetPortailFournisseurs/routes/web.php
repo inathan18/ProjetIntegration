@@ -14,6 +14,7 @@ use App\Models\Usager;
 use App\Notifications\BienvenueNotification;
 use App\Notifications\ChangementFournisseur;
 use App\Notifications\NouveauFournisseur;
+use App\Notifications\ChangementStatut;
 use Illuminate\Support\Facades\Log;
 use App\Http\Middleware\EnsureEmailIsNotVerified;
 
@@ -104,10 +105,19 @@ Route::get('notification/modification', function (){
 
 Route::get('notification/nouveau', function (){
     $usager = Usager::find(1);
+    $fournisseur = Fournisseur::find(1);
 
-    return (new NouveauFournisseur($usager))
+    return (new NouveauFournisseur($fournisseur, $usager))
     ->toMail($usager);
 });
+
+Route::get('notification/statut', function (){
+    $usager = Usager::find(1);
+
+    return (new ChangementStatut($usager))
+    ->toMail($usager);
+});
+
 
 Route::get('notification/validation', function(){
     $fournisseur = Fournisseur::find(1);
