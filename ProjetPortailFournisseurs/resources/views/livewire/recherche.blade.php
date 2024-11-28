@@ -204,8 +204,8 @@ $(document).ready(function() {
 
     Livewire.on('produits-services-reset', () => {
         $('#produitsServices')
-            .selectpicker('deselectAll');
-            .selectpicker('refresh')  
+            .selectpicker('deselectAll')
+            .selectpicker('refresh');
     });
 
     // Bouton reset
