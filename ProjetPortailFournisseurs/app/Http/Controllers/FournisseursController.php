@@ -111,13 +111,29 @@ class FournisseursController extends Controller
     {
         // Récupérer le fournisseur associé à cet ID
         $fournisseur = Fournisseur::findOrFail($id);
-        
+
+        // Vérifier si le champ unspsc est déjà un tableau ou une chaîne JSON
+        $codesUnspsc = is_string($fournisseur->unspsc) ? json_decode($fournisseur->unspsc, true) : $fournisseur->unspsc;
+
+        // Charger les données du fichier unspsc.json
+        $unspscData = json_decode(Storage::get('unspsc.json'), true);
+
+        // Créer un tableau avec les descriptions des produits et services
+        $produitsServices = [];
+        foreach ($codesUnspsc as $code) {
+            foreach ($unspscData as $item) {
+                if ($item['codeUnspsc'] == $code) {
+                    $produitsServices[] = $item['codeUnspsc'] . ' - ' . $item['descUnspsc'];
+                }
+            }
+        }
+
         return view('GestionFournisseurs.FicheFournisseur', [
-            'fournisseur' => $fournisseur
+            'fournisseur' => $fournisseur,
+            'produitsServices' => $produitsServices,
         ]);
     }
-    
-      
+
     public function showHistorique($id)
     {
         $fournisseur = Fournisseur::findOrFail($id);

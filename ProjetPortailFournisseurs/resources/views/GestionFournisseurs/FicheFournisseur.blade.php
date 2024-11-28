@@ -118,9 +118,9 @@
                     <h5 class="card-title">Produits et services offerts</h5>
                     <p>Catégorie :</p>
                     <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        @foreach($produitsServices as $produitService)
+                            <li>{{ $produitService }}</li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
