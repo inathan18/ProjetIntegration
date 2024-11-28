@@ -204,17 +204,14 @@ $(document).ready(function() {
 
     Livewire.on('produits-services-reset', () => {
         $('#produitsServices')
-            .selectpicker('val', '')  
+            .selectpicker('deselectAll');
             .selectpicker('refresh')  
-            .selectpicker('render');  
     });
 
     // Bouton reset
     Livewire.on('resetSelects', () => {
-        $('#produitsServices').selectpicker('val', '');
-        $('#categoriesTravaux').selectpicker('val', '');
-        $('#regions').selectpicker('val', '');
-        $('#villes').selectpicker('val', '');
+        $('.selectpicker').selectpicker('deselectAll');
+        $('.selectpicker').selectpicker('refresh');
         
         @this.chargerToutesLesVilles();
         
