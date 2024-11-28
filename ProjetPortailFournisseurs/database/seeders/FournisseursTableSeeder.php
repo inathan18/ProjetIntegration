@@ -25,7 +25,7 @@ class FournisseursTableSeeder extends Seeder
             'country' => 'Canada',
             'phone' => json_encode(['8196930855', 'Bureau']),
             'postCode' => 'g9a6m1',
-            'unspsc' => json_encode(['31160000']),
+            'unspsc' => json_encode(['31160000','25101702']),
             'website' => 'rona.ca',
             'email' => 'rona@rona.ca',
             'files' => json_encode(['']),

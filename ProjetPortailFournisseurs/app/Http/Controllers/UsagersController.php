@@ -81,7 +81,7 @@ class UsagersController extends Controller
             catch (\Throwable $e) {
                 Log::debug($e);
             }
-            return redirect()->route('Usagers.login');
+            return redirect()->route('Usagers.connexion');
     }
 
     /**
