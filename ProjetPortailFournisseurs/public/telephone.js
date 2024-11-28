@@ -34,6 +34,7 @@ function removePhoneNumber(containerId) {
 }
 
 function addPersonneContact() {
+    if(ContactCtr < 6) {
     ContactCtr++;
     const ContactDiv = document.getElementById('Contact');
 
@@ -78,7 +79,8 @@ function addPersonneContact() {
         <button class="btn btn-danger" style="transform:scale(0.6);" onclick="removePersonneContact('Contact-${ContactCtr}')"> - </button>
         </div>`;
 
-    ContactDiv.appendChild(addContactDiv);
+    ContactDiv.appendChild(addContactDiv); 
+}
 }
 
 function removePersonneContact(containerId) {

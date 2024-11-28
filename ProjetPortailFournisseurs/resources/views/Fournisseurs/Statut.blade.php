@@ -55,28 +55,41 @@ session_start();
                         <form method="post" action="{{route('Fournisseurs.store')}}" class="employee-form">
                             @csrf
 
-                            <div class="form-section">
-                                <label for="">Name:</label>
-                                <input type="text" class="form-control mb-3" name="name" required>
-                                <label for="">Last Name:</label>
-                                <input type="text" class="form-control mb-3" name="last_name" required>
+                            <div class="container-fluid"  id="Contact">
+                                <div class="row">
+                                    <div class="p-3 col-4">
+                                        <label class="form-label" for="personneContact">Personne Contact : </label>
+                                        <input class="form-control" type="personneContact" id="personneContact" name="personneContact[]">
+                                    </div>
+                                    <div class="col-4 p-3 align-self-center text-center">
+                                        <div id="PhonePersonnel">
+                                        <div class="phone-number-container col-12" style="margin-top: 10px;">
+                                            <label for="phone1">Telephone Personnel</label>
+                                            <select name="phone[]" class="phone">
+                                                <option value="Bureau">Bureau</option>
+                                                <option value="Domicile">Domicile</option>
+                                                <option value="Cellulaire">Cellulaire</option>
+                                            </select>
+                                            <input type="text" name="personneContact[]" min="10" max="12" required>
+                                        </div>
+                                        <div class="phone-number-container col-12" style="margin-top: 10px;">
+                                            <label for="phone1">Telephone Personnel</label>
+                                            <select name="phone[]" class="phone">
+                                                <option value="Bureau">Bureau</option>
+                                                <option value="Domicile">Domicile</option>
+                                                <option value="Cellulaire">Cellulaire</option>
+                                            </select>
+                                            <input type="text" name="personneContact[]" min="10" max="12" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-3 col-4">
+                                    <label class="form-label" for="email">Courriel : </label>
+                                    <input class="form-control" type="email" id="email" name="personneContact[]">
+                                </div>
+                                </div>
                             </div>
-                            <div class="form-section">
-                                <label for="">E-mail:</label>
-                                <input type="email" class="form-control mb-3" name="email" required>
-                                <label for="">Phone:</label>
-                                <input type="tel" class="form-control mb-3" name="phone"  required>
-                            </div>
-                            <div class="form-section">
-                                <label for="">Address:</label>
-                                <textarea name="address" class="form-control mb-3" cols="30" rows="5" required></textarea>
-                            </div>
-
-                        <div class="form-navigation mt-3">
-                            <button type="button" class="previous btn btn-primary float-left">&lt; Previous</button>
-                            <button type="button" class="next btn btn-primary float-right">Next &gt;</button>
-                            <button type="submit" class="btn btn-success float-right">Submit</button>
-                        </div>
+                            <button type="button" class="btn btn-primary" style="transform:scale(0.6);"onclick="addPersonneContact()">+</button>
 
                         </form>
                         </div>

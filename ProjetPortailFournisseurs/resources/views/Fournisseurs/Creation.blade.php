@@ -29,9 +29,11 @@ session_start();
                         <div class="card-content">
 
                         <div class="nav nav-fill my-3">
-                          <div class="nav-link shadow-sm step0 col-12 border ml-2" style="border-radius: 25px;">Étape 1</div>
-                          <div class="nav-link shadow-sm step1 col-12 border ml-2" style="border-radius: 25px;">Étape 2</div>
-                          <div class="nav-link shadow-sm step2 col-12 border ml-2" style="border-radius: 25px;">Étape 3</div>
+                          <div class="nav-link shadow-sm step0 col-12 border ml-2" style="border-radius: 25px; color:black;">Compagnie</div>
+                          <div class="nav-link shadow-sm step1 col-12 border ml-2" style="border-radius: 25px; color:black;">Contact</div>
+                          <div class="nav-link shadow-sm step2 col-12 border ml-2" style="border-radius: 25px; color:black;">UNSPSC</div>
+                          <div class="nav-link shadow-sm step3 col-12 border ml-2" style="border-radius: 25px; color:black;">Fichiers</div>
+                          <div class="nav-link shadow-sm step4 col-12 border ml-2" style="border-radius: 25px; color:black;">Compte</div>
                         </div>
 
                         </div>
@@ -45,23 +47,22 @@ session_start();
                 <div class="card-container" style="height: 100%; padding:20px;">
                     <div class="persoCardInscription">
                         <div class="card-contentInscription">
-                        <br>
-                        <form method="post" action="{{route('Fournisseurs.store')}}" class="employee-form">
+                        <form method="post" action="{{route('Fournisseurs.store')}}" class="fournisseur-form">
                             @csrf
                             
                             <div class="form-section">
+                            <div class="col-12 text-center V3R-BleuFonce" style="color:white; border-radius: 20px; padding-bottom: 2px; padding-top: 2px;">
+                                <h1>Informations Compagnie</h1>
+                            </div>
 
-                                <div class="col-6 FormInscription" style="padding-right: 12px">
-                                    <label class="beaulabel" for="name">Nom de l'entreprise : </label>
-                                    <input  class="form-control" type="text" id="name" name="name" required>
-                                </div>
-                                <!-- -->
-                                <div class="row">
-                                    <div class="col-6 FormInscription">
-                                        <label class="beaulabel" for="address">address : </label>
-                                        <input  class="form-control" type="text" id="address" name="address" required>
+                            <div class="row" style="    margin-left: 2%; margin-right: 2%;">
+
+                                    <div class="col-6 FormInscription" style="padding-right: 12px">
+                                        <label class="beaulabel" for="name">Nom de l'entreprise : </label>
+                                        <input  class="form-control" type="text" id="name" name="name" style="border-radius:15px;">
                                     </div>
-                                    
+                                    <!-- -->
+
                                     <div class="col-6 FormInscription align-self-center">
                                         <div class="row justify-content-center">
 
@@ -72,10 +73,15 @@ session_start();
                                                     <option value="Domicile">Domicile</option>
                                                     <option value="Cellulaire">Cellulaire</option>
                                                 </select>
-                                                <input type="text" name="phone[]" id="phone" pattern="^\d{3}-\d{3}-\d{4}$" style="border-radius: 10px; width:30%;" required>
+                                                <input type="text" name="phone[]" id="phone" pattern="^\d{3}-\d{3}-\d{4}$" placeholder="xxx-xxx-xxxx" style="border-radius: 10px; width:30%;">
                                             </div>
 
                                         </div>
+                                    </div>
+
+                                    <div class="col-6 FormInscription">
+                                        <label class="beaulabel" for="address">address : </label>
+                                        <input  class="form-control" type="text" id="address" name="address">
                                     </div>
                                     
                                     <div class="col-6 FormInscription">
@@ -83,7 +89,7 @@ session_start();
 
                                             <div class="col-6" style="background-color: #003399; border-radius:25px; padding-top:2px; padding-bottom:2px;">
                                                 <label class="beaulabelSelect" for="city">Ville : </label>
-                                                <select name="city" class="city" id="city" style="border-radius: 10px; width:80%;" required>
+                                                <select name="city" class="city" id="city" style="border-radius: 10px; width:80%;">
                                                     <option value="city">Sélectionnez la ville</option>
                                                 </select>
                                             </div>
@@ -92,11 +98,16 @@ session_start();
                                     </div>
 
                                     <div class="col-6 FormInscription">
+                                        <label class="beaulabel" for="city">NEQ : </label>
+                                        <input  class="form-control" type="text" id="neq" name="neq">
+                                    </div>
+
+                                    <div class="col-6 FormInscription">
                                         <div class="row justify-content-center">
 
                                             <div class="col-6" style="background-color: #003399; border-radius:25px; padding-top:2px; padding-bottom:2px;">
                                                 <label class="beaulabelSelect" for="region">Région:</label>
-                                                <select name="region" class="region" id="region" style="border-radius: 10px; width:70%;" required>
+                                                <select name="region" class="region" id="region" style="border-radius: 10px; width:70%;">
                                                     <option disabled selected value>Sélectionnez la région</option>
                                                     <option value="Autre">Autre</option>
                                                 </select>
@@ -104,28 +115,6 @@ session_start();
 
                                         </div>
                                     </div>
-
-                                    <div class="col-6 FormInscription">
-                                        <label class="beaulabel" for="city">NEQ : </label>
-                                        <input  class="form-control" type="text" id="neq" name="neq" required>
-                                    </div>
-                                    
-                                    <div class="col-6 FormInscription">
-                                        <label class="beaulabel" for="city">RBQ : </label>
-                                        <input  class="form-control" type="text" id="rbq" name="rbq" required>
-                                    </div>
-
-                                    <div class="col-6 FormInscription">
-                                        <label class="beaulabel" for="email">email : </label>
-                                        <input  class="form-control" type="text" id="email" name="email" required>
-                                    </div>
-                                    
-                                    <div class="col-6 FormInscription">
-                                        <label class="beaulabel" for="password">password : </label>
-                                        <input  class="form-control" type="text" id="password" name="password">
-                                    </div>
-                                    
-                                    
 
                                     <div class="col-12 FormInscription">
                                         <label class="beaulabel" for="website">Siteweb : </label>
@@ -138,16 +127,92 @@ session_start();
                             </div>
                             <!-- Ajout pour voir si le formulaire est fonctionnel -->
                             <div class="form-section">
-                                <label for="">Name:</label>
-                                <input type="text" class="form-control mb-3" name="name" required>
-                                <label for="">Last Name:</label>
-                                <input type="text" class="form-control mb-3" name="last_name" required>
+
+                                <div class="col-12 text-center V3R-BleuFonce" style="color:white; border-radius: 20px; padding-bottom: 2px; padding-top: 2px;">
+                                    <h1>Informations Contacts</h1>
+                                </div>
+                                
+                                <div class="container-fluid"  id="Contact">
+                                    <div class="row">
+                                        <div class="p-3 col-4">
+                                            <label class="form-label" for="personneContact">Personne Contact : </label>
+                                            <input class="form-control" type="personneContact" id="personneContact" name="personneContact[]">
+                                        </div>
+                                        <div class="col-4 p-3 align-self-center text-center">
+                                            <div id="PhonePersonnel">
+                                            <div class="phone-number-container col-12" style="margin-top: 10px;">
+                                                <label for="phone1">Telephone Personnel</label>
+                                                <select name="phone[]" class="phone">
+                                                    <option value="Bureau">Bureau</option>
+                                                    <option value="Domicile">Domicile</option>
+                                                    <option value="Cellulaire">Cellulaire</option>
+                                                </select>
+                                                <input type="text" name="personneContact[]" min="10" max="12">
+                                            </div>
+                                            <div class="phone-number-container col-12" style="margin-top: 10px;">
+                                                <label for="phone1">Telephone Personnel</label>
+                                                <select name="phone[]" class="phone">
+                                                    <option value="Bureau">Bureau</option>
+                                                    <option value="Domicile">Domicile</option>
+                                                    <option value="Cellulaire">Cellulaire</option>
+                                                </select>
+                                                <input type="text" name="personneContact[]" min="10" max="12">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 col-4">
+                                        <label class="form-label" for="email">Courriel : </label>
+                                        <input class="form-control" type="email" id="email" name="personneContact[]">
+                                    </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary" style="transform:scale(0.6);"onclick="addPersonneContact()">+</button>
+
+                            </div>
+
+                            <div class="form-section">
+                                <div class="col-12 text-center V3R-BleuFonce" style="color:white; border-radius: 20px; padding-bottom: 2px; padding-top: 2px;">
+                                    <h1>UNSPSC</h1>
+                                </div>
+                                
+                                <div class="col-6 FormInscription">
+                                    <label class="beaulabel" for="city">UNSPSC : </label>
+                                    <input  class="form-control" type="text" id="unspsc" name="unspsc">
+                                </div>
+
+                            </div>
+
+                            <div class="form-section">
+                                <div class="col-12 text-center V3R-BleuFonce" style="color:white; border-radius: 20px; padding-bottom: 2px; padding-top: 2px;">
+                                    <h1>Fichiers</h1>
+                                </div>
+                                    <div class="form-group col-6">
+                                        <input type="file" accept=" .pdf, .png, .txt, .docx " class="form-control-file" id="file" name="file[]" style="color:white;" multiple>
+                                    </div>
+                            </div>
+
+                            <div class="form-section">
+
+                                <div class="col-12 text-center V3R-BleuFonce" style="color:white; border-radius: 20px; padding-bottom: 2px; padding-top: 2px;">
+                                    <h1>Informations De Connexion</h1>
+                                </div>
+
+                                <div class="col-6 FormInscription">
+                                    <label class="beaulabel" for="email">email : </label>
+                                    <input  class="form-control" type="text" id="email" name="email">
+                                </div>
+                                    
+                                <div class="col-6 FormInscription">
+                                    <label class="beaulabel" for="password">password : </label>
+                                    <input  class="form-control" type="text" id="password" name="password">
+                                </div>
+
                             </div>
                             <!-- Ajout pour voir si le formulaire est fonctionnel -->
 
                             <div class="form-navigation mt-3">
-                                <button type="button" class="previous btn btn-primary float-left">&lt; Previous</button>
-                                <button type="button" class="next btn btn-primary float-right">Next &gt;</button>
+                                <button type="button" class="previous btn btn-primary" style="border-radius:15px;">&lt; Previous</button>
+                                <button type="button" class="next btn btn-primary" style="border-radius:15px;">Next &gt;</button>
                                 <div class="text-center">
                                     <button disabled class="btn" id="submit" style="background-color: #003399; border-color: black; color:white;" type="submit"
                                                 onclick="var val= document.getElementById('password').value; document.getElementById('password').value(sha512(val));">
@@ -194,7 +259,7 @@ session_start();
 
      
             const step= document.querySelector('.step'+index);
-            step.style.backgroundColor="#17a2b8";
+            step.style.backgroundColor="#003399";
             step.style.color="white";
 
 
@@ -211,7 +276,7 @@ session_start();
         });
 
         $('.form-navigation .next').click(function(){
-            $('.employee-form').parsley().whenValidate({
+            $('.fournisseur-form').parsley().whenValidate({
                 group:'block-'+curIndex()
             }).done(function(){
                 navigateTo(curIndex()+1);

@@ -12,7 +12,7 @@ password.addEventListener("keyup", (e) => {
     const value = e.currentTarget.value;
     submitButton.disabled = false;
 
-    if (personneContact.value === "") {
+    if (password.value === "") {
         submitButton.disabled = true;
     }
 
