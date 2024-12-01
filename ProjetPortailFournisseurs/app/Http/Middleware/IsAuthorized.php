@@ -19,7 +19,7 @@ class IsAuthorized
         $user = Auth::guard('usager')->user();
 
         // Vérifie que l'utilisateur a un rôle autorisé
-        if ($user && in_array($user->role, ['commis', 'responsable'])) {
+        if ($user && in_array($user->role, ['commis', 'responsable', 'administrateur'])) {
             return $next($request);
         }
 

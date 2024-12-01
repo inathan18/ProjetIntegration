@@ -115,20 +115,49 @@
 
                         <!-- Téléphone -->
                         <div class="mb-3">
-                            <p>Téléphone : 
-                                @if ($fournisseur->phone)
-                                    @php
-                                        $phoneData = is_array($fournisseur->phone) ? $fournisseur->phone : json_decode($fournisseur->phone, true);
-                                    @endphp
-                                    @if (isset($phoneData[0]) && isset($phoneData[1]))
-                                        {{ $phoneData[0] }} ({{ $phoneData[1] }})
-                                    @else
-                                        Téléphone non disponible
-                                    @endif
+                            <label class="form-label">Numéros de Téléphone</label>
+                            <div id="phone-container">
+                                @php
+                                    $phoneData = is_array($fournisseur->phone) ? $fournisseur->phone : json_decode($fournisseur->phone, true);
+                                @endphp
+
+                                @if ($phoneData)
+                                    @for ($i = 0; $i < count($phoneData); $i += 2)
+                                        <div class="row phone-row mb-2">
+                                            <div class="col-6">
+                                                <input type="text" class="form-control" name="phone_number[]" 
+                                                    value="{{ $phoneData[$i] ?? '' }}" 
+                                                    placeholder="Numéro de téléphone">
+                                            </div>
+                                            <div class="col-5">
+                                                <input type="text" class="form-control" name="phone_type[]" 
+                                                    value="{{ $phoneData[$i+1] ?? '' }}" 
+                                                    placeholder="Type (Bureau, Mobile, etc.)">
+                                            </div>
+                                            <div class="col-1">
+                                                <button type="button" class="btn btn-danger remove-phone-row">-</button>
+                                            </div>
+                                        </div>
+                                    @endfor
                                 @else
-                                    Téléphone non disponible
+                                    <div class="row phone-row mb-2">
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" name="phone_number[]" 
+                                                placeholder="Numéro de téléphone">
+                                        </div>
+                                        <div class="col-5">
+                                            <input type="text" class="form-control" name="phone_type[]" 
+                                                placeholder="Type (Bureau, Mobile, etc.)">
+                                        </div>
+                                        <div class="col-1">
+                                            <button type="button" class="btn btn-danger remove-phone-row">-</button>
+                                        </div>
+                                    </div>
                                 @endif
-                            </p>
+                            </div>
+                            <button type="button" id="add-phone-row" class="btn btn-secondary mt-2">
+                                <i class="fas fa-plus"></i> Ajouter un numéro
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -154,7 +183,41 @@
         }
         toggleRefusFields();
         etatDemandeSelect.addEventListener('change', toggleRefusFields);
+
+        // Gestion dynamique des numéros de téléphone
+        const phoneContainer = document.getElementById('phone-container');
+        const addPhoneRowButton = document.getElementById('add-phone-row');
+
+        addPhoneRowButton.addEventListener('click', function() {
+            const newRow = document.createElement('div');
+            newRow.classList.add('row', 'phone-row', 'mb-2');
+            newRow.innerHTML = `
+                <div class="col-6">
+                    <input type="text" class="form-control" name="phone_number[]" 
+                           placeholder="Numéro de téléphone">
+                </div>
+                <div class="col-5">
+                    <input type="text" class="form-control" name="phone_type[]" 
+                           placeholder="Type (Bureau, Mobile, etc.)">
+                </div>
+                <div class="col-1">
+                    <button type="button" class="btn btn-danger remove-phone-row">-</button>
+                </div>
+            `;
+            phoneContainer.appendChild(newRow);
+        });
+
+        // Utiliser event delegation pour gérer la suppression des lignes
+        phoneContainer.addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-phone-row')) {
+                // Empêcher la suppression si c'est la dernière ligne
+                if (phoneContainer.querySelectorAll('.phone-row').length > 1) {
+                    event.target.closest('.phone-row').remove();
+                } else {
+                    alert('Vous devez garder au moins un numéro de téléphone.');
+                }
+            }
+        });
     });
 </script>
 @endsection
-

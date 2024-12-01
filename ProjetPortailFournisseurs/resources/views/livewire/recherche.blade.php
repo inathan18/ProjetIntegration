@@ -17,30 +17,33 @@
         <!-- Cases à cocher statut demande-->
         <div class="card-body">
             <div class="row mb-3 align-items-center">
-                <div class="col-12 col-md-8 mb-2">
-                    <div class="d-flex flex-wrap align-items-center">
-                        <div class="me-2">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filtre.attente" wire:change="recherche"> En attente
-                            </label>
-                        </div>
-                        <div class="me-2">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filtre.accepte" wire:change="recherche"> Acceptées
-                            </label>
-                        </div>
-                        <div class="me-2">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filtre.refuse" wire:change="recherche"> Refusées
-                            </label>
-                        </div>
-                        <div class="me-2">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" wire:model="filtre.reviser" wire:change="recherche"> À réviser
-                            </label>
+                @if(in_array(auth()->guard('usager')->user()->role, ['responsable', 'administrateur']))
+                    <div class="col-12 col-md-8 mb-2">
+                        <div class="d-flex flex-wrap align-items-center">
+                            <div class="me-2">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" wire:model="filtre.attente" wire:change="recherche"> En attente
+                                </label>
+                            </div>
+                            <div class="me-2">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" wire:model="filtre.accepte" wire:change="recherche"> Acceptées
+                                </label>
+                            </div>
+                            <div class="me-2">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" wire:model="filtre.refuse" wire:change="recherche"> Refusées
+                                </label>
+                            </div>
+                            <div class="me-2">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" wire:model="filtre.reviser" wire:change="recherche"> À réviser
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
+
                 <!-- Bouton rechercher -->
                 <div class="col-12 col-md-4 mb-2">
                     <div class="d-flex align-items-center">
@@ -67,9 +70,10 @@
             <!-- Catégories de travaux -->
             <div class="col-12 col-md-6 col-lg-3 mb-2">
                 <select id="categoriesTravaux" class="selectpicker" multiple wire:model="filtre.categorie" data-live-search="true"
-                 title="Catégories de Travaux" data-selected-text-format="static">
-                    <option value="general">Entrepreneur général</option>
-                    <option value="specialise">Entrepreneur spécialisé</option>
+                    title="Catégories de Travaux" data-selected-text-format="static">
+                    @foreach($categoriesTravauxDescriptions as $code => $description)
+                        <option value="{{ $code }}">{{ $description }}</option>
+                    @endforeach
                 </select>
             </div>
             <!-- Régions administratives -->
@@ -139,9 +143,12 @@
                             @endif
                         </td>
                         <td>
-
+                            @if (isset($fournisseur->correspondingCategoriesCount))
+                                {{ $fournisseur->correspondingCategoriesCount }}/{{ $fournisseur->correspondingCategoriesTotal }}
+                            @else
+                                0/{{ $fournisseur->correspondingCategoriesTotal ?? 0 }}
+                            @endif
                         </td>
-                        
                         <td>
                             <a href="{{ route('fournisseurs.showFiche', $fournisseur->id) }}" class="btn btn-primary btn-sm">Ouvrir</a>
                         </td>
@@ -169,6 +176,18 @@ $(document).ready(function() {
     });
 
     Livewire.on('produits-services-charges', () => {
+        $('.selectpicker').selectpicker('refresh');
+    });
+
+
+    // Gestion des catégories de travaux
+    $('#categoriesTravaux').on('changed.bs.select', function () {
+        let selectedCategories = $(this).val() || [];
+        @this.set('filtre.categorie', selectedCategories);
+        @this.call('chargerCategoriesTravauxFiltres');
+    });
+
+    Livewire.on('categories-travaux-charges', () => {
         $('.selectpicker').selectpicker('refresh');
     });
 

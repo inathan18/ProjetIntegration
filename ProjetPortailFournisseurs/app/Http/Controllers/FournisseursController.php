@@ -107,33 +107,6 @@ class FournisseursController extends Controller
         ]);
     }
 
-    public function showFiche($id)
-    {
-        // Récupérer le fournisseur associé à cet ID
-        $fournisseur = Fournisseur::findOrFail($id);
-
-        // Vérifier si le champ unspsc est déjà un tableau ou une chaîne JSON
-        $codesUnspsc = is_string($fournisseur->unspsc) ? json_decode($fournisseur->unspsc, true) : $fournisseur->unspsc;
-
-        // Charger les données du fichier unspsc.json
-        $unspscData = json_decode(Storage::get('unspsc.json'), true);
-
-        // Créer un tableau avec les descriptions des produits et services
-        $produitsServices = [];
-        foreach ($codesUnspsc as $code) {
-            foreach ($unspscData as $item) {
-                if ($item['codeUnspsc'] == $code) {
-                    $produitsServices[] = $item['codeUnspsc'] . ' - ' . $item['descUnspsc'];
-                }
-            }
-        }
-
-        return view('GestionFournisseurs.FicheFournisseur', [
-            'fournisseur' => $fournisseur,
-            'produitsServices' => $produitsServices,
-        ]);
-    }
-
     public function showHistorique($id)
     {
         $fournisseur = Fournisseur::findOrFail($id);
@@ -151,6 +124,71 @@ class FournisseursController extends Controller
             'historique' => $historique,
         ]);
     }
+
+    public function showFiche($id)
+    {
+        // Récupérer le fournisseur associé à cet ID
+        $fournisseur = Fournisseur::findOrFail($id);
+    
+        // Vérification que les données 'unspsc' et 'typesRbq' ne sont pas nulles et sont des tableaux
+        $codesUnspsc = is_string($fournisseur->unspsc) ? json_decode($fournisseur->unspsc, true) : ($fournisseur->unspsc ?? []);
+        $codesRbq = is_string($fournisseur->typesRbq) ? json_decode($fournisseur->typesRbq, true) : ($fournisseur->typesRbq ?? []);
+    
+        // Charger les données du fichier unspsc.json et typesrbq.json depuis le répertoire public
+        $unspscFilePath = public_path('unspsc.json');
+        $rbqFilePath = public_path('typesrbq.json');
+        
+        // Vérifier si les fichiers existent
+        if (!file_exists($unspscFilePath)) {
+            throw new \Exception('Le fichier UNSPSC n\'existe pas.');
+        }
+        if (!file_exists($rbqFilePath)) {
+            throw new \Exception('Le fichier RBQ n\'existe pas.');
+        }
+    
+        $unspscData = json_decode(file_get_contents($unspscFilePath), true);
+        $rbqData = json_decode(file_get_contents($rbqFilePath), true);
+    
+        // Vérification de la validité des données chargées
+        if (!is_array($unspscData)) {
+            throw new \Exception('Le fichier UNSPSC contient des données invalides.');
+        }
+        if (!is_array($rbqData)) {
+            throw new \Exception('Le fichier RBQ contient des données invalides.');
+        }
+    
+        // Produits et services
+        $produitsServices = [];
+        if (!empty($codesUnspsc)) {
+            foreach ($codesUnspsc as $code) {
+                foreach ($unspscData as $item) {
+                    if ($item['codeUnspsc'] == $code) {
+                        $produitsServices[] = $item['codeUnspsc'] . ' - ' . $item['descUnspsc'];
+                    }
+                }
+            }
+        }
+    
+        // Licences RBQ
+        $licencesRbq = [];
+        if (!empty($codesRbq)) {
+            foreach ($codesRbq as $code) {
+                foreach ($rbqData as $item) {
+                    if ($item['codeRbq'] == $code) {
+                        $licencesRbq[] = $item['codeRbq'] . ' - ' . $item['nomRbq'];
+                    }
+                }
+            }
+        }
+    
+        // Retourner la vue avec les données
+        return view('GestionFournisseurs.FicheFournisseur', [
+            'fournisseur' => $fournisseur,
+            'produitsServices' => $produitsServices,
+            'licencesRbq' => $licencesRbq,
+        ]);
+    }
+    
     
     public function editFiche($id)
     {
@@ -161,46 +199,91 @@ class FournisseursController extends Controller
 
 
     public function modifierFournisseur(Request $request, $id)
-{
-    $fournisseur = Fournisseur::findOrFail($id);
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
+        
+        // Validation des données
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|string|max:100',
+            'statut' => 'required|string|max:10',
+            'neq' => 'nullable|string',
+            'raison' => $request->input('statut') === 'R' ? 'required|string' : 'nullable|string',
+            'address' => 'nullable|string|max:100',
+            'city' => 'nullable|string|max:100',
+            'website' => 'nullable|string|max:255',
+            'phone_number.*' => 'nullable|string',
+            'phone_type.*' => 'nullable|string', 
+        ]);
     
-    // Validation des données
-    $request->validate([
-        'name' => 'required|string|max:100',
-        'email' => 'required|string|max:100',
-        'statut' => 'required|string|max:10',
-        'neq' => 'nullable|string',
-        'raison' => $request->input('statut') === 'R' ? 'required|string' : 'nullable|string',
-        'address' => 'nullable|string|max:100',
-        'city' => 'nullable|string|max:100',
-        'website' => 'nullable|string|max:255',
-    ]);
-
-    // Mise à jour des informations
-    $fournisseur->name = $request->input('name');
-    $fournisseur->email = $request->input('email');
-    $fournisseur->statut = $request->input('statut');
+        // Mise à jour des informations principales
+        $fournisseur->name = $request->input('name');
+        $fournisseur->email = $request->input('email');
+        $fournisseur->statut = $request->input('statut');
+        
+        // Gestion de la raison du refus
+        if ($fournisseur->statut == 'R') {
+            $fournisseur->raisonRefus = $request->input('raison');
+        } else {
+            $fournisseur->raisonRefus = null;
+        }
     
-    // Si l'état est refusé, stocker la raison du refus
-    if ($fournisseur->statut == 'R') {
-        $fournisseur->raisonRefus = $request->input('raison');
-    } else {
-        $fournisseur->raisonRefus = null;
+        // Mise à jour des autres champs
+        $fournisseur->neq = $request->input('neq');
+        $fournisseur->address = $request->input('address');
+        $fournisseur->city = $request->input('city');
+        $fournisseur->website = $request->input('website');
+    
+        // Gestion des numéros de téléphone
+        $phoneNumbers = $request->input('phone_number', []);
+        $phoneTypes = $request->input('phone_type', []);
+        
+        // Fusionner en un tableau JSON, en filtrant les entrées vides
+        $phoneData = [];
+        foreach ($phoneNumbers as $index => $number) {
+            // Ne stocker que les numéros non vides
+            if (!empty(trim($number))) {
+                $phoneData[] = trim($number);
+                // Utiliser le type correspondant ou une chaîne vide si non spécifié
+                $phoneData[] = isset($phoneTypes[$index]) ? trim($phoneTypes[$index]) : '';
+            }
+        }
+    
+        // Mettre à jour le champ phone avec le nouveau tableau JSON
+        $fournisseur->phone = $phoneData;
+    
+        $fournisseur->save();
+    
+        return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
+                        ->with('success', 'Les informations ont été modifiées avec succès');
     }
 
-    // Mise à jour des champs
-    $fournisseur->neq = $request->input('neq');
-    $fournisseur->address = $request->input('address');
-    $fournisseur->city = $request->input('city');
-    $fournisseur->website = $request->input('website');
+    public function modifierEtatFournisseur(Request $request, $id)
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
+        
+        // Validation des données
+        $request->validate([
+            'statut' => 'required|string|max:10',
+            'raison' => $request->input('statut') === 'R' ? 'required|string' : 'nullable|string',
+        ]);
+        
+        $fournisseur->statut = $request->input('statut');
+        
+        // Gestion de la raison du refus
+        if ($fournisseur->statut == 'R') {
+            $fournisseur->raisonRefus = $request->input('raison');
+        } else {
+            $fournisseur->raisonRefus = null;
+        }
+        
+        // Sauvegarde du fournisseur
+        $fournisseur->save();
+        
+        return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
+                        ->with('success', 'L\'état du fournisseur a été modifié avec succès');
+    }
 
-    $fournisseur->save();
-
-    return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
-                     ->with('success', 'Les informations ont été modifiées avec succès');
-}
-
-    
 
     /**
      * Display the specified resource.

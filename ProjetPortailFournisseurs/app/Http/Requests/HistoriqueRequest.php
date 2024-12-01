@@ -25,7 +25,7 @@ class HistoriqueRequest extends FormRequest
             'fournisseur_id' => 'required|exists:fournisseurs,id',
             'etat_demande' => 'required|string|max:255',
             'modifie_par' => 'required|string|email|max:255',
-            'raison_refus' => 'nullable|string|max:1000',
+            'raison_refus' => 'nullable|string',
             'modifications' => 'nullable|json',
         ];
     }

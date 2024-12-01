@@ -30,10 +30,17 @@ class Recherche extends Component
     public $toutesLesVilles = [];
     public $unspscDescriptions = [];
     public $codesUnspsc = [];
+    public $categoriesTravauxDescriptions = [];
+    public $codesCategoriesTravaux = [];
 
     public function mount()
     {
+        // Si l'utilisateur n'est pas responsable ou administrateur, cocher "Acceptées" par défaut
+        if (!in_array(auth()->guard('usager')->user()->role, ['responsable', 'administrateur'])) {
+            $this->filtre['accepte'] = 1; 
+        }
         $this->chargerProduitsServices();
+        $this->chargerCategoriesTravaux();
         $this->chargerRegionsEtVilles();
         $this->recherche();
         $this->filtre['region'] = [];
@@ -50,6 +57,47 @@ class Recherche extends Component
             $this->dispatch('produits-services-reset');
         }
     
+        $this->recherche();
+    }
+
+    public function chargerCategoriesTravaux()
+    {
+        // Chargement des catégories de travaux depuis le fichier JSON
+        $categoriesData = json_decode(file_get_contents(public_path('typesrbq.json')), true);
+
+        // Récupération des descriptions des catégories de travaux
+        $categoriesDataMap = collect($categoriesData)->keyBy('codeRbq');
+
+        // Récupération des codes des catégories de travaux distincts dans la base de données
+        $fournisseursCategories = DB::table('fournisseurs')
+            ->whereNotNull('typesRbq')
+            ->pluck('typesRbq')
+            ->toArray();
+
+        $this->codesCategoriesTravaux = collect($fournisseursCategories)
+            ->flatMap(function ($typeRbq) {
+                return json_decode($typeRbq, true);
+            })
+            ->unique()
+            ->values()
+            ->toArray();
+
+        // Ne garder que les descriptions des codes catégories de travaux présents en base de données
+        $this->categoriesTravauxDescriptions = collect($this->codesCategoriesTravaux)
+            ->mapWithKeys(function ($code) use ($categoriesDataMap) {
+                return $categoriesDataMap->has($code) 
+                    ? [$code => $categoriesDataMap[$code]['nomRbq']] 
+                    : [];
+            })
+            ->toArray();
+    }
+
+    public function chargerCategoriesTravauxFiltres()
+    {
+        if (empty($this->filtre['categorie'])) {
+            $this->dispatch('categories-travaux-reset');
+        }
+        
         $this->recherche();
     }
     
@@ -127,47 +175,53 @@ class Recherche extends Component
         }
 
         // Filtres UNSPSC
-        // Produits et Services filtering
-    $selectedServices = $this->filtre['produitsServices'] ?? [];
+        $selectedServices = $this->filtre['produitsServices'] ?? [];
 
-    if (!empty($selectedServices)) {
-        $query->where(function ($subQuery) use ($selectedServices) {
-            $subQuery->whereNull('unspsc')
-                ->orWhere(function ($q) use ($selectedServices) {
-                    $q->where(function ($innerQ) use ($selectedServices) {
-                        foreach ($selectedServices as $code) {
-                            $innerQ->orWhereJsonContains('unspsc', $code);
-                        }
+        if (!empty($selectedServices)) {
+            $query->where(function ($subQuery) use ($selectedServices) {
+                $subQuery->whereNull('unspsc')
+                    ->orWhere(function ($q) use ($selectedServices) {
+                        $q->where(function ($innerQ) use ($selectedServices) {
+                            foreach ($selectedServices as $code) {
+                                $innerQ->orWhereJsonContains('unspsc', $code);
+                            }
+                        });
                     });
-                });
-        });
-    }
-    // Executer la recherche
-    $this->fournisseurs = $query->get()->map(function ($fournisseur) use ($selectedServices) {
-        $fournisseurUnspsc = is_array($fournisseur->unspsc) 
-            ? $fournisseur->unspsc 
-            : (json_decode($fournisseur->unspsc, true) ?? []);
+            });
+        }
+
+        // Filtres de catégories de travaux
+        if (!empty($this->filtre['categorie'])) {
+            $query->where(function ($subQuery) {
+                foreach ($this->filtre['categorie'] as $categorieCode) {
+                    $subQuery->orWhereJsonContains('typesRbq', $categorieCode);
+                }
+            });
+        }
         
-        $correspondingServices = $selectedServices 
-            ? array_intersect($fournisseurUnspsc, $selectedServices) 
-            : [];
-        
-        $fournisseur->correspondingServicesCount = count($correspondingServices);
-        $fournisseur->correspondingServicesTotal = count($selectedServices);
-        
-        return $fournisseur;
-    });
-    
+        // Executer la recherche
         $this->fournisseurs = $query->get()->map(function ($fournisseur) use ($selectedServices) {
             $fournisseurUnspsc = is_array($fournisseur->unspsc) 
                 ? $fournisseur->unspsc 
                 : (json_decode($fournisseur->unspsc, true) ?? []);
             
-            $correspondingServices = array_intersect($fournisseurUnspsc, $selectedServices);
+            $correspondingServices = $selectedServices 
+                ? array_intersect($fournisseurUnspsc, $selectedServices) 
+                : [];
             
             $fournisseur->correspondingServicesCount = count($correspondingServices);
             $fournisseur->correspondingServicesTotal = count($selectedServices);
-            
+
+            $selectedCategories = $this->filtre['categorie'] ?? [];
+            $fournisseurCategories = is_array($fournisseur->typesRbq) 
+                ? $fournisseur->typesRbq 
+                : (json_decode($fournisseur->typesRbq, true) ?? []);
+            $correspondingCategories = $selectedCategories 
+                ? array_intersect($fournisseurCategories, $selectedCategories) 
+                : [];
+            $fournisseur->correspondingCategoriesCount = count($correspondingCategories);
+            $fournisseur->correspondingCategoriesTotal = count($selectedCategories);
+                        
             return $fournisseur;
         });
     }

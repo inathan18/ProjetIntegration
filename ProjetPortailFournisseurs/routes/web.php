@@ -85,6 +85,8 @@ Route::middleware([IsAuthorized::class])->group(function () {
     Route::get('/fournisseurs/{id}/edit', [FournisseursController::class, 'editFiche'])->name('fournisseurs.editFiche');
 
     Route::put('/fournisseurs/{id}/modifier', [FournisseursController::class, 'modifierFournisseur'])->name('fournisseurs.modifierFournisseur');
+    
+    Route::put('/fournisseurs/{id}/modifieretat', [FournisseursController::class, 'modifierEtatFournisseur'])->name('fournisseurs.modifierEtatFournisseur');
 
 });
 
