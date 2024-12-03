@@ -4,7 +4,7 @@
 
 @section('contenu')
 
-<div class="p-3 text-center"> <h1> Frame Statut </h1> </div>
+<div class="p-3 text-center"> <h1> Satut </h1> </div>
 
 <div class="container-fluid h-100">
 
