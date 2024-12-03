@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('website', 255);
             $table->string('email', 100)->unique();
             $table->json('files')->nullable();
-            $table->string('statut', 10)->default('En cours');
+            $table->string('statut', 10)->default('AT');
             $table->string('neq', 100)->nullable()->unique();
             $table->string('rbq', 100)->nullable();
             $table->json('typesRbq')->nullable();

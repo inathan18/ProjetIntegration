@@ -16,27 +16,42 @@ class FournisseurObserver
             \Log::error('Le statut du fournisseur est vide ou invalide.', ['fournisseur_id' => $fournisseur->id]);
             throw new \Exception('Le statut du fournisseur est vide ou invalide.');
         }
+        
         $modifications = $fournisseur->getDirty();
         $changes = [];
         unset($modifications['updated_at']);
     
         foreach ($modifications as $key => $newValue) {
-            // Récupérer l'ancienne valeur
             $oldValue = $fournisseur->getOriginal($key);
     
-            // Vérifier si l'ancienne valeur et la nouvelle valeur sont différentes
-            if ($oldValue !== $newValue) {
-                // Ajouter à la liste des changements, avec "-" pour l'ancienne valeur et "+" pour la nouvelle
-                $changes[$key] = [
-                    'old' => "- $oldValue",
-                    'new' => "+ $newValue" 
-                ];
+            if ($key === 'phone') {
+                // Convertir les tableaux en chaînes lisibles pour la comparaison
+                $oldValueString = is_array($oldValue) ? implode(', ', $oldValue) : $oldValue;
+                $newValueString = is_array($newValue) ? implode(', ', $newValue) : $newValue;
+    
+                if ($oldValueString !== $newValueString) {
+                    $changes[$key] = [
+                        'old' => "- $oldValueString",
+                        'new' => "+ $newValueString"
+                    ];
+                }
+            } else {
+                if ($oldValue !== $newValue) {
+                    $changes[$key] = [
+                        'old' => "- $oldValue",
+                        'new' => "+ $newValue" 
+                    ];
+                }
             }
         }
     
         // Si le statut est refusé, on prend la raison du refus
         $historiqueStatut = 'M';
         $raisonRefus = null;
+        if (array_key_exists('statut', $modifications) && $modifications['statut'] === 'R') {
+            $raisonRefus = $fournisseur->raisonRefus ?: null;
+        }
+
         if (array_key_exists('statut', $modifications)) {
             $historiqueStatut = $fournisseur->statut;
         }
@@ -46,7 +61,7 @@ class FournisseurObserver
             Historique::create([
                 'fournisseur_id' => $fournisseur->id,
                 'statut' => $historiqueStatut,
-                'modifie_par' => Auth::user()->name ?? 'systeme',
+                'modifie_par' => Auth::guard('usager')->user() ? Auth::guard('usager')->user()->email : 'systeme',
                 'modifications' => json_encode($changes),
                 'raisonRefus' => $raisonRefus,
             ]);

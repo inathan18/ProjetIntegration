@@ -20,6 +20,8 @@ use App\Http\Middleware\EnsureEmailIsNotVerified;
 use App\Http\Controllers\ResponsablesController;
 use App\Http\Controllers\NotificationTemplateController;
 use App\Livewire\Recherche;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsAuthorized;
 
 // Route pour Usagers
 
@@ -29,6 +31,7 @@ Route::get('/usagers/connexion',
 Route::post('/LoginUsagers', 
 [UsagersController::class, 'login'])->name('Usagers.login');
 
+Route::post('/logout', [UsagersController::class, 'logout'])->name('logout');
 
 
 Route::get('/', function () {
@@ -66,7 +69,6 @@ Route::post('/fournisseur/upload',
 
 Route::post('/loginFournisseur', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
-
 
 Route::get('/fournisseur/deleteFichier', 
 [FournisseursController::class, 'fichierDelete'])->name('Fournisseurs.fichier.delete');
@@ -137,53 +139,41 @@ Route::get('/send-mail', function(){
 });
 
 
+// Routes pour responsables et commis
+
+Route::middleware([IsAuthorized::class])->group(function () {
+    Route::get('/Recherche', Recherche::class)->name('fournisseurs.recherche');
+
+    Route::get('/fournisseurs/selection', [FournisseursController::class, 'showSelected'])->name('fournisseurs.selectionnes');
+
+    Route::get('/fournisseurs/{id}', [FournisseursController::class, 'showFiche'])->name('fournisseurs.showFiche');
+
+    Route::get('/fournisseurs/{id}/historique', [FournisseursController::class, 'showHistorique'])->name('fournisseurs.historique');
+
+    Route::get('/fournisseurs/{id}/edit', [FournisseursController::class, 'editFiche'])->name('fournisseurs.editFiche');
+
+    Route::put('/fournisseurs/{id}/modifier', [FournisseursController::class, 'modifierFournisseur'])->name('fournisseurs.modifierFournisseur');
+    
+    Route::put('/fournisseurs/{id}/modifieretat', [FournisseursController::class, 'modifierEtatFournisseur'])->name('fournisseurs.modifierEtatFournisseur');
+
+});
 
 
 
-
-// Routes pour responsables
-
-
-Route::get('/Recherche', Recherche::class)->name('fournisseurs.recherche');
-
-Route::get('/fournisseurs/selection', [FournisseursController::class, 'showSelected'])->name('fournisseurs.selectionnes');
-
-Route::get('/fournisseurs/{id}', [FournisseursController::class, 'showFiche'])->name('fournisseurs.showFiche');
-
-Route::get('/fournisseurs/{id}/historique', [FournisseursController::class, 'showHistorique'])->name('fournisseurs.historique');
-
-Route::get('/fournisseurs/{id}/edit', [FournisseursController::class, 'editFiche'])->name('fournisseurs.editFiche');
-
-Route::put('/fournisseurs/{id}/modifier', [FournisseursController::class, 'modifierFournisseur'])->name('fournisseurs.modifierFournisseur');
-
-
-// Routes admin
-Route::get('/admin', 
-[AdminsController::class, 'index'])->name('Admins.Panel');
-
-Route::get('/admin/usagers', 
-[AdminsController::class, 'gestionUsagers'])->name('Admins.Usagers');
-
-Route::get('/admin/usagers/nouveau', 
-[AdminsController::class, 'createUser'])->name('Admins.Usagers.Creation');
-
-Route::post('/admin/usagers/add', 
-[AdminsController::class,'storeUser'])->name('Admin.Usager.Store');
-
-Route::get('/admin/parametres', 
-[AdminsController::class, 'parametres'])->name('Admins.Parametres');
-
-Route::get('/admin/courriel', 
-[NotificationTemplateController::class, 'showForm'])->name('NotificationTemplate.showForm');
-
-Route::delete('/admin/usagers/{id}',
-[UsagersController::class,'destroy'])->name('Admins.Usager.Supprimer');
-
-Route::put('/admin/usagers/{id}/update-role',
-[AdminsController::class, 'updateRole'])->name('Admins.Usager.UpdateRole');
-Route::post('/admin/courriel/fetchTemplate',
-[NotificationTemplateController::class, 'fetchTemplate'])->name('NotificationTemplate.fetchTemplate');
-Route::post('/admin/courriel/update', 
-[NotificationTemplateController::class, 'update'])->name('NotificationTemplate.update');
-
-
+Route::middleware([IsAdmin::class])->group(function () {
+    Route::get('/admin', [AdminsController::class, 'index'])->name('Admins.Panel');
+    
+    Route::get('/admin/usagers', [AdminsController::class, 'gestionUsagers'])->name('Admins.Usagers');
+    
+    Route::get('/admin/usagers/nouveau', [AdminsController::class, 'createUser'])->name('Admins.Usagers.Creation');
+    
+    Route::post('/admin/usagers/add', [AdminsController::class,'storeUser'])->name('Admin.Usager.Store');
+    
+    Route::get('/admin/parametres', [AdminsController::class, 'parametres'])->name('Admins.Parametres');
+    
+    Route::get('/admin/courriel', [AdminsController::class, 'modelesCourriel'])->name('Admins.Courriel');
+    
+    Route::delete('/admin/usagers/{id}', [UsagersController::class,'destroy'])->name('Admins.Usager.Supprimer');
+    
+    Route::put('/admin/usagers/{id}/update-role', [AdminsController::class, 'updateRole'])->name('Admins.Usager.UpdateRole');    
+});

@@ -6,7 +6,8 @@ use Livewire\Component;
 use App\Models\Fournisseur;
 use Illuminate\Support\Facades\Cache;
 use Log;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 class Recherche extends Component
 {
     public $filtre = [
@@ -17,7 +18,8 @@ class Recherche extends Component
         'service' => [],
         'categorie' => [],
         'region' => [],
-        'ville' => []
+        'ville' => [],
+        'produitsServices' => [],
     ];
 
     public $rechercheTerm = '';
@@ -26,9 +28,19 @@ class Recherche extends Component
     public $regions = [];
     public $villes = [];
     public $toutesLesVilles = [];
+    public $unspscDescriptions = [];
+    public $codesUnspsc = [];
+    public $categoriesTravauxDescriptions = [];
+    public $codesCategoriesTravaux = [];
 
     public function mount()
     {
+        // Si l'utilisateur n'est pas responsable ou administrateur, cocher "Acceptées" par défaut
+        if (!in_array(auth()->guard('usager')->user()->role, ['responsable', 'administrateur'])) {
+            $this->filtre['accepte'] = 1; 
+        }
+        $this->chargerProduitsServices();
+        $this->chargerCategoriesTravaux();
         $this->chargerRegionsEtVilles();
         $this->recherche();
         $this->filtre['region'] = [];
@@ -37,6 +49,89 @@ class Recherche extends Component
     public function updatedRechercheTerm()
     {
         $this->recherche();
+    }
+
+    public function chargerProduitsFiltres()
+    {
+        if (empty($this->filtre['produitsServices'])) {
+            $this->dispatch('produits-services-reset');
+        }
+    
+        $this->recherche();
+    }
+
+    public function chargerCategoriesTravaux()
+    {
+        // Chargement des catégories de travaux depuis le fichier JSON
+        $categoriesData = json_decode(file_get_contents(public_path('typesrbq.json')), true);
+
+        // Récupération des descriptions des catégories de travaux
+        $categoriesDataMap = collect($categoriesData)->keyBy('codeRbq');
+
+        // Récupération des codes des catégories de travaux distincts dans la base de données
+        $fournisseursCategories = DB::table('fournisseurs')
+            ->whereNotNull('typesRbq')
+            ->pluck('typesRbq')
+            ->toArray();
+
+        $this->codesCategoriesTravaux = collect($fournisseursCategories)
+            ->flatMap(function ($typeRbq) {
+                return json_decode($typeRbq, true);
+            })
+            ->unique()
+            ->values()
+            ->toArray();
+
+        // Ne garder que les descriptions des codes catégories de travaux présents en base de données
+        $this->categoriesTravauxDescriptions = collect($this->codesCategoriesTravaux)
+            ->mapWithKeys(function ($code) use ($categoriesDataMap) {
+                return $categoriesDataMap->has($code) 
+                    ? [$code => $categoriesDataMap[$code]['nomRbq']] 
+                    : [];
+            })
+            ->toArray();
+    }
+
+    public function chargerCategoriesTravauxFiltres()
+    {
+        if (empty($this->filtre['categorie'])) {
+            $this->dispatch('categories-travaux-reset');
+        }
+        
+        $this->recherche();
+    }
+    
+
+    public function chargerProduitsServices()
+    {
+        // Chargement des produits et services depuis le fichier JSON
+        $unspscData = json_decode(file_get_contents(public_path('unspsc.json')), true);
+    
+        // Récupération des descriptions UNSPSC
+        $unspscDataMap = collect($unspscData)->keyBy('codeUnspsc');
+        
+        // Récupération des codes UNSPSC distincts dans la base de données
+        $fournisseursUnspsc = DB::table('fournisseurs')
+            ->whereNotNull('unspsc')
+            ->pluck('unspsc')
+            ->toArray();
+        
+        $this->codesUnspsc = collect($fournisseursUnspsc)
+            ->flatMap(function ($unspsc) {
+                return json_decode($unspsc, true);
+            })
+            ->unique()
+            ->values()
+            ->toArray();
+    
+        // Ne garder que les descriptions des codes UNSPSC présents en base de données
+        $this->unspscDescriptions = collect($this->codesUnspsc)
+            ->mapWithKeys(function ($code) use ($unspscDataMap) {
+                return $unspscDataMap->has($code) 
+                    ? [$code => $unspscDataMap[$code]['descUnspsc']]
+                    : [];
+            })
+            ->toArray();
     }
 
     public function recherche()
@@ -60,7 +155,7 @@ class Recherche extends Component
         }
 
         $villesAutorisees = collect($this->toutesLesVilles);
-        
+
         // Filtre par région
         if (!empty($this->filtre['region'])) {
             $villesAutorisees = $villesAutorisees->filter(function ($ville) {
@@ -79,7 +174,56 @@ class Recherche extends Component
             $query->whereIn('city', $villesFinales);
         }
 
-        $this->fournisseurs = $query->get();
+        // Filtres UNSPSC
+        $selectedServices = $this->filtre['produitsServices'] ?? [];
+
+        if (!empty($selectedServices)) {
+            $query->where(function ($subQuery) use ($selectedServices) {
+                $subQuery->whereNull('unspsc')
+                    ->orWhere(function ($q) use ($selectedServices) {
+                        $q->where(function ($innerQ) use ($selectedServices) {
+                            foreach ($selectedServices as $code) {
+                                $innerQ->orWhereJsonContains('unspsc', $code);
+                            }
+                        });
+                    });
+            });
+        }
+
+        // Filtres de catégories de travaux
+        if (!empty($this->filtre['categorie'])) {
+            $query->where(function ($subQuery) {
+                foreach ($this->filtre['categorie'] as $categorieCode) {
+                    $subQuery->orWhereJsonContains('typesRbq', $categorieCode);
+                }
+            });
+        }
+        
+        // Executer la recherche
+        $this->fournisseurs = $query->get()->map(function ($fournisseur) use ($selectedServices) {
+            $fournisseurUnspsc = is_array($fournisseur->unspsc) 
+                ? $fournisseur->unspsc 
+                : (json_decode($fournisseur->unspsc, true) ?? []);
+            
+            $correspondingServices = $selectedServices 
+                ? array_intersect($fournisseurUnspsc, $selectedServices) 
+                : [];
+            
+            $fournisseur->correspondingServicesCount = count($correspondingServices);
+            $fournisseur->correspondingServicesTotal = count($selectedServices);
+
+            $selectedCategories = $this->filtre['categorie'] ?? [];
+            $fournisseurCategories = is_array($fournisseur->typesRbq) 
+                ? $fournisseur->typesRbq 
+                : (json_decode($fournisseur->typesRbq, true) ?? []);
+            $correspondingCategories = $selectedCategories 
+                ? array_intersect($fournisseurCategories, $selectedCategories) 
+                : [];
+            $fournisseur->correspondingCategoriesCount = count($correspondingCategories);
+            $fournisseur->correspondingCategoriesTotal = count($selectedCategories);
+                        
+            return $fournisseur;
+        });
     }
 
     public function chargerRegionsEtVilles()
@@ -172,7 +316,8 @@ class Recherche extends Component
             'service' => [],
             'categorie' => [],
             'region' => [],
-            'ville' => []
+            'ville' => [],
+            'produitsServices' => [],
         ];
 
         $this->rechercheTerm = '';

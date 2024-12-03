@@ -120,13 +120,66 @@ class FournisseursController extends Controller
     {
         // Récupérer le fournisseur associé à cet ID
         $fournisseur = Fournisseur::findOrFail($id);
+    
+        // Vérification que les données 'unspsc' et 'typesRbq' ne sont pas nulles et sont des tableaux
+        $codesUnspsc = is_string($fournisseur->unspsc) ? json_decode($fournisseur->unspsc, true) : ($fournisseur->unspsc ?? []);
+        $codesRbq = is_string($fournisseur->typesRbq) ? json_decode($fournisseur->typesRbq, true) : ($fournisseur->typesRbq ?? []);
+    
+        // Charger les données du fichier unspsc.json et typesrbq.json depuis le répertoire public
+        $unspscFilePath = public_path('unspsc.json');
+        $rbqFilePath = public_path('typesrbq.json');
         
+        // Vérifier si les fichiers existent
+        if (!file_exists($unspscFilePath)) {
+            throw new \Exception('Le fichier UNSPSC n\'existe pas.');
+        }
+        if (!file_exists($rbqFilePath)) {
+            throw new \Exception('Le fichier RBQ n\'existe pas.');
+        }
+    
+        $unspscData = json_decode(file_get_contents($unspscFilePath), true);
+        $rbqData = json_decode(file_get_contents($rbqFilePath), true);
+    
+        // Vérification de la validité des données chargées
+        if (!is_array($unspscData)) {
+            throw new \Exception('Le fichier UNSPSC contient des données invalides.');
+        }
+        if (!is_array($rbqData)) {
+            throw new \Exception('Le fichier RBQ contient des données invalides.');
+        }
+    
+        // Produits et services
+        $produitsServices = [];
+        if (!empty($codesUnspsc)) {
+            foreach ($codesUnspsc as $code) {
+                foreach ($unspscData as $item) {
+                    if ($item['codeUnspsc'] == $code) {
+                        $produitsServices[] = $item['codeUnspsc'] . ' - ' . $item['descUnspsc'];
+                    }
+                }
+            }
+        }
+    
+        // Licences RBQ
+        $licencesRbq = [];
+        if (!empty($codesRbq)) {
+            foreach ($codesRbq as $code) {
+                foreach ($rbqData as $item) {
+                    if ($item['codeRbq'] == $code) {
+                        $licencesRbq[] = $item['codeRbq'] . ' - ' . $item['nomRbq'];
+                    }
+                }
+            }
+        }
+    
+        // Retourner la vue avec les données
         return view('GestionFournisseurs.FicheFournisseur', [
-            'fournisseur' => $fournisseur
+            'fournisseur' => $fournisseur,
+            'produitsServices' => $produitsServices,
+            'licencesRbq' => $licencesRbq,
         ]);
     }
-    
-      
+
     public function showHistorique($id)
     {
         $fournisseur = Fournisseur::findOrFail($id);
