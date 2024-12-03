@@ -19,12 +19,12 @@
 session_start();
 ?>
 
-    <div class="container-fluid p-0" style="height: 100%;">
+    <div class="container-fluid p-0 ImageTR" style="height: 100%;">
         <div class="row" style="height: 100%; margin:0px;">
 
                 <div class="col-2 p-0" style="height:100%;"> <!-- Navbar Verticale -->
 
-                <div class="card-container" style="height: 100%; padding:20px;">
+                <div class="card-container" style="height: 95%; padding:20px;">
                     <div class="persoCardInscription">
                         <div class="card-content">
 
@@ -44,7 +44,7 @@ session_start();
 
                 <div class="col-10 p-0" style="height:100%;"> <!-- Section Formulaire -->
 
-                <div class="card-container" style="height: 100%; padding:20px;">
+                <div class="card-container" style="height: 95%; padding:20px;">
                     <div class="persoCardInscription">
                         <div class="card-contentInscription">
                         <form method="post" action="{{route('Fournisseurs.store')}}" class="fournisseur-form">
