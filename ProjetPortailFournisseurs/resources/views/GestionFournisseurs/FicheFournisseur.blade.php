@@ -213,7 +213,7 @@
                     <h5 class="card-title">Licence RBQ</h5>
                     @if($fournisseur->rbq)
                         <p>Numéro : 
-                            <span>{{ chunk_split($fournisseur->rbq, 4, '-') }}</span>
+                            <span>{{$fournisseur->rbq}}</span>
                         </p>
                         <p class="text-success">
                             <i class="fas fa-check-circle"></i> Valide

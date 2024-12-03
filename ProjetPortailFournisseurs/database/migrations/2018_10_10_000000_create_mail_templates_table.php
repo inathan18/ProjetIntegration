@@ -8,15 +8,18 @@ class CreateMailTemplatesTable extends Migration
 {
     public function up()
     {
-        Schema::create('mail_templates', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('type');
-            $table->tring('name');
-            $table->string('subject')->nullable();
-            $table->string('line1')->nullable();
-            $table->string('line2')->nullable();
-            $table->string('line3')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('mail_templates')) {
+            Schema::create('mail_templates', function (Blueprint $table) {
+                $table->id();
+                $table->string('type');
+                $table->string('name');
+                $table->string('subject')->nullable();
+                $table->string('line1')->nullable();
+                $table->string('line2')->nullable();
+                $table->string('line3')->nullable();
+                $table->timestamps();
+            });
+        }
     }
+    
 }

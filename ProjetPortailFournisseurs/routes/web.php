@@ -171,9 +171,15 @@ Route::middleware([IsAdmin::class])->group(function () {
     
     Route::get('/admin/parametres', [AdminsController::class, 'parametres'])->name('Admins.Parametres');
     
-    Route::get('/admin/courriel', [AdminsController::class, 'modelesCourriel'])->name('Admins.Courriel');
+    Route::get('/admin/courriel', [NotificationTemplateController::class, 'showForm'])->name('NotificationTemplate.showForm');
     
     Route::delete('/admin/usagers/{id}', [UsagersController::class,'destroy'])->name('Admins.Usager.Supprimer');
     
-    Route::put('/admin/usagers/{id}/update-role', [AdminsController::class, 'updateRole'])->name('Admins.Usager.UpdateRole');    
+    Route::put('/admin/usagers/{id}/update-role', [AdminsController::class, 'updateRole'])->name('Admins.Usager.UpdateRole'); 
+    
+    Route::post('/admin/courriel/fetchTemplate',
+    [NotificationTemplateController::class, 'fetchTemplate'])->name('NotificationTemplate.fetchTemplate');
+
+    Route::post('/admin/courriel/update',
+    [NotificationTemplateController::class, 'update'])->name('NotificationTemplate.update');
 });
