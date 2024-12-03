@@ -48,6 +48,10 @@ class FournisseurObserver
         // Si le statut est refusé, on prend la raison du refus
         $historiqueStatut = 'M';
         $raisonRefus = null;
+        if (array_key_exists('statut', $modifications) && $modifications['statut'] === 'R') {
+            $raisonRefus = $fournisseur->raisonRefus ?: null;
+        }
+
         if (array_key_exists('statut', $modifications)) {
             $historiqueStatut = $fournisseur->statut;
         }

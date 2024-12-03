@@ -39,6 +39,14 @@
                             <i class="fas fa-exclamation-circle"></i> À réviser
                         @elseif ($fournisseur->statut == 'R')
                             <i class="fas fa-times-circle"></i> Refusée
+                            @if (!empty($fournisseur->raisonRefus))
+                                @if(in_array(auth()->guard('usager')->user()->role, ['responsable', 'administrateur']))
+                                    <!-- Affichage de la raison du refus -->
+                                    <span class="d-block mt-2 text-muted">
+                                        <strong>Raison du refus :</strong> {{ $fournisseur->raisonRefus }}
+                                    </span>
+                                @endif
+                            @endif
                         @else
                             <i class="fas fa-info-circle"></i> Statut inconnu
                         @endif
