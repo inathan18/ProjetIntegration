@@ -4,7 +4,7 @@
 
 @section('contenu')
 
-<div class="p-3 text-center"> <h1> Frame Connexion </h1></div>
+<div class="p-3 text-center"> <h1> Connexion Fournisseur </h1></div>
     <form method="post" action="{{route('Fournisseurs.login')}}">
     @csrf
 
