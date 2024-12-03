@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\FournisseursRequest;
+use App\Http\Requests\HistoriqueRequest;
+use App\Models\Fournisseur;
+use App\Models\Historique;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File; 
-
-
-use App\Models\Fournisseur;
 use Illuminate\Support\Facades\Storage;
 
 class FournisseursController extends Controller
@@ -95,6 +95,108 @@ class FournisseursController extends Controller
             }
             return redirect()->route('Fournisseurs.login');
     }
+
+    // Fournisseurs selectionnés sur la page de recherche
+    public function showSelected(Request $request)
+    {
+        $selectedIds = $request->session()->get('selected_fournisseurs', []);
+        $fournisseurs = Fournisseur::whereIn('id', $selectedIds)->get();
+        
+        return view('GestionFournisseurs.Selectionnes', [
+            'fournisseurs' => $fournisseurs
+        ]);
+    }
+
+    public function showFiche($id)
+    {
+        // Récupérer le fournisseur associé à cet ID
+        $fournisseur = Fournisseur::findOrFail($id);
+
+        // Vérifier si le champ unspsc est déjà un tableau ou une chaîne JSON
+        $codesUnspsc = is_string($fournisseur->unspsc) ? json_decode($fournisseur->unspsc, true) : $fournisseur->unspsc;
+        $unspscData = json_decode(Storage::get('unspsc.json'), true);
+
+        // Créer un tableau avec les descriptions des produits et services
+        $produitsServices = [];
+        foreach ($codesUnspsc as $code) {
+            foreach ($unspscData as $item) {
+                if ($item['codeUnspsc'] == $code) {
+                    $produitsServices[] = $item['codeUnspsc'] . ' - ' . $item['descUnspsc'];
+                }
+            }
+        }
+
+        return view('GestionFournisseurs.FicheFournisseur', [
+            'fournisseur' => $fournisseur,
+            'produitsServices' => $produitsServices,
+        ]);
+    }
+
+    public function showHistorique($id)
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
+    
+        $historique = Historique::where('fournisseur_id', $id)
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->map(function ($item) {
+                $item->raisonRefus = $item->raisonRefus; 
+                return $item;
+            });
+    
+        return view('GestionFournisseurs.historique', [
+            'fournisseur' => $fournisseur,
+            'historique' => $historique,
+        ]);
+    }
+    
+    public function editFiche($id)
+    {
+        $fournisseur = Fournisseur::findOrFail($id);
+        
+        return view('GestionFournisseurs.editFiche', compact('fournisseur'));
+    }
+
+
+    public function modifierFournisseur(Request $request, $id)
+{
+    $fournisseur = Fournisseur::findOrFail($id);
+    
+    // Validation des données
+    $request->validate([
+        'name' => 'required|string|max:100',
+        'email' => 'required|string|max:100',
+        'statut' => 'required|string|max:10',
+        'neq' => 'nullable|string',
+        'raison' => $request->input('statut') === 'R' ? 'required|string' : 'nullable|string',
+        'address' => 'nullable|string|max:100',
+        'city' => 'nullable|string|max:100',
+        'website' => 'nullable|string|max:255',
+    ]);
+
+    // Mise à jour des informations
+    $fournisseur->name = $request->input('name');
+    $fournisseur->email = $request->input('email');
+    $fournisseur->statut = $request->input('statut');
+    
+    // Si l'état est refusé, stocker la raison du refus
+    if ($fournisseur->statut == 'R') {
+        $fournisseur->raisonRefus = $request->input('raison');
+    } else {
+        $fournisseur->raisonRefus = null;
+    }
+
+    // Mise à jour des champs
+    $fournisseur->neq = $request->input('neq');
+    $fournisseur->address = $request->input('address');
+    $fournisseur->city = $request->input('city');
+    $fournisseur->website = $request->input('website');
+
+    $fournisseur->save();
+
+    return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
+                     ->with('success', 'Les informations ont été modifiées avec succès');
+}
 
     
 

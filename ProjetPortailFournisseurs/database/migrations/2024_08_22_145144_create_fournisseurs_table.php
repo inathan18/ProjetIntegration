@@ -25,14 +25,16 @@ return new class extends Migration
             $table->string('website', 255);
             $table->string('email', 100);
             $table->json('files')->nullable();
-            $table->string('statut', 10);
+            $table->string('statut', 10)->default('AT');
             $table->string('neq', 100)->nullable()->unique();
             $table->string('rbq', 100)->nullable();
             $table->json('typesRbq')->nullable();
             $table->string('personneContact', 100);
             $table->timestamps();
-            $table->string('raisonRefus', 255)->nullable();
+            $table->text('raisonRefus')->nullable();
             $table->string('password', 255);
+            $table->datetime('email_verified_at')->nullable();
+            $table->rememberToken();
         });
     }
 

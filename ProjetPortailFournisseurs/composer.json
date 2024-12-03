@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
         "pharaonic/livewire-select2": "^1.2",
+        "predis/predis": "^2.2",
         "thiagoprz/eloquent-composite-key": "^1.0"
     },
     "require-dev": {
