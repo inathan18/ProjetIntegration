@@ -26,10 +26,7 @@ class AdminsController extends Controller
         return view ('Admins.Parametres');
     }
 
-    public function modelesCourriel()
-    {
-        return view('Admins.Courriel');
-    }
+
 
     public function createUser()
     {

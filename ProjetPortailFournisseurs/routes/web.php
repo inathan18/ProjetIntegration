@@ -6,7 +6,19 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UsagersController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\AdminsController;
+use App\Http\Controllers\EmailVerificationController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+use App\Models\Fournisseur;
+use App\Models\Usager;
+use App\Notifications\BienvenueNotification;
+use App\Notifications\ChangementFournisseur;
+use App\Notifications\NouveauFournisseur;
+use App\Notifications\ChangementStatut;
+use Illuminate\Support\Facades\Log;
+use App\Http\Middleware\EnsureEmailIsNotVerified;
 use App\Http\Controllers\ResponsablesController;
+use App\Http\Controllers\NotificationTemplateController;
 use App\Livewire\Recherche;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsAuthorized;
@@ -70,6 +82,62 @@ Route::get('/fournisseur/modification',
 Route::patch('/fournisseur/{fournisseur}/modification', 
 [FournisseursController::class, 'update'])->name('Fournisseurs.update');
 
+//Routes validation courriel
+Route::get('/email/verify', [EmailVerificationController::class, 'show'])->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request){
+    $request->user()->sendEmailVerificationNotification();
+    Log::Debug($request);
+
+    return back()->with('message', 'Courriel de vérification envoyé!');
+})->middleware(['auth:fournisseur', 'throttle:6,1', EnsureEmailIsNotVerified::class])->name('verification.send');
+
+//Tests notifications
+Route::get('notification/bienvenue', function (){
+    $fournisseur = Fournisseur::find(1);
+
+    return (new BienvenueNotification($fournisseur))
+    ->toMail($fournisseur);
+});
+
+Route::get('notification/modification', function (){
+    $fournisseur = Fournisseur::find(1);
+
+    return (new ChangementFournisseur($fournisseur))
+    ->toMail($fournisseur);
+});
+
+Route::get('notification/nouveau', function (){
+    $usager = Usager::find(1);
+    $fournisseur = Fournisseur::find(1);
+
+    return (new NouveauFournisseur($fournisseur, $usager))
+    ->toMail($usager);
+});
+
+Route::get('notification/statut', function (){
+    $usager = Usager::find(1);
+
+    return (new ChangementStatut($usager))
+    ->toMail($usager);
+});
+
+
+Route::get('notification/validation', function(){
+    $fournisseur = Fournisseur::find(1);
+    return (new Illuminate\Auth\Notifications\VerifyEmail())->toMail($fournisseur);
+});
+
+Route::get('/send-mail', function(){
+    \Mail::raw('This is a test email', function($message){
+        $message->to('nathan.lafreniere@gmail.com')->subject('Test Email');
+        
+    });
+    return 'Email sent!';
+});
+
 
 // Routes pour responsables et commis
 
@@ -90,7 +158,7 @@ Route::middleware([IsAuthorized::class])->group(function () {
 
 });
 
-// Routes admin
+
 
 Route::middleware([IsAdmin::class])->group(function () {
     Route::get('/admin', [AdminsController::class, 'index'])->name('Admins.Panel');

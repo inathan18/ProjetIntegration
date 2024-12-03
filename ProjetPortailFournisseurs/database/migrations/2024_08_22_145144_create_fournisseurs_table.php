@@ -16,14 +16,14 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('address', 100);
             $table->string('city', 100);
-            $table->string('province', 100);
+            $table->string('province', 100)->default('Québec');
             $table->string('region', 100)->nullable();
-            $table->string('country', 100);
+            $table->string('country', 100)->default('Canada');
             $table->json('phone')->nullable();
             $table->string('postCode', 10);
             $table->json('unspsc')->nullable();
             $table->string('website', 255);
-            $table->string('email', 100);
+            $table->string('email', 100)->unique();
             $table->json('files')->nullable();
             $table->string('statut', 10)->default('AT');
             $table->string('neq', 100)->nullable()->unique();

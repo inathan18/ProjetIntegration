@@ -31,11 +31,13 @@ class FournisseursTableSeeder extends Seeder
             'files' => json_encode(['']),
             'neq' => '1171854699',
             'rbq' => '',
-            'typesRbq' => json_encode([]),
+            'typesRbq' => '',
             'password' => Hash::make('rona'),
             'raisonRefus' => null,
             'personneContact' => 'Directeur',
             'statut'=> 'A',
+
+            
         ]);
 
         DB::table('fournisseurs')->insert([
@@ -53,11 +55,12 @@ class FournisseursTableSeeder extends Seeder
             'files' => json_encode(['']),
             'neq' => '1146438586',
             'rbq' => '',
-            'typesRbq' => json_encode([]),
+            'typesRbq' => '',
             'password' => Hash::make('ford'),
             'raisonRefus' => null,
             'personneContact' => 'Directeur',
             'statut'=> 'A',
+
         ]);
 
         DB::table('fournisseurs')->insert([
@@ -75,11 +78,12 @@ class FournisseursTableSeeder extends Seeder
             'files' => json_encode(['']),
             'neq' => '3',
             'rbq' => '',
-            'typesRbq' => json_encode([]),
+            'typesRbq' => '',
             'password' => Hash::make('nathan'),
             'raisonRefus' => null,
             'personneContact' => 'Nathan',
             'statut'=> 'A',
+
         ]);
 
         DB::table('fournisseurs')->insert([

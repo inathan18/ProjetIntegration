@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('email', 100);
             $table->string('role', 25);
             $table->timestamps();
+            $table->datetime('email_verified_at')->nullable();
         });
     }
 

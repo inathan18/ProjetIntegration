@@ -5,6 +5,7 @@ use App\Models\Fournisseur;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\FournisseurObserver;
 
+
 class AppServiceProvider extends ServiceProvider
 {
     /**

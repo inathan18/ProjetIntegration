@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File; 
+use Illuminate\Auth\Events\Registered;
+use App\Events\AccountModified;
+use App\Events\AccountCreated;
+use App\Events\StatusChanged;
+
 use Illuminate\Support\Facades\Storage;
 
 class FournisseursController extends Controller
@@ -87,13 +92,17 @@ class FournisseursController extends Controller
             Log::debug($fournisseurs);
             $fournisseurs->postCode = str_replace(' ', '', $fournisseurs->postcode);
             $fournisseurs->save();
+            event(new Registered($fournisseurs));
+            event(new AccountCreated($fournisseurs));
+            Auth::guard('fournisseur')->login($fournisseurs);
+            return redirect()->route('verification.notice')->with('success', 'Nous vous avons envoyé un courriel de vérification. Veuillez cliquer sur le lien reçu par courriel pour confirmer.');
             }
                 
             catch (\Throwable $e) {
                 Log::debug($e);
-                return redirect()->route('Fournisseurs.login');
+                return redirect()->route('Fournisseurs.connexion');
             }
-            return redirect()->route('Fournisseurs.login');
+            return redirect()->route('Fournisseurs.connexion');
     }
 
     // Fournisseurs selectionnés sur la page de recherche
@@ -200,6 +209,7 @@ class FournisseursController extends Controller
     public function modifierFournisseur(Request $request, $id)
 {
     $fournisseur = Fournisseur::findOrFail($id);
+
     
     // Validation des données
     $request->validate([
@@ -231,8 +241,14 @@ class FournisseursController extends Controller
     $fournisseur->city = $request->input('city');
     $fournisseur->website = $request->input('website');
 
+    
+    if($fournisseur->isDirty('statut')){
+        event(new StatusChanged($fournisseur) );
+    }
+    else if($fournisseur->isDirty()){
+        event(new AccountModified($fournisseur));
+    }
     $fournisseur->save();
-
     return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
                      ->with('success', 'Les informations ont été modifiées avec succès');
 }
@@ -324,13 +340,16 @@ class FournisseursController extends Controller
     {
         try
         {
-
+            $oldData = $fournisseur->only(['personneContact', 'website']);
             $fournisseur->update([
                 'personneContact' => $request->personneContact,
                 'website' => $request->website,
 
             ]);
-
+            $changes = array_diff($fournisseur->only(['personneContact', 'website']), $oldData);
+            if(!empty($changes)){
+                event(new AccountModified($fournisseur));
+            }
             return redirect()->route('fournisseur.accueil')->with('message', "Modification de " . $fournisseur->name . " réussi!");
         }
         catch(\Throwable $e)
@@ -377,6 +396,42 @@ class FournisseursController extends Controller
     public function destroy(string $id)
     {
         
+    }
+
+    public function verify(Request $request, $id, $hash){
+        $fournisseur = Fournisseur::findOrFail($id);
+        if (!hash_equals(sha1($fournisseur->getEmailForVerification()), $hash)){
+            return redirect()->route('Fournisseur.connexion')->with('fail', 'Lien de vérification invalide.');
+        }
+        if ($request->fournisseur()->hasVerifiedEmail()){
+            return redirect()->route('Fournisseur.connexion')->with('status', 'Courriel déjà vérifié.');
+        }
+        if ($request->fournisseur()->markEmailAsVerified()){
+            event(new Verified($fournisseur));
+        }
+        return redirect()->route('Fournisseurs.connexion')->with('verified', true);
+    }
+
+    public function check(Request $request){
+        $request->validate(['email' => 'required|email',
+        'password' => 'required']);
+
+        $fournisseurInfo = Fournisseur::where('email', $request->email)->first();
+
+        if (!$fournisseurInfo){
+            return back()->withInput()->withErrors(['email' => 'Courriel n\'existe pas']);
+        }
+
+        if($fournisseurInfo->hasVerifiedEmail()){
+            return back()->withInput()->withErrors(['email'=>'Vous devez valider votre courriel pour vous connecter.'])
+            ->with('resend_email', true);
+
+            session([
+                'LoggedFournisseurInfo' => $fournisseurInfo->id,
+                'LoggedFournisseurName' => $fournisseurInfo->name,
+            ]);
+            return redirect()->route('Fournisseur.accueil');
+        }
     }
 
 
