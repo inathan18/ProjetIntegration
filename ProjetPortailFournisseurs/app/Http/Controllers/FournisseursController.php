@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
 
 
 use App\Models\Fournisseur;
@@ -22,7 +22,7 @@ class FournisseursController extends Controller
     {
         $fournisseurs = Fournisseur::all();
 
-    return view('Fournisseurs.Connexion', compact('fournisseurs'));
+        return view('Fournisseurs.Connexion', compact('fournisseurs'));
     }
 
 
@@ -34,7 +34,7 @@ class FournisseursController extends Controller
         $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
         $fichier = $this->IniFichier($fournisseur_actuel);
 
-    return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'unspsc', 'fichier'));
+        return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'unspsc', 'fichier'));
     }
 
 
@@ -43,7 +43,7 @@ class FournisseursController extends Controller
     {
         $fournisseurs = Fournisseur::all();
 
-    return view('Fournisseurs.ConnexionNEQ', compact('fournisseurs' /*,'commis', 'responsables', 'administrateurs'*/));
+        return view('Fournisseurs.ConnexionNEQ', compact('fournisseurs' /*,'commis', 'responsables', 'administrateurs'*/));
     }
 
 
@@ -51,7 +51,7 @@ class FournisseursController extends Controller
     {
         $fournisseurs = Fournisseur::all();
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
-        
+
         return view('Fournisseurs.statut', compact('fournisseurs', 'fournisseur_actuel'));
     }
 
@@ -67,14 +67,13 @@ class FournisseursController extends Controller
     public function login(Request $request)
     {
         $reussi = (auth()->guard('fournisseur')->attempt(['email' => $request->email, 'password' => $request->password]));
-        Log::debug('Réussi: '.$reussi);
+        Log::debug('Réussi: ' . $reussi);
 
-        if($reussi){
+        if ($reussi) {
             $fournisseur = Fournisseur::Where('email', $request->email)->firstOrFail();
             return redirect()->route('Fournisseurs.accueil')->with('message', "Connexion réussi");
-        }
-        else{
-            return redirect()->route('Fournisseurs.login')->withErrors(['Informations invalides']);
+        } else {
+            return redirect()->route('Fournisseurs.connexion')->withErrors(['Informations invalides']);
         }
     }
 
@@ -91,16 +90,14 @@ class FournisseursController extends Controller
             $fournisseur['personneContact'] = "ah";
 
             $fournisseur->save();
-            }
-                
-            catch (\Throwable $e) {
-                Log::debug($e);
-                return redirect()->route('Fournisseurs.creation');
-            }
-            return redirect()->route('Fournisseurs.connexion');
+        } catch (\Throwable $e) {
+            Log::debug($e);
+            return redirect()->route('Fournisseurs.creation');
+        }
+        return redirect()->route('Fournisseurs.connexion');
     }
 
-    
+
 
     /**
      * Display the specified resource.
@@ -116,7 +113,6 @@ class FournisseursController extends Controller
         $fichier = $this->IniFichier($fournisseur_actuel);
 
         return view('Fournisseurs.MonDossier', compact('fournisseur_actuel', 'telephone', 'unspsc', 'fichier'));
- 
     }
 
     /**
@@ -154,8 +150,7 @@ class FournisseursController extends Controller
      */
     public function update(Request $request, Fournisseur $fournisseur)
     {
-        try
-        {
+        try {
             $fournisseur->update([
                 'personneContact' => $request->personneContact,
                 'website' => $request->website,
@@ -163,15 +158,14 @@ class FournisseursController extends Controller
             ]);
 
             return redirect()->route('fournisseur.accueil')->with('message', "Modification de " . $fournisseur->name . " réussi!");
-        }
-        catch(\Throwable $e)
-        {
+        } catch (\Throwable $e) {
             Log::debug($e);
             return redirect()->route('Fournisseurs.dossier')->withErrors(["la modification n'a pas fonctionné"]);
         }
     }
 
-    public function upload(Request $request) {
+    public function upload(Request $request)
+    {
 
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
 
@@ -179,18 +173,18 @@ class FournisseursController extends Controller
 
         if ($request->hasfile('file')) {
             $fileJSON = array();
-            $i = 0 ;
+            $i = 0;
             foreach ($request->file('file') as $file) {
 
                 Log::debug($file->extension());
 
-                $extension = ".".$file->extension();
+                $extension = "." . $file->extension();
 
                 $filename = pathinfo($file, PATHINFO_FILENAME);
                 $destinationPath = "fournisseur";
-                Storage::disk()->putfileas($destinationPath, $file, $filename .$extension);
-                $fileJSON[$i] = $filename.$extension;
-               $i++;
+                Storage::disk()->putfileas($destinationPath, $file, $filename . $extension);
+                $fileJSON[$i] = $filename . $extension;
+                $i++;
             }
             $fournisseur_actuel->update([
                 'files' => $fileJSON,
@@ -199,7 +193,6 @@ class FournisseursController extends Controller
         }
 
         return redirect()->back();
-
     }
 
     /**
@@ -207,28 +200,27 @@ class FournisseursController extends Controller
      */
     public function destroy(string $id)
     {
-        
     }
 
-//--------------------------------Fonction pour alèger le code-------------------------------------------------
+    //--------------------------------Fonction pour alèger le code-------------------------------------------------
 
-    public function IniFichier($fournisseur) {
+    public function IniFichier($fournisseur)
+    {
         try {
 
 
             $ctr = count($fournisseur->files);
 
             $fichier = "";
-            
-            for( $i = 0; $i < $ctr; $i++ ) {
-                $fichier .= $fournisseur->files[$i] . " | " ;
+
+            for ($i = 0; $i < $ctr; $i++) {
+                $fichier .= $fournisseur->files[$i] . " | ";
             }
-            
-            if($fichier == "" || $fichier == " | ") {
+
+            if ($fichier == "" || $fichier == " | ") {
                 $fichier = "Aucun Fichier Envoyé";
             }
-        }
-        catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             $fichier = "Aucun Fichier Envoyé";
         }
         return $fichier;
@@ -237,26 +229,26 @@ class FournisseursController extends Controller
 
 
 
-    public function DelFichier($fournisseur) {
+    public function DelFichier($fournisseur)
+    {
         try {
-        $ctr = count($fournisseur->files);
-        
-        for( $i = 0; $i < $ctr; $i++ ) {
-            $filename = $fournisseur->files[$i];
+            $ctr = count($fournisseur->files);
 
-            unlink(storage_path('app/fournisseur/' .$filename));
-            Storage::delete($filename);
+            for ($i = 0; $i < $ctr; $i++) {
+                $filename = $fournisseur->files[$i];
+
+                unlink(storage_path('app/fournisseur/' . $filename));
+                Storage::delete($filename);
+            }
+
+            $fournisseur->update([
+                'files' => [""],
+            ]);
+        } catch (\Throwable $e) {
         }
-
-        $fournisseur->update([
-            'files' => [""],
-        ]);
-    }
-    catch (\Throwable $e) { }
-        
     }
 
-//--------------------------------Fonction pour alèger le code-------------------------------------------------
+    //--------------------------------Fonction pour alèger le code-------------------------------------------------
 
 
 

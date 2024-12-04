@@ -12,7 +12,7 @@ function addPhoneNumber() {
     addTelephoneDiv.classList.add('col-12');
     addTelephoneDiv.id = `phone-${phoneCtr}`;
     addTelephoneDiv.innerHTML = 
-    ` <label for="phone${phoneCtr}">Telephone Compagnie</label>
+    ` <label for="phone${phoneCtr}">Téléphone : </label>
         <select name="phone[]" class="phone ">
             <option value="Bureau">Bureau</option>
             <option value="Domicile">Domicile</option>
@@ -44,13 +44,13 @@ function addPersonneContact() {
 
     addContactDiv.innerHTML = 
     `   <div class="p-3 col-4">
-            <label class="beaulabel" for="personneContact">Personne Contact : </label>
+            <label class="beaulabel" for="personneContact">Nom Contact : </label>
             <button class="btn btn-danger" style="transform:scale(0.6);" onclick="removePersonneContact('Contact-${ContactCtr}')"> - </button>
             <input class="form-control" type="personneContact" name="personneContact[]">
         </div>
 
         <div class="col-4 p-3 align-self-center text-center">
-            <label class="beaulabel" for="phone1">Telephone Personnel</label>
+            <label class="beaulabel" for="phone1">Téléphone :</label>
             <div id="PhonePersonnel">
             <div class="phone-number-container col-12" style="margin-top: 10px;">
                 <select name="personneContact[]" class="phone ">
