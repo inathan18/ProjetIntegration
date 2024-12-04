@@ -29,11 +29,11 @@ session_start();
                         <div class="card-content">
 
                         <div class="nav nav-fill my-3">
-                          <div class="nav-link shadow-sm step0 col-12 border ml-2" style="border-radius: 25px; color:black;">Compagnie</div>
-                          <div class="nav-link shadow-sm step1 col-12 border ml-2" style="border-radius: 25px; color:black;">Contact</div>
-                          <div class="nav-link shadow-sm step2 col-12 border ml-2" style="border-radius: 25px; color:black;">UNSPSC</div>
-                          <div class="nav-link shadow-sm step3 col-12 border ml-2" style="border-radius: 25px; color:black;">Fichiers</div>
-                          <div class="nav-link shadow-sm step4 col-12 border ml-2" style="border-radius: 25px; color:black;">Compte</div>
+                          <div class="nav-link step0 col-12 border ml-2" style="border-radius: 25px; color:black;">Compagnie</div>
+                          <div class="nav-link step1 col-12 border ml-2" style="border-radius: 25px; color:black;">Contact</div>
+                          <div class="nav-link step2 col-12 border ml-2" style="border-radius: 25px; color:black;">UNSPSC</div>
+                          <div class="nav-link step3 col-12 border ml-2" style="border-radius: 25px; color:black;">Fichiers</div>
+                          <div class="nav-link step4 col-12 border ml-2" style="border-radius: 25px; color:black;">Compte</div>
                         </div>
 
                         </div>
@@ -135,33 +135,32 @@ session_start();
                                 <div class="container-fluid"  id="Contact">
                                     <div class="row">
                                         <div class="p-3 col-4">
-                                            <label class="form-label" for="personneContact">Personne Contact : </label>
+                                            <label class="beaulabel" for="personneContact">Personne Contact : </label>
                                             <input class="form-control" type="personneContact" id="personneContact" name="personneContact[]">
                                         </div>
                                         <div class="col-4 p-3 align-self-center text-center">
+                                        <label class="beaulabel" for="phone1">Telephone Personnel</label>
                                             <div id="PhonePersonnel">
                                             <div class="phone-number-container col-12" style="margin-top: 10px;">
-                                                <label for="phone1">Telephone Personnel</label>
                                                 <select name="phone[]" class="phone">
                                                     <option value="Bureau">Bureau</option>
                                                     <option value="Domicile">Domicile</option>
                                                     <option value="Cellulaire">Cellulaire</option>
                                                 </select>
-                                                <input type="text" name="personneContact[]" min="10" max="12">
+                                                <input type="text" placeholder="xxx-xxx-xxxx" name="personneContact[]" min="10" max="12">
                                             </div>
                                             <div class="phone-number-container col-12" style="margin-top: 10px;">
-                                                <label for="phone1">Telephone Personnel</label>
-                                                <select name="phone[]" class="phone">
+                                                <select name="phone[]" style="" class="phone">
                                                     <option value="Bureau">Bureau</option>
                                                     <option value="Domicile">Domicile</option>
                                                     <option value="Cellulaire">Cellulaire</option>
                                                 </select>
-                                                <input type="text" name="personneContact[]" min="10" max="12">
+                                                <input type="text" placeholder="xxx-xxx-xxxx" name="personneContact[]" min="10" max="12">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="p-3 col-4">
-                                        <label class="form-label" for="email">Courriel : </label>
+                                        <label class="beaulabel" for="email">Courriel : </label>
                                         <input class="form-control" type="email" id="email" name="personneContact[]">
                                     </div>
                                     </div>

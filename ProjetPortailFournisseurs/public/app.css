@@ -64,6 +64,7 @@ html, body,main {
  justify-content: center;
  flex-wrap: wrap;
  margin-top: 30px;
+ 
 }
 
 .persoCard {
@@ -185,6 +186,7 @@ border-radius: 25px;
 }
 
 .nav-link {
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.219); 
     margin-top: 18%;
     margin-bottom: 19%;
 }
