@@ -136,6 +136,12 @@
     </div>
 
 </div>
+
+<div class="col-12">
+    <div class="text-center">
+    <a href="{{route('Fournisseurs.edit')}}" class="btn align-self-center" style="background-color: #FFFFFF; border-color: black; color:black;"> Modifier les informations </a>
+    </div>
+</div>
 </div>
 
 @endsection

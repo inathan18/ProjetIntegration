@@ -4,7 +4,9 @@
 
 @section('contenu')
 
-<div class="p-3 text-center"> <h1> Frame Edit </h1> </div>
+@section('body', "V3R-Blanc")
+
+<div class="p-3 text-center"> <h1> Modifier mes informations </h1> </div>
 
 <div class="container-fluid h-100">
 
