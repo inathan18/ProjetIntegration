@@ -22,6 +22,6 @@ class IsAdmin
         }
 
         // Sinon, redirige vers une page de refus d'accès ou la page de connexion
-        return redirect()->route('Fournisseurs.accueil')->withErrors(['Accès refusé.']);
+        return redirect()->route('Usagers.connexion')->withErrors(['Accès refusé.']);
     }
 }

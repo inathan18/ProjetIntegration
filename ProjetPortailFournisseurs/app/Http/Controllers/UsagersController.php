@@ -35,6 +35,11 @@ class UsagersController extends Controller
         return view('Usagers.Creation');
     }
 
+    public function deco()
+    {
+        return view('Usagers.Creation');
+    }
+
     public function login(Request $request)
     {
         $credentials = [
@@ -50,7 +55,7 @@ class UsagersController extends Controller
             if ($usager->role === 'administrateur') {
                 return redirect()->route('Admins.Panel')->with('message', "Connexion réussie");
             } else {
-                return redirect()->route('fournisseurs.recherche');
+                return redirect()->route('Fournisseurs.connexion');
             }
         } else {
             // Redirection en cas d'échec

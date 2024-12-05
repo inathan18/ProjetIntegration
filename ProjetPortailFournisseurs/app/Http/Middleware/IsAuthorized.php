@@ -24,6 +24,6 @@ class IsAuthorized
         }
 
         // Sinon, redirige vers une page d'accès refusé ou de connexion
-        return redirect()->route('Fournisseurs.accueil')->withErrors(['Accès refusé.']);
+        return redirect()->route('Usagers.connexion')->withErrors(['Accès refusé.']);
     }
 }
