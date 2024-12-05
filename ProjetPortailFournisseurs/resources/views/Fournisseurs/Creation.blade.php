@@ -116,9 +116,14 @@ session_start();
                                         </div>
                                     </div>
 
-                                    <div class="col-12 FormInscription">
+                                    <div class="col-6 FormInscription">
                                         <label class="beaulabel" for="website">Site Internet : </label>
                                         <input class="form-control" type="text" id="website" name="website">
+                                    </div>
+
+                                    <div class="col-6 FormInscription">
+                                        <label class="beaulabel" for="postCode">Code Postal : </label>
+                                        <input class="form-control" type="text" id="postCode" name="postCode">
                                     </div>
 
                                 </div>

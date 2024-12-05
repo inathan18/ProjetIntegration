@@ -78,16 +78,20 @@ class FournisseursController extends Controller
     }
 
     /* fonction utilisé pour la création de compte Fournisseur*/
-    public function store(FournisseurRequest $request)
+    public function store(Request $request)
     {
         try {
             session()->put($request->all());
             $fournisseur = new Fournisseur($request->all());
             Log::debug($fournisseur);
 
-            $fournisseur['postCode'] = trim($fournisseur->postCode);
+            $fournisseur['postCode'] = trim($request['postCode']);
+
+            Log::debug(trim($request['postCode']));
 
             $fournisseur['personneContact'] = "ah";
+
+            $fournisseur['region'] = $request['region'];
 
             $fournisseur->save();
         } catch (\Throwable $e) {
