@@ -32,7 +32,7 @@ Route::post('/LoginUsagers',
 [UsagersController::class, 'login'])->name('Usagers.login');
 
 Route::post('/logout', [UsagersController::class, 'logout'])->name('logout');
-
+Route::post('/logoutFournisseur', [FournisseursController::class, 'logout'])->name('Fournisseur.logout');
 
 Route::get('/', function () {
     return view('welcome');

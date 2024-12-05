@@ -36,7 +36,12 @@ class FournisseursController extends Controller
         $fournisseurs = Fournisseur::all();
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
         $telephone = json_decode($fournisseur_actuel->phone[0], true);
-        $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
+        
+
+            $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
+        
+
+        
         $fichier = $this->IniFichier($fournisseur_actuel);
 
         return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'unspsc', 'fichier'));
@@ -101,11 +106,12 @@ class FournisseursController extends Controller
             $fournisseur['personneContact'] = "ah";
 
             $fournisseur['region'] = $request['region'];
+            $fournisseur['statut'] = "AT";
 
             $fournisseur->save();
-            event(new Registered($fournisseurs));
-            event(new AccountCreated($fournisseurs));
-            Auth::guard('fournisseur')->login($fournisseurs);
+            event(new Registered($fournisseur));
+            event(new AccountCreated($fournisseur));
+            Auth::guard('fournisseur')->login($fournisseur);
             return redirect()->route('verification.notice')->with('success', 'Nous vous avons envoyé un courriel de vérification. Veuillez cliquer sur le lien reçu par courriel pour confirmer.');
         } catch (\Throwable $e) {
             Log::debug($e);
@@ -334,6 +340,15 @@ class FournisseursController extends Controller
             return redirect()->route('Fournisseurs.dossier')->withErrors(["la modification n'a pas fonctionné"]);
         }
     }
+
+    public function logout(Request $request)
+    {
+        auth()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+    
+        return redirect()->route('Fournisseurs.connexion');
+    }  
 
     public function upload(Request $request)
     {

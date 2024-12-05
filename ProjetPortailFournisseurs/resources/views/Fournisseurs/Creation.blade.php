@@ -152,7 +152,7 @@ session_start();
                                                         <option value="Domicile">Domicile</option>
                                                         <option value="Cellulaire">Cellulaire</option>
                                                     </select>
-                                                    <input type="text" placeholder="xxx-xxx-xxxx" name="personneContact[]" min="10" max="12">
+                                                    <input type="text" placeholder="xxx-xxx-xxxx" name="personneContact[]">
                                                 </div>
                                                 <div class="phone-number-container col-12" style="margin-top: 10px;">
                                                     <select name="phone[]" style="" class="phone">
@@ -160,7 +160,7 @@ session_start();
                                                         <option value="Domicile">Domicile</option>
                                                         <option value="Cellulaire">Cellulaire</option>
                                                     </select>
-                                                    <input type="text" placeholder="xxx-xxx-xxxx" name="personneContact[]" min="10" max="12">
+                                                    <input type="text" placeholder="xxx-xxx-xxxx" name="personneContact[]" >
                                                 </div>
                                             </div>
                                         </div>
@@ -168,6 +168,7 @@ session_start();
                                             <label class="beaulabel" for="email">Courriel : </label>
                                             <input class="form-control" type="email" id="email" name="personneContact[]">
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-primary" style="transform:scale(0.6);" onclick="addPersonneContact()">+</button>

@@ -9,6 +9,13 @@
 <div class="container-fluid">
 <div class="row">
 <div class="col-6">
+<form method="POST" action="{{ route('Fournisseur.logout') }}" class="d-flex align-items-center">
+    @csrf
+    <button type="submit" class="btn btn-link nav-link d-flex align-items-center" style="display: inline; padding: 0; margin: 0; border: none;">
+        <i class="fas fa-sign-out-alt me-2"></i>
+        Déconnexion
+    </button>
+</form>
 
     <div class="row">
         <div class="col-6">

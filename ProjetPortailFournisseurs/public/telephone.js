@@ -58,7 +58,7 @@ function addPersonneContact() {
                     <option value="Domicile">Domicile</option>
                     <option value="Cellulaire">Cellulaire</option>
                 </select>
-                <input type="text" name="personneContact[]" placeholder="xxx-xxx-xxxx" min="10" max="12" required>
+                <input type="text" name="personneContact[]" placeholder="xxx-xxx-xxxx">
             </div>
             <div class="phone-number-container col-12" style="margin-top: 10px;">
                 <select name="personneContact[]" class="phone ">
@@ -66,7 +66,7 @@ function addPersonneContact() {
                     <option value="Domicile">Domicile</option>
                     <option value="Cellulaire">Cellulaire</option>
                 </select>
-                <input type="text" name="personneContact[]" placeholder="xxx-xxx-xxxx" min="10" max="12" required>
+                <input type="text" name="personneContact[]" placeholder="xxx-xxx-xxxx">
             </div>
         </div>
         </div>
