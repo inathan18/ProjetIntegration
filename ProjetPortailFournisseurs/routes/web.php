@@ -57,6 +57,8 @@ Route::get('/fournisseur/connexion',
 
 Route::get('/fournisseur/inscription', 
 [FournisseursController::class, 'create'])->name('Fournisseurs.creation');
+Route::get('/fournisseur/inscriptionRBQ', 
+[FournisseursController::class, 'createRBQ'])->name('Fournisseurs.creationRBQ');
 
 Route::get('/fournisseur/unspsc', 
 [FournisseursController::class, 'unspsc'])->name('Fournisseurs.UNSPSC');

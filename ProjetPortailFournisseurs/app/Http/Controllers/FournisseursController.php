@@ -72,6 +72,11 @@ class FournisseursController extends Controller
         return view('Fournisseurs.Creation');
     }
 
+    public function createRBQ()
+    {
+        return view('Fournisseurs.CreationRBQ');
+    }
+
     public function unspsc(){
         return view('Fournisseurs.UNSPSC');
     }
@@ -104,6 +109,7 @@ class FournisseursController extends Controller
             Log::debug(trim($request['postCode']));
 
             $fournisseur['personneContact'] = "ah";
+            $fournisseur['unspsc'] = [$request['unspsc']];
 
             $fournisseur['region'] = $request['region'];
             $fournisseur['statut'] = "AT";

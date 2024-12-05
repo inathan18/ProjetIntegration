@@ -209,7 +209,7 @@ session_start();
 
                                 <div class="col-6 FormInscription">
                                     <label class="beaulabel" for="password">Mot de passe : </label>
-                                    <input class="form-control" type="text" id="password" name="password">
+                                    <input class="form-control" type="password" id="password" name="password">
                                 </div>
 
                             </div>
