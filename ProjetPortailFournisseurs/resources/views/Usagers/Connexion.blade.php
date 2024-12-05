@@ -4,19 +4,23 @@
 
 @section('contenu')
 
-<div class="p-3 text-center"> <h1> Frame Connexion </h1></div>
+<div class="p-3 text-center"> <h1>Connexion usagers</h1></div>
 
     <form method="POST" action="{{route('Usagers.login')}}">
-    @csrf
+        @csrf
 
         <div class="p-3">
             <label class="form-label" for="email">Courriel : </label>
-            <input class="form-control" type="email" id="email" name="email">
+            <input class="form-control" type="email" id="email" name="email" required>
         </div>
 
         <div class="p-3">
-            <label class="form-label" for="password">Mot de Passe : </label>
-            <input class="form-control" type="password" id="password" name="password">
+            <label class="form-label" for="role">Rôle : </label>
+            <select class="form-control" id="role" name="role" required>
+                <option value="administrateur">Administrateur</option>
+                <option value="responsable">Responsable</option>
+                <option value="commis">Commis</option>
+            </select>
         </div>
 
         <div class="align-items-center text-center">
@@ -24,7 +28,6 @@
                 Se Connecter
             </button>
         </div>
-
     </form>
 
 @endsection

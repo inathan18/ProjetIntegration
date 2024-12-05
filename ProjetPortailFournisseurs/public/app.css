@@ -1,4 +1,4 @@
-html, body,main {
+html, body {
     height: 100%;
     width:  100%
 }
@@ -201,3 +201,22 @@ background-color: #ffffff;
     background-repeat: no-repeat;
     background-position: center;
 }
+.bootstrap-select .dropdown-toggle {
+    color: #000 !important; 
+}
+
+.bootstrap-select .dropdown-toggle {
+    border: 1px solid #7e7c7c71 !important;
+    box-shadow: none !important; 
+}
+
+.bootstrap-select .dropdown-toggle:focus, 
+.bootstrap-select .dropdown-toggle:hover {
+    border-color: #007bff !important; 
+    color: #000 !important;
+}
+
+.bootstrap-select .dropdown-menu li a {
+    color: #000 !important;
+}
+

@@ -11,6 +11,20 @@
     <label class="form-label" for="rbq">No Licence RBQ: </label>
     <input readonly class="form-control" type="rbq" id="rbq" name="rbq" wire:model="rbq" value="{{$rbq}}">
 </div>
+@if(!empty($typesRbq))
+<div class="p-3">
+<label class="form-label" for="typesRbq">Types de licence RBQ: </label>
+@php
+$i = 0
+@endphp
+@foreach(array_unique($typesRbq) as $typeRbq)
+<input readonly class="form-control" type="typeRbq" id="typeRbq" name="typesRbq[<?php echo $i; ?>]" wire:model="typeRbq" value="{{$typeRbq}}">
+@php
+$i++
+@endphp
+@endforeach
+</div>
+@endif
 
     <div class="p-3">
     <label class="form-label" for="neq">No NEQ: </label>

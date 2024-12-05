@@ -1,0 +1,256 @@
+[
+    {
+        "codeRbq": "1.1.1",
+        "nomRbq": "Bâtiments résidentiels neufs visés par un plan de garantie, classe I"
+    },
+    {
+        "codeRbq": "1.1.2",
+        "nomRbq": "Bâtiments résidentiels neufs visés par un plan de garantie, classe II"
+    },
+    {
+        "codeRbq": "1.2",
+        "nomRbq": "Petits bâtiments"
+    },
+    {
+        "codeRbq": "1.3",
+        "nomRbq": "Bâtiments de tout genre"
+    },
+    {
+        "codeRbq": "1.4",
+        "nomRbq": "Routes et canalisation"
+    },
+    {
+        "codeRbq": "1.5",
+        "nomRbq": "Structures d'ouvrages de génie civil"
+    },
+    {
+        "codeRbq": "1.6",
+        "nomRbq": "Ouvrages de génie civil immergés"
+    },
+    {
+        "codeRbq": "1.7",
+        "nomRbq": "Télécommunication, transport, transformation et distribution d'énergie électrique"
+    },
+    {
+        "codeRbq": "1.8",
+        "nomRbq": "Installation d'équipement pétrolier"
+    },
+    {
+        "codeRbq": "1.9",
+        "nomRbq": "Mécanique du bâtiment"
+    },
+    {
+        "codeRbq": "1.10",
+        "nomRbq": "Remontées mécaniques"
+    },
+    {
+        "codeRbq": "2.1",
+        "nomRbq": "Puits forés"
+    },
+    {
+        "codeRbq": "2.2",
+        "nomRbq": "Ouvrages de captage d'eau non forés"
+    },
+    {
+        "codeRbq": "2.3",
+        "nomRbq": "Systèmes de pompage des eaux souterraines"
+    },
+    {
+        "codeRbq": "2.4",
+        "nomRbq": "Systèmes d'assainissement autonome"
+    },
+    {
+        "codeRbq": "2.6",
+        "nomRbq": "Pieux et fondations spéciales"
+    },
+    {
+        "codeRbq": "2.8",
+        "nomRbq": "Sautage"
+    },
+    {
+        "codeRbq": "3.1",
+        "nomRbq": "Structures de béton"
+    },
+    {
+        "codeRbq": "4.1",
+        "nomRbq": "Structures de maçonnerie"
+    },
+    {
+        "codeRbq": "5.1",
+        "nomRbq": "Structures métalliques et éléments préfabriqués de béton"
+    },
+    {
+        "codeRbq": "6.1",
+        "nomRbq": "Charpentes de bois"
+    },
+    {
+        "codeRbq": "10",
+        "nomRbq": "Systèmes de chauffage localisé à combustible solide"
+    },
+    {
+        "codeRbq": "11.1",
+        "nomRbq": "Tuyauterie industrielle ou institutionnelle sous pression"
+    },
+    {
+        "codeRbq": "13.1",
+        "nomRbq": "Protection contre la foudre"
+    },
+    {
+        "codeRbq": "13.2",
+        "nomRbq": "Systèmes d'alarme incendie"
+    },
+    {
+        "codeRbq": "13.3",
+        "nomRbq": "Systèmes d'extinction d'incendie"
+    },
+    {
+        "codeRbq": "13.4",
+        "nomRbq": "Systèmes localisés d'extinction incendie"
+    },
+    {
+        "codeRbq": "14.1",
+        "nomRbq": "Ascenseurs et montecharges"
+    },
+    {
+        "codeRbq": "14.2",
+        "nomRbq": "Appareils élévateurs pour personnes handicapées"
+    },
+    {
+        "codeRbq": "14.3",
+        "nomRbq": "Autres types d'appareils élévateurs"
+    },
+    {
+        "codeRbq": "15.1",
+        "nomRbq": "Systèmes de chauffage à air pulsé"
+    },
+    {
+        "codeRbq": "15.1.1",
+        "nomRbq": "Systèmes de chauffage à air pulsé pour certains travaux qui ne sont pas réservés exclusivement aux maîtres mécaniciens en tuyauterie"
+    },
+    {
+        "codeRbq": "15.2",
+        "nomRbq": "Systèmes de brûleurs au gaz naturel"
+    },
+    {
+        "codeRbq": "15.2.1",
+        "nomRbq": "Systèmes de brûleurs au gaz naturel pour certains travaux qui ne sont pas réservés exclusivement aux maîtres mécaniciens en tuyauterie"
+    },
+    {
+        "codeRbq": "15.3",
+        "nomRbq": "Systèmes de brûleurs à l'huile"
+    },
+    {
+        "codeRbq": "15.3.1",
+        "nomRbq": "Systèmes de brûleurs à l'huile pour certains travaux qui ne sont pas réservés exclusivement aux maîtres mécaniciens en tuyauterie"
+    },
+    {
+        "codeRbq": "15.4",
+        "nomRbq": "Systèmes de chauffage hydronique"
+    },
+    {
+        "codeRbq": "15.4.1",
+        "nomRbq": "Systèmes de chauffage hydronique pour certains travaux qui ne sont pas réservés exclusivement aux maîtres mécaniciens en tuyauterie"
+    },
+    {
+        "codeRbq": "15.5",
+        "nomRbq": "Plomberie"
+    },
+    {
+        "codeRbq": "15.5.1",
+        "nomRbq": "Plomberie pour certains travaux qui ne sont pas réservés exclusivement aux maîtres mécaniciens en tuyauterie"
+    },
+    {
+        "codeRbq": "15.6",
+        "nomRbq": "Propane"
+    },
+    {
+        "codeRbq": "15.7",
+        "nomRbq": "Ventilation résidentielle"
+    },
+    {
+        "codeRbq": "15.8",
+        "nomRbq": "Ventilation"
+    },
+    {
+        "codeRbq": "15.9",
+        "nomRbq": "Petits systèmes de réfrigération"
+    },
+    {
+        "codeRbq": "15.10",
+        "nomRbq": "Réfrigération"
+    },
+    {
+        "codeRbq": "16",
+        "nomRbq": "Électricité"
+    },
+    {
+        "codeRbq": "17.1",
+        "nomRbq": "Instrumentation, contrôle et régulation"
+    },
+    {
+        "codeRbq": "2.5",
+        "nomRbq": "Excavation et terrassement"
+    },
+    {
+        "codeRbq": "2.7",
+        "nomRbq": "Travaux d'emplacement"
+    },
+    {
+        "codeRbq": "3.2",
+        "nomRbq": "Petits ouvrages de béton"
+    },
+    {
+        "codeRbq": "4.2",
+        "nomRbq": "Travaux de maçonnerie non structurale, marbre et céramique"
+    },
+    {
+        "codeRbq": "5.2",
+        "nomRbq": "Ouvrages métalliques"
+    },
+    {
+        "codeRbq": "6.2",
+        "nomRbq": "Travaux de bois et plastique"
+    },
+    {
+        "codeRbq": "7",
+        "nomRbq": "Isolation, étanchéité, couvertures et revêtement extérieur"
+    },
+    {
+        "codeRbq": "8",
+        "nomRbq": "Portes et fenêtres"
+    },
+    {
+        "codeRbq": "9",
+        "nomRbq": "Travaux de finition"
+    },
+    {
+        "codeRbq": "11.2",
+        "nomRbq": "Équipements et produits spéciaux"
+    },
+    {
+        "codeRbq": "12",
+        "nomRbq": "Armoires et comptoirs usinés"
+    },
+    {
+        "codeRbq": "13.5",
+        "nomRbq": "Installations spéciales ou préfabriquées"
+    },
+    {
+        "codeRbq": "17.2",
+        "nomRbq": "Intercommunication, téléphonie et surveillance"
+    },
+    {
+        "codeRbq": "GPC",
+        "nomRbq": "Gestion de projets et de chantiers"
+    },
+    {
+        "codeRbq": "ADM",
+        "nomRbq": "Administration"
+    },
+    {
+        "codeRbq": "SEC",
+        "nomRbq": "Gestion de la sécurité"
+    }
+
+    
+]

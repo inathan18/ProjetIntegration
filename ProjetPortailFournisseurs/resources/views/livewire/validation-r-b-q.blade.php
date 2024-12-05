@@ -19,28 +19,28 @@
         <div class="w-1/3 bg-white rounded-lg shadow">
   
             @if(!empty($tests))
-                    <select wire:model.change="noNeq" name="noNeq" class="noNeq" id="noNeq">
+                    <select wire:model.change="noNeq" name="noNeq" class="noNeq" id="noNeq" size="1">
                     <option disabled selected value>Choisir une entreprise</option>
                     @php $key=0 @endphp
                     @foreach($tests as $rbq)
+                    @if($key <1)
                     {{$key++}}
                         <option value="{{$key}}">
-                            {{ $rbq['Nom de l\'intervenant'] }} - {{ $rbq['Numero de licence'] }} - {{ $rbq['Statut de la licence'] }} - 
-                            @if($rbq['Categorie'])
-                            {{ $rbq['Categorie'] }} - 
-                            @endif
-                            {{ $rbq['Sous-categories']}}
+                            {{ $rbq['Nom de l\'intervenant'] }} - {{ $rbq['Numero de licence'] }} - {{ $rbq['Statut de la licence'] }}
+
                         </option>
+                        @endif
+                        
                     @endforeach
         </select>
         <div>
         @if(!empty($noNeq))
-            <livewire:supplier-form :noNeq="$tests[$noNeq]"/>
+            <livewire:supplier-form :noNeq="$tests[$noNeq]" :types_rbq="$tests[0][0]"/>
         @endif
         </div>
 
             @else
-                <div class="list-item">No results!</div>
+                <div class="list-item">Aucun résultat!</div>
             @endif
         </div>
     @endif
