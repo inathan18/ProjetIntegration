@@ -16,10 +16,12 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css" rel="stylesheet" >
 @vite('resources/css/app.css')
+    @yield('link')
+
 </head>
-<body>
+<body class="@yield('body')">
     <main>
-        @include("partials.navbar") 
+        @include("partials.navbarUsager") 
 
         @yield("contenu")
     </main>
