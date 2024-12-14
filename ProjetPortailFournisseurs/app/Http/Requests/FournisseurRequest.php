@@ -20,15 +20,15 @@ class FournisseurRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'name' => 'required|min:3',
             'address' => 'required',
-            'postCode' => 'required',
+            'postCode' => 'required', 'regex: /^[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d$',
             'website' => 'required',
             'personneContact' => 'required',
-            'phone' => 'required', 'regex:/^\d{3}-\d{3}-\d{4}$/',
+            'phone' => 'required', 'regex: /^\d{3}-\d{3}-\d{4}$/',
             'email' => 'required',
             'password' => 'required',
         ];

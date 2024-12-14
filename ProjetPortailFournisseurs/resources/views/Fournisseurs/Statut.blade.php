@@ -1,172 +1,109 @@
-@extends('layouts.app')
+<form id="fournisseur-form">
+    <label for="name">Nom</label>
+    <input type="text" name="name" id="name">
+    <div id="nameError" class="error"></div>
 
-@section('titre', "Inscription")
+    <label for="address">Adresse</label>
+    <input type="text" name="address" id="address">
+    <div id="addressError" class="error"></div>
 
-@section('link')
+    <label for="postCode">Code postal</label>
+    <input type="text" name="postCode" id="postCode">
+    <div id="postCodeError" class="error"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js" integrity="sha512-eyHL1atYNycXNXZMDndxrDhNAegH2BDWt1TmkXJPoGf1WLlNYt08CSjkqF5lnCRmdm3IrkHid8s2jOUY4NIZVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <label for="website">Site Web</label>
+    <input type="text" name="website" id="website">
+    <div id="websiteError" class="error"></div>
 
+    <label for="personneContact">Personne de contact</label>
+    <input type="text" name="personneContact" id="personneContact">
+    <div id="personneContactError" class="error"></div>
 
+    <label for="phone">Téléphone</label>
+    <input type="text" name="phone" id="phone">
+    <div id="phoneError" class="error"></div>
 
-<style>
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email">
+    <div id="emailError" class="error"></div>
 
+    <label for="password">Mot de passe</label>
+    <input type="password" name="password" id="password">
+    <div id="passwordError" class="error"></div>
 
-</style>
-
-@endsection
-
-@section('contenu')
-
-
-
-
-<?php 
-session_start();
-?>
-
-    <div class="container-fluid p-0" style="height: 100%;">
-        <div class="row" style="height: 100%; margin:0px;">
-
-                <div class="col-2 p-0" style="height:100%;"> <!-- Navbar Verticale -->
-
-                <div class="card-container" style="height: 100%; padding:20px;">
-                    <div class="persoCardInscription">
-                        <div class="card-content">
-
-                        <div class="nav nav-fill my-3">
-                          <label class="nav-link shadow-sm step0   border ml-2 ">Step One</label>
-                          <label class="nav-link shadow-sm step1   border ml-2 " >Step Two</label>
-                          <label class="nav-link shadow-sm step2   border ml-2 " >Step Three</label>
-                        </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                </div>
-
-                <div class="col-10 p-0" style="height:100%;"> <!-- Section Formulaire -->
-
-                <div class="card-container" style="height: 100%; padding:20px;">
-                    <div class="persoCardInscription">
-                        <div class="card-contentInscription">
-                        <br>
-                        <form method="post" action="{{route('Fournisseurs.store')}}" class="employee-form">
-                            @csrf
-
-                            <div class="container-fluid"  id="Contact">
-                                <div class="row">
-                                    <div class="p-3 col-4">
-                                        <label class="form-label" for="personneContact">Personne Contact : </label>
-                                        <input class="form-control" type="personneContact" id="personneContact" name="personneContact[]">
-                                    </div>
-                                    <div class="col-4 p-3 align-self-center text-center">
-                                        <div id="PhonePersonnel">
-                                        <div class="phone-number-container col-12" style="margin-top: 10px;">
-                                            <label for="phone1">Telephone Personnel</label>
-                                            <select name="phone[]" class="phone">
-                                                <option value="Bureau">Bureau</option>
-                                                <option value="Domicile">Domicile</option>
-                                                <option value="Cellulaire">Cellulaire</option>
-                                            </select>
-                                            <input type="text" name="personneContact[]" min="10" max="12" required>
-                                        </div>
-                                        <div class="phone-number-container col-12" style="margin-top: 10px;">
-                                            <label for="phone1">Telephone Personnel</label>
-                                            <select name="phone[]" class="phone">
-                                                <option value="Bureau">Bureau</option>
-                                                <option value="Domicile">Domicile</option>
-                                                <option value="Cellulaire">Cellulaire</option>
-                                            </select>
-                                            <input type="text" name="personneContact[]" min="10" max="12" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-3 col-4">
-                                    <label class="form-label" for="email">Courriel : </label>
-                                    <input class="form-control" type="email" id="email" name="personneContact[]">
-                                </div>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-primary" style="transform:scale(0.6);"onclick="addPersonneContact()">+</button>
-
-                        </form>
-                        </div>
-                    </div>
-                </div>
-
-
-                </div>
-
-        </div>
-    </div>
-</div>
-
-@endsection
-
-@section('scripts')
+    <button type="submit">Submit</button>
+</form>
 
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('fournisseur-form');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent form submission
 
-    $(function(){
-        var $sections=$('.form-section');
+            // Clear previous error messages
+            document.querySelectorAll('.error').forEach(div => div.textContent = '');
 
-        function navigateTo(index){
+            // Collect form values
+            const formData = new FormData(form);
+            const errors = {};
 
-            $sections.removeClass('current').eq(index).addClass('current');
+            // Validation Rules
+            if (!formData.get('name') || formData.get('name').length < 3) {
+                errors.name = "Erreur nom (minimum 3 caractères)";
+            }
 
-            $('.form-navigation .previous').toggle(index>0);
-            var atTheEnd = index >= $sections.length - 1;
-            $('.form-navigation .next').toggle(!atTheEnd);
-            $('.form-navigation [Type=submit]').toggle(atTheEnd);
+            if (!formData.get('address')) {
+                errors.address = "Erreur adresse";
+            }
 
-     
-            const step= document.querySelector('.step'+index);
-            step.style.backgroundColor="#17a2b8";
-            step.style.color="white";
+            if (!formData.get('postCode')) {
+                errors.postCode = "Erreur code postal";
+            }
 
+            if (!formData.get('website')) {
+                errors.website = "Erreur site web";
+            }
 
+            if (!formData.get('personneContact')) {
+                errors.personneContact = "Erreur personne de contact";
+            }
 
-        }
+            const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+            if (!formData.get('phone')) {
+                errors.phone = "Le numéro de téléphone est requis";
+            } else if (!phoneRegex.test(formData.get('phone'))) {
+                errors.phone = "Le numéro de téléphone doit être au format 123-456-7890.";
+            }
 
-        function curIndex(){
+            if (!formData.get('email')) {
+                errors.email = "Erreur email";
+            }
 
-            return $sections.index($sections.filter('.current'));
-        }
+            if (!formData.get('password')) {
+                errors.password = "Erreur mot de passe";
+            }
 
-        $('.form-navigation .previous').click(function(){
-            navigateTo(curIndex() - 1);
+            // Display Errors
+            for (const field in errors) {
+                const errorDiv = document.getElementById(`${field}Error`);
+                if (errorDiv) {
+                    errorDiv.textContent = errors[field];
+                }
+            }
+
+            // If no errors, proceed with form submission
+            if (Object.keys(errors).length === 0) {
+                alert("Formulaire soumis avec succès !");
+                form.reset(); // Optionally reset the form
+            }
         });
-
-        $('.form-navigation .next').click(function(){
-            $('.employee-form').parsley().whenValidate({
-                group:'block-'+curIndex()
-            }).done(function(){
-                navigateTo(curIndex()+1);
-            });
-
-        });
-
-        $sections.each(function(index,section){
-            $(section).find(':input').attr('data-parsley-group','block-'+index);
-        });
-
-
-        navigateTo(0);
-
-
-
     });
-
-
 </script>
 
-<script src="../localisation.js"></script>
-<script src="../telephone.js"></script>
-<script src="../Confirmation.js"></script>
-
-
-
-
-@endsection
+<style>
+    .error {
+        color: red;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+</style>
