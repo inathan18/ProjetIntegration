@@ -5,29 +5,30 @@
     <div class="container">
         <h2 class="mb-4">Gestion des paramètres</h2>
 
-        <form>
+        <form method="POST" action="{{ route('Admins.updateParameters') }}">
+        @csrf
             <div class="mb-3 row">
-                <label for="courrielAppro" class="col-sm-4 col-form-label">Courriel de l'Appro.</label>
+                <label for="emailAppro" class="col-sm-4 col-form-label">Courriel de l'Appro.</label>
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" id="courrielAppro" value="approvisionnement@v3r.net">
+                    <input type="email" class="form-control" id="emailAppro" name="emailAppro"value="{{$parameter->emailAppro}}">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="delaiRevision" class="col-sm-4 col-form-label">Délai avant la révision (mois)</label>
                 <div class="col-sm-8">
-                    <input type="number" class="form-control" id="delaiRevision" value="24">
+                    <input type="number" class="form-control" id="delaiRevision" name="delaiRevision" value="{{$parameter->delaiRevision}}">
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="tailleFichiers" class="col-sm-4 col-form-label">Taille maximale des fichiers joints (Mo)</label>
+                <label for="tailleFichier" class="col-sm-4 col-form-label">Taille maximale des fichiers joints (Mo)</label>
                 <div class="col-sm-8">
-                    <input type="number" class="form-control" id="tailleFichiers" value="75">
+                    <input type="number" class="form-control" id="tailleFichier" name="tailleFichier" value="{{$parameter->tailleFichier}}">
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="courrielFinances" class="col-sm-4 col-form-label">Courriel des Finances</label>
+                <label for="emailFinance" class="col-sm-4 col-form-label">Courriel des Finances</label>
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" id="courrielFinances" value="finances@v3r.net">
+                    <input type="email" class="form-control" id="emailFinance" name="emailFinance" value="{{$parameter->emailFinance}}">
                 </div>
             </div>
 
