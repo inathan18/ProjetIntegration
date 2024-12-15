@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Usager;
+use App\Models\Parameters;
+use Illuminate\Support\Facades\Log;
 
 class AdminsController extends Controller
 {
@@ -23,7 +25,8 @@ class AdminsController extends Controller
 
     public function parametres()
     {
-        return view ('Admins.Parametres');
+        $parameter = Parameters::findOrFail(1);
+        return view ('Admins.Parametres', compact('parameter'));
     }
 
 
@@ -48,6 +51,28 @@ class AdminsController extends Controller
         $usager->save();
 
         return redirect()->route('Admins.Usagers')->with('new_user_success', 'Le nouvel utilisateur a bien été ajouté');
+    }
+
+    public function updateParameters(Request $request)
+    {
+        Log::debug($request);
+        $request->validate([
+            'emailAppro' => 'required|email',
+            'delaiRevision' => 'required|integer',
+            'tailleFichier' => 'required|integer',
+            'emailFinance' => 'required|email',
+        ]);
+        $parameter = Parameters::findOrFail(1);
+        Log::debug($parameter);
+        $parameter->update([
+            'emailAppro' => $request->emailAppro,
+            'delaiRevision' => $request->delaiRevision,
+            'tailleFichier' => $request->tailleFichier,
+            'emailFinance' => $request->emailFinance,
+
+        ]);
+        return redirect()->route('Admins.Parametres')->with('success', 'Paramètres mis à jour avec succès.' );
+
     }
 
     public function updateRole(Request $request, $id)

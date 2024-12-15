@@ -175,6 +175,7 @@ Route::middleware([IsAdmin::class])->group(function () {
     Route::post('/admin/usagers/add', [AdminsController::class,'storeUser'])->name('Admin.Usager.Store');
     
     Route::get('/admin/parametres', [AdminsController::class, 'parametres'])->name('Admins.Parametres');
+    Route::post('/admin/parametres/updateParameters', [AdminsController::class, 'updateParameters'])->name('Admins.updateParameters');
     
     Route::get('/admin/courriel', [NotificationTemplateController::class, 'showForm'])->name('NotificationTemplate.showForm');
     
