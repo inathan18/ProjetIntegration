@@ -117,32 +117,38 @@
             <div class="col-1"></div>
             </div>
         </div>
+        @for ($i = 0; $i < (count($PersonnesContact)/6); $i++)
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
 
-        <div class="col-6">
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-10">
+
+                        <div class="card-container">
+                            <div class="persoCard">
+                                <div class="card-top text-center">
+                                    <h3> Personne Contact {{$i+1}} </h3>
+                                </div>
+                                <div class="card-content">
+
+                                    <p> Contact {{$i+1}} : <br> {{$PersonnesContact[$i *6]}} </p><hr>
+
+                                    <p> {{$PersonnesContact[($i *6)+1] }} : <br>  : {{$PersonnesContact[($i *6)+2] }} </p><hr>
+
+                                    <p> {{$PersonnesContact[($i *6)+3] }} : <br>  : {{$PersonnesContact[($i *6)+4] }} </p><hr>
+
+                                    <p> Courriel:  : <br> {{$PersonnesContact[($i *6)+5]}} </p><hr>
 
 
-            <div class="card-container">
-                <div class="persoCard">
-                <div class="card-top text-center">
-                <h3> Personne Contact </h3>
-                </div>
-                <div class="card-content">
+                                </div>
+                            </div>
+                        </div>
 
-                <p> Contact 1 : <br> {{$PersonnesContact[0]}} </p><hr>
-
-                <p> Compte : <br> {{count($PersonnesContact)}} </p><hr>
-
-                </div>
+                    </div>
+                <div class="col-1"></div>
                 </div>
             </div>
-
-            </div>
-            <div class="col-1"></div>
-            </div>
-        </div>
+        @endfor
 
     </div>
 
