@@ -34,7 +34,7 @@
                     <p> Ville: <br> {{$fournisseur_actuel->city}} </p><hr>
                     <p> Province: <br> {{$fournisseur_actuel->province}} </p><hr>
                     <p> Pays: <br> {{$fournisseur_actuel->country}} </p><hr>
-                    <p> Telephone: <br> {{$telephone}} </p><hr>
+                    <p> Telephone {{$telephone[0]}}: <br> {{$telephone[1]}} </p><hr>
                 </div>
                 </div>
             </div>

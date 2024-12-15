@@ -23,7 +23,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Mauricie (04)',
             'country' => 'Canada',
-            'phone' => json_encode(['8196930855', 'Bureau']),
+            'phone' => json_encode('["8196930855", "Bureau"]'),
             'postCode' => 'g9a6m1',
             'unspsc' => json_encode(['31160000','25101702']),
             'website' => 'rona.ca',
@@ -34,7 +34,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.2']),
             'password' => Hash::make('rona'),
             'raisonRefus' => null,
-            'personneContact' => json_encode('Directeur'),
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'A',
         ]);
 

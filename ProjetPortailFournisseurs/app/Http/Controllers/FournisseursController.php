@@ -36,8 +36,7 @@ class FournisseursController extends Controller
         $fournisseurs = Fournisseur::all();
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
 
-        $telephones = json_decode($fournisseur_actuel->phone, true);
-        $telephone = $telephones[1];
+        $telephone = json_decode($fournisseur_actuel->phone, true);
         Log::debug($telephone);
 
         $PersonnesContact = json_decode($fournisseur_actuel->personneContact, true);
