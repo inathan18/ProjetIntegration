@@ -45,24 +45,67 @@
         </div>
 
         <div class="col-6">
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-10">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
 
-            <div class="card-container">
-                <div class="persoCard">
-                <div class="card-top text-center">
-                <h3> Services Fournis </h3>
-                </div>
-                <div class="card-content">
-                    <p> UNSPSC: <br> {{$unspsc}} </p><hr>
+                    <div class="card-container">
+                        <div class="persoCard">
+                            <div class="card-top text-center">
+                                <h3> Services Fournis </h3>
+                            </div>
+                            <div class="card-content">
+
+                                @foreach($produitsServices as $produitService)
+                                    <li>{{ $produitService }}</li><hr>
+                                @endforeach
+
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
-                </div>
+                <div class="col-1"></div>
             </div>
+        </div>
 
-            </div>
-            <div class="col-1"></div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+
+                    <div class="card-container">
+                        <div class="persoCard">
+                            <div class="card-top text-center">
+                                <h3> Licence RBQ </h3>
+                            </div>
+                            <div class="card-content">
+                                @if($fournisseur_actuel->rbq)
+                                    <p>Numéro : 
+                                        <span>{{$fournisseur_actuel->rbq}}</span>
+                                    </p>
+                                    <p class="text-success">
+                                        <i class="fas fa-check-circle"></i> Valide
+                                    </p>
+                                @else
+                                    <p>Numéro : <span class="text-muted">Non renseigné</span></p>
+                                    <p class="text-danger">
+                                        <i class="fas fa-times-circle"></i> Invalide ou non fourni
+                                    </p>
+                                @endif
+                                <p>Catégories :</p>
+                                <ul>
+                                    @foreach($licencesRbq as $licenceRbq)
+                                        <li>{{ $licenceRbq }}</li><hr>
+                                    @endforeach
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-1"></div>
             </div>
         </div>
 

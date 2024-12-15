@@ -33,8 +33,59 @@ class FournisseursController extends Controller
 
     public function accueil()
     {
+
         $fournisseurs = Fournisseur::all();
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
+
+        $codesUnspsc = is_string($fournisseur_actuel->unspsc) ? json_decode($fournisseur_actuel->unspsc, true) : ($fournisseur_actuel->unspsc ?? []);
+        $codesRbq = is_string($fournisseur_actuel->typesRbq) ? json_decode($fournisseur_actuel->typesRbq, true) : ($fournisseur_actuel->typesRbq ?? []);
+    
+        // Charger les données du fichier unspsc.json et typesrbq.json depuis le répertoire public
+        $unspscFilePath = public_path('unspsc.json');
+        $rbqFilePath = public_path('typesrbq.json');
+        
+        // Vérifier si les fichiers existent
+        if (!file_exists($unspscFilePath)) {
+            throw new \Exception('Le fichier UNSPSC n\'existe pas.');
+        }
+        if (!file_exists($rbqFilePath)) {
+            throw new \Exception('Le fichier RBQ n\'existe pas.');
+        }
+    
+        $unspscData = json_decode(file_get_contents($unspscFilePath), true);
+        $rbqData = json_decode(file_get_contents($rbqFilePath), true);
+    
+        // Vérification de la validité des données chargées
+        if (!is_array($unspscData)) {
+            throw new \Exception('Le fichier UNSPSC contient des données invalides.');
+        }
+        if (!is_array($rbqData)) {
+            throw new \Exception('Le fichier RBQ contient des données invalides.');
+        }
+
+        $produitsServices = [];
+        if (!empty($codesUnspsc)) {
+            foreach ($codesUnspsc as $code) {
+                foreach ($unspscData as $item) {
+                    if ($item['codeUnspsc'] == $code) {
+                        $produitsServices[] = $item['codeUnspsc'] . ' - ' . $item['descUnspsc'];
+                    }
+                }
+            }
+        }
+
+        $licencesRbq = [];
+        if (!empty($codesRbq)) {
+            foreach ($codesRbq as $code) {
+                foreach ($rbqData as $item) {
+                    if ($item['codeRbq'] == $code) {
+                        $licencesRbq[] = $item['codeRbq'] . ' - ' . $item['nomRbq'];
+                    }
+                }
+            }
+        }
+
+
 
         $telephone = json_decode($fournisseur_actuel->phone, true);
         Log::debug($telephone);
@@ -46,7 +97,7 @@ class FournisseursController extends Controller
         
         $fichier = $this->IniFichier($fournisseur_actuel);
 
-        return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'PersonnesContact', 'unspsc', 'fichier'));
+        return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'PersonnesContact', 'produitsServices', 'licencesRbq', 'unspsc', 'fichier'));
     }
 
 
