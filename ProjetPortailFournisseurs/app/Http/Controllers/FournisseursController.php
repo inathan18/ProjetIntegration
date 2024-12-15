@@ -349,7 +349,7 @@ class FournisseursController extends Controller
             return redirect()->route('fournisseur.accueil')->with('message', "Modification de " . $fournisseur->name . " réussi!");
         } catch (\Throwable $e) {
             Log::debug($e);
-            return redirect()->route('Fournisseurs.accueil')->withErrors(["la modification n'a pas fonctionné"]);
+            return redirect()->route('Fournisseurs.edit')->withErrors(["la modification n'a pas fonctionné"]);
         }
     }
 
