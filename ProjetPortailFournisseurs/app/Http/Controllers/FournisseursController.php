@@ -35,10 +35,13 @@ class FournisseursController extends Controller
     {
         $fournisseurs = Fournisseur::all();
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
-        $telephone = json_decode($fournisseur_actuel->phone[0], true);
+        $telephones = json_decode($fournisseur_actuel->phone, true);
+        $telephone = $telephones[1];
         
 
             $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
+
+            Log::debug($telephone);
         
 
         
@@ -104,11 +107,16 @@ class FournisseursController extends Controller
             $fournisseur = new Fournisseur($request->all());
             Log::debug($fournisseur);
 
+            Log::debug('a');
+
             $fournisseur['postCode'] = trim($request['postCode']);
 
             Log::debug(trim($request['postCode']));
 
-            $fournisseur['personneContact'] = "ah";
+            $fournisseur['personneContact'] = json_encode($request['personneContact']);
+
+            $fournisseur['phone'] = json_encode($request['phone']);
+
             $fournisseur['unspsc'] = [$request['unspsc']];
 
             $fournisseur['region'] = $request['region'];
@@ -300,12 +308,11 @@ class FournisseursController extends Controller
     {
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
 
-        $telephone = json_decode($fournisseur_actuel->phone[0], true);
 
         $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
 
 
-        return view('Fournisseurs.Modification', compact('fournisseur_actuel', 'telephone', 'unspsc'));
+        return view('Fournisseurs.Modification', compact('fournisseur_actuel', 'unspsc'));
     }
 
     public function fichierDelete()
@@ -343,7 +350,7 @@ class FournisseursController extends Controller
             return redirect()->route('fournisseur.accueil')->with('message', "Modification de " . $fournisseur->name . " réussi!");
         } catch (\Throwable $e) {
             Log::debug($e);
-            return redirect()->route('Fournisseurs.dossier')->withErrors(["la modification n'a pas fonctionné"]);
+            return redirect()->route('Fournisseurs.accueil')->withErrors(["la modification n'a pas fonctionné"]);
         }
     }
 

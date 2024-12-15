@@ -34,7 +34,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.2']),
             'password' => Hash::make('rona'),
             'raisonRefus' => null,
-            'personneContact' => 'Directeur',
+            'personneContact' => json_encode('Directeur'),
             'statut'=> 'A',
         ]);
 
@@ -56,7 +56,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.3', '1.2']),
             'password' => Hash::make('ford'),
             'raisonRefus' => null,
-            'personneContact' => 'Directeur',
+            'personneContact' => json_encode('Directeur'),
             'statut'=> 'A',
 
         ]);
@@ -83,7 +83,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.4', '1.5']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Clement Désilets',
+            'personneContact' => json_encode('Clement Désilets'),
             'statut' => 'A',
         ]);
         
@@ -110,7 +110,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.6', '1.7']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Phoebe Maltais',
+            'personneContact' => json_encode('Phoebe Maltais'),
             'statut' => 'A',
         ]);
         
@@ -135,7 +135,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.2']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Miro Petit',
+            'personneContact' => json_encode('Miro Petit'),
             'statut' => 'A',
         ]);
         
@@ -158,7 +158,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.2', '1.3']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Joud Kirouac',
+            'personneContact' => json_encode('Joud Kirouac'),
             'statut'=> 'R',
         ]);
         
@@ -181,7 +181,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.4', '1.5']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Rose Munger',
+            'personneContact' => json_encode('Rose Munger'),
             'statut'=> 'AT',
         ]);
         
@@ -204,7 +204,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.2', '1.6']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Norah Bouchard',
+            'personneContact' => json_encode('Norah Bouchard'),
             'statut'=> 'AT',
         ]);
         
@@ -227,7 +227,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.8']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'N/A',
+            'personneContact' => json_encode('N/A'),
             'statut'=> 'AT',
         ]);
         
@@ -250,7 +250,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1']),
             'password' => Hash::make('Vst1234%'),
             'raisonRefus' => null,
-            'personneContact' => 'Responsable des ventes',
+            'personneContact' => json_encode('Responsable Des Ventes'),
             'statut'=> 'A',
         ]);
         
@@ -273,7 +273,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1']),
             'password' => Hash::make('Auto1234%'),
             'raisonRefus' => null,
-            'personneContact' => 'Technicien principal',
+            'personneContact' => json_encode('Technicien Principal'),
             'statut'=> 'A',
         ]);
         
@@ -296,7 +296,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.2']),
             'password' => Hash::make('Enviro1234%'),
             'raisonRefus' => null,
-            'personneContact' => 'Coordonnateur des projets',
+            'personneContact' => json_encode('Coordonateur Des Projets'),
             'statut'=> 'AR',
         ]);
         
@@ -319,7 +319,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1']),
             'password' => Hash::make('Securite1234%'),
             'raisonRefus' => null,
-            'personneContact' => 'Directeur des opérations',
+            'personneContact' => json_encode('Directeur des Opérations'),
             'statut'=> 'AT',
         ]);
         
@@ -342,7 +342,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1']),
             'password' => Hash::make('Lumos1234%'),
             'raisonRefus' => null,
-            'personneContact' => 'Chef de produit',
+            'personneContact' => json_encode('Chef de Produit'),
             'statut'=> 'R',
         ]);
         

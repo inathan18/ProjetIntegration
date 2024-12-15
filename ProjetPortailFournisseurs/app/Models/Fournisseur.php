@@ -46,6 +46,7 @@ class Fournisseur extends Authenticatable implements MustVerifyEmail
         'files' => 'array',
         'unspsc' => 'array',
         'typesRbq' => 'array',
+        'personneContact' => 'array',
         'raisonRefus' => 'encrypted'
 
     ];

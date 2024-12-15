@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('neq', 100)->nullable()->unique();
             $table->string('rbq', 100)->nullable();
             $table->json('typesRbq')->nullable();
-            $table->string('personneContact', 100);
+            $table->json('personneContact');
             $table->timestamps();
             $table->text('raisonRefus')->nullable();
             $table->string('password', 255);

@@ -32,7 +32,6 @@ session_start();
                             <div class="nav-link step0 col-12 border ml-2" style="border-radius: 25px; color:black;">Entreprise</div>
                             <div class="nav-link step1 col-12 border ml-2" style="border-radius: 25px; color:black;">Contact</div>
                             <div class="nav-link step2 col-12 border ml-2" style="border-radius: 25px; color:black;">UNSPSC</div>
-                            <div class="nav-link step3 col-12 border ml-2" style="border-radius: 25px; color:black;">Fichiers</div>
                             <div class="nav-link step4 col-12 border ml-2" style="border-radius: 25px; color:black;">Compte</div>
                         </div>
 
@@ -147,7 +146,7 @@ session_start();
                                             <label class="beaulabel" for="phone1">Téléphone : </label>
                                             <div id="PhonePersonnel">
                                                 <div class="phone-number-container col-12" style="margin-top: 10px;">
-                                                    <select name="phone[]" class="phone">
+                                                    <select name="personneContact[]" class="phone">
                                                         <option value="Bureau">Bureau</option>
                                                         <option value="Domicile">Domicile</option>
                                                         <option value="Cellulaire">Cellulaire</option>
@@ -155,7 +154,7 @@ session_start();
                                                     <input type="text" placeholder="xxx-xxx-xxxx" name="personneContact[]">
                                                 </div>
                                                 <div class="phone-number-container col-12" style="margin-top: 10px;">
-                                                    <select name="phone[]" style="" class="phone">
+                                                    <select name="personneContact[]" class="phone">
                                                         <option value="Bureau">Bureau</option>
                                                         <option value="Domicile">Domicile</option>
                                                         <option value="Cellulaire">Cellulaire</option>
@@ -165,8 +164,8 @@ session_start();
                                             </div>
                                         </div>
                                         <div class="p-3 col-4">
-                                            <label class="beaulabel" for="email">Courriel : </label>
-                                            <input class="form-control" type="email" id="email" name="personneContact[]">
+                                            <label class="beaulabel" for="personneContact[]">Courriel : </label>
+                                            <input class="form-control" type="email" id="emailContact" name="personneContact[]">
                                         </div>
                                         
                                     </div>
@@ -185,15 +184,6 @@ session_start();
                                     <input class="form-control" type="text" id="unspsc" name="unspsc">
                                 </div>
 
-                            </div>
-
-                            <div class="form-section">
-                                <div class="col-12 text-center V3R-BleuFonce" style="color:white; border-radius: 20px; padding-bottom: 2px; padding-top: 2px;">
-                                    <h1>Fichiers</h1>
-                                </div>
-                                <div class="form-group col-6">
-                                    <input type="file" accept=" .pdf, .png, .txt, .docx " class="form-control-file" id="file" name="file[]" style="color:white;" multiple>
-                                </div>
                             </div>
 
                             <div class="form-section">
@@ -264,9 +254,6 @@ session_start();
             const step = document.querySelector('.step' + index);
             step.style.backgroundColor = "#003399";
             step.style.color = "white";
-
-
-
         }
 
 
