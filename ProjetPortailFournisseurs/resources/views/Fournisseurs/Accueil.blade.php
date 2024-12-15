@@ -131,6 +131,10 @@
                 </div>
                 <div class="card-content">
 
+                <p> Contact 1 : <br> {{$PersonnesContact[0]}} </p><hr>
+
+                <p> Compte : <br> {{count($PersonnesContact)}} </p><hr>
+
                 </div>
                 </div>
             </div>

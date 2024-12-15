@@ -35,19 +35,19 @@ class FournisseursController extends Controller
     {
         $fournisseurs = Fournisseur::all();
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
+
         $telephones = json_decode($fournisseur_actuel->phone, true);
         $telephone = $telephones[1];
-        
+        Log::debug($telephone);
 
-            $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
+        $PersonnesContact = json_decode($fournisseur_actuel->personneContact, true);
+        Log::debug($PersonnesContact);
 
-            Log::debug($telephone);
-        
-
+        $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
         
         $fichier = $this->IniFichier($fournisseur_actuel);
 
-        return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'unspsc', 'fichier'));
+        return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'PersonnesContact', 'unspsc', 'fichier'));
     }
 
 
