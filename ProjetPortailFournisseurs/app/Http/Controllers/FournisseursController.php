@@ -167,7 +167,7 @@ class FournisseursController extends Controller
 
             $fournisseur['phone'] = json_encode($request['phone']);
 
-            $fournisseur['unspsc'] = [$request['unspsc']];
+            $fournisseur['unspsc'] = $request->input('unspscs', []);
 
             $fournisseur['region'] = $request['region'];
             $fournisseur['statut'] = "AT";
@@ -285,11 +285,38 @@ class FournisseursController extends Controller
         return view('GestionFournisseurs.editFiche', compact('fournisseur'));
     }
 
+    public function modifierEtatFournisseur(Request $request, $id){
+
+        $fournisseur = Fournisseur::findOrFail($id);
+
+        $request->validate([
+            'raison' => $request->input('statut') === 'R' ? 'required|string' : 'nullable|string',
+        ]);
+        $fournisseur->statut = $request->input('statut');
+
+            // Si l'état est refusé, stocker la raison du refus
+    if ($fournisseur->statut == 'R') {
+        $fournisseur->raisonRefus = $request->input('raison');
+    } else {
+        $fournisseur->raisonRefus = null;
+    }
+
+    if($fournisseur->isDirty('statut')){
+        event(new StatusChanged($fournisseur) );
+    }
+    else if($fournisseur->isDirty()){
+        event(new AccountModified($fournisseur));
+    }
+    $fournisseur->save();
+    return redirect()->route('fournisseurs.showFiche', ['id' => $fournisseur->id])
+                     ->with('success', 'Les informations ont été modifiées avec succès');
+    }
+
 
     public function modifierFournisseur(Request $request, $id)
 {
     $fournisseur = Fournisseur::findOrFail($id);
-
+    //Log::debug($request);
     
     // Validation des données
     $request->validate([

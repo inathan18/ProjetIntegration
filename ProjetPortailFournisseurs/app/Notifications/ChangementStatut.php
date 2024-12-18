@@ -62,7 +62,7 @@ class ChangementStatut extends Notification
                 $mail->line('Nouveau statut: Refusé');
             }
         
-        $mail->action('Accédez à mon dossier', url('/fournisseur/monDossier'));
+        $mail->action('Accédez à mon dossier', url('/fournisseur/accueil'));
         //$mail->line('Merci de votre collaboration!');
         $mail->line($line2);
         return $mail;
