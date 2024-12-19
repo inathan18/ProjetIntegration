@@ -200,6 +200,7 @@
 <div class="col-12">
     <div class="text-center">
     <a href="{{route('Fournisseurs.edit')}}" class="btn align-self-center" style="background-color: #FFFFFF; border-color: black; color:black;"> Modifier les informations </a>
+    <a href="{{route('Fournisseurs.editFinancialInformation')}}" class="btn align-self-center" style="background-color: #FFFFFF; border-color: black; color:black;"> Modifier ou ajouter les informations financières </a>
     </div>
 </div>
 </div>

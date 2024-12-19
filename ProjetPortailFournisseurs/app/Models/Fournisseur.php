@@ -31,6 +31,7 @@ class Fournisseur extends Authenticatable implements MustVerifyEmail
         'password',
         'personneContact',
         'statut',
+        'financial_information_id',
 
     ];
 
@@ -50,6 +51,10 @@ class Fournisseur extends Authenticatable implements MustVerifyEmail
         'raisonRefus' => 'encrypted'
 
     ];
+
+    public function financialInformation(){
+        return $this->hasOne(FinancialInformation::class);
+    }
 }
 
 
