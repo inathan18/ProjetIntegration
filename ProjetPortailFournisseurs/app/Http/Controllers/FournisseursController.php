@@ -19,6 +19,7 @@ use App\Events\AccountCreated;
 use App\Events\StatusChanged;
 
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Constraint\Count;
 
 class FournisseursController extends Controller
 {
@@ -480,11 +481,15 @@ class FournisseursController extends Controller
     {
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
 
+        $PersonnesContact = json_decode($fournisseur_actuel->personneContact, true);
+
+        $Count = Count($PersonnesContact);
+
 
         $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
 
 
-        return view('Fournisseurs.Modification', compact('fournisseur_actuel', 'unspsc'));
+        return view('Fournisseurs.Modification', compact('fournisseur_actuel', 'PersonnesContact', 'Count', 'unspsc'));
     }
 
     public function fichierDelete()
@@ -511,7 +516,7 @@ class FournisseursController extends Controller
         {
             $oldData = $fournisseur->only(['personneContact', 'website']);
             $fournisseur->update([
-                'personneContact' => $request->personneContact,
+                'personneContact' => json_encode($request->personneContact),
                 'website' => $request->website,
 
             ]);
