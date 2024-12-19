@@ -21,7 +21,6 @@
 </head>
 <body class="@yield('body')">
     <main>
-        @include("partials.navbarUsager") 
 
         @yield("contenu")
     </main>

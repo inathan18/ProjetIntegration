@@ -29,7 +29,7 @@ class RechercheUNSPSC extends Component
     public $selectedUnspscs = [];
     public $filterCategory = '';
     public $categories = [];
-    public $maxResults = 50;
+    public $maxResults = 5;
     public $showDetails = false;
     public $selectedDetailCode = null;
 
@@ -86,7 +86,7 @@ class RechercheUNSPSC extends Component
             $this->selectedUnspscs[] = $code;
         }
     }
-    
+
     
 
     public function mount()

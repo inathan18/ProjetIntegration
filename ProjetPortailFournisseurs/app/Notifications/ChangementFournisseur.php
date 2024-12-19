@@ -56,7 +56,7 @@ class ChangementFournisseur extends Notification
                     ->subject($subject)
                     //->line('Un modification a été effectué sur votre profil fournisseur.')
                     ->line($line1)
-                    ->action('Accédez à mon dossier', url('/fournisseur/monDossier'))
+                    ->action('Accédez à mon dossier', url('/fournisseur/accueil'))
                     //->line('Merci de votre collaboration!');
                     ->line($line2);
                     

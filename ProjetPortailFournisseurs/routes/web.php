@@ -23,6 +23,8 @@ use App\Livewire\Recherche;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsAuthorized;
 
+use App\Http\Middleware\IsFournisseur;
+
 // Route pour Usagers
 
 Route::get('/usagers/connexion', 
@@ -40,14 +42,11 @@ Route::get('/', function () {
 
 // Routes pour fournisseurs
 
-Route::get('/fournisseur/accueil', 
-[FournisseursController::class, 'accueil'])->name('Fournisseurs.accueil');
+Route::get('/fournisseur/inscription', 
+[FournisseursController::class, 'create'])->name('Fournisseurs.creation');
 
-Route::get('/fournisseur/statut', 
-[FournisseursController::class, 'statut'])->name('Fournisseurs.statut');
-
-Route::get('/fournisseur/edit', 
-[FournisseursController::class, 'edit'])->name('Fournisseurs.edit');
+Route::post('/fournisseur/inscription', 
+[FournisseursController::class, 'store'])->name('Fournisseurs.store');
 
 Route::get('/fournisseur/connexionNEQ', 
 [FournisseursController::class, 'connexionNEQ'])->name('Fournisseurs.connexionNEQ');
@@ -55,32 +54,38 @@ Route::get('/fournisseur/connexionNEQ',
 Route::get('/fournisseur/connexion', 
 [FournisseursController::class, 'index'])->name('Fournisseurs.connexion');
 
-Route::get('/fournisseur/inscription', 
-[FournisseursController::class, 'create'])->name('Fournisseurs.creation');
-
-Route::get('/fournisseur/unspsc', 
-[FournisseursController::class, 'unspsc'])->name('Fournisseurs.UNSPSC');
-
-Route::post('/fournisseur/inscription', 
-[FournisseursController::class, 'store'])->name('Fournisseurs.store');
-
-Route::post('/fournisseur/upload', 
-[FournisseursController::class, 'upload'])->name('Fournisseurs.fichier.upload');
-
 Route::post('/loginFournisseur', 
 [FournisseursController::class, 'login'])->name('Fournisseurs.login');
 
-Route::get('/fournisseur/deleteFichier', 
-[FournisseursController::class, 'fichierDelete'])->name('Fournisseurs.fichier.delete');
+Route::post('/logoutFournisseur',
+[FournisseursController::class, 'logout'])->name('Fournisseur.logout');
 
-Route::get('/fournisseur/monDossier', 
-[FournisseursController::class, 'show'])->name('Fournisseurs.dossier');
 
-Route::get('/fournisseur/modification', 
-[FournisseursController::class, 'edit'])->name('Fournisseurs.edit');
+Route::middleware([IsFournisseur::class])->group(function () {
+    Route::get('/fournisseur/accueil', 
+    [FournisseursController::class, 'accueil'])->name('Fournisseurs.accueil');
 
-Route::patch('/fournisseur/{fournisseur}/modification', 
-[FournisseursController::class, 'update'])->name('Fournisseurs.update');
+    Route::get('/fournisseur/edit', 
+    [FournisseursController::class, 'edit'])->name('Fournisseurs.edit');
+
+    Route::get('/fournisseur/inscriptionRBQ', 
+    [FournisseursController::class, 'createRBQ'])->name('Fournisseurs.creationRBQ');
+
+    Route::get('/fournisseur/unspsc', 
+    [FournisseursController::class, 'unspsc'])->name('Fournisseurs.UNSPSC');
+
+    Route::post('/fournisseur/upload', 
+    [FournisseursController::class, 'upload'])->name('Fournisseurs.fichier.upload');
+
+    Route::get('/fournisseur/deleteFichier', 
+    [FournisseursController::class, 'fichierDelete'])->name('Fournisseurs.fichier.delete');
+
+    Route::get('/fournisseur/modification', 
+    [FournisseursController::class, 'edit'])->name('Fournisseurs.edit');
+
+    Route::patch('/fournisseur/{fournisseur}/modification', 
+    [FournisseursController::class, 'update'])->name('Fournisseurs.update');
+});
 
 //Routes validation courriel
 Route::get('/email/verify', [EmailVerificationController::class, 'show'])->name('verification.notice');
@@ -170,6 +175,7 @@ Route::middleware([IsAdmin::class])->group(function () {
     Route::post('/admin/usagers/add', [AdminsController::class,'storeUser'])->name('Admin.Usager.Store');
     
     Route::get('/admin/parametres', [AdminsController::class, 'parametres'])->name('Admins.Parametres');
+    Route::post('/admin/parametres/updateParameters', [AdminsController::class, 'updateParameters'])->name('Admins.updateParameters');
     
     Route::get('/admin/courriel', [NotificationTemplateController::class, 'showForm'])->name('NotificationTemplate.showForm');
     

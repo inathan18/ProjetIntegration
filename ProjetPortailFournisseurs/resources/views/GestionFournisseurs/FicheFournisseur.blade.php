@@ -183,10 +183,38 @@
         <div class="col-md-6 mb-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Contacts</h5>
-                    <p>{{ $fournisseur->personneContact }}</p>
-                    <p>Email : </p>
-                    <p>Téléphone : </p>
+                @for ($i = 0; $i < count($fournisseur->personnesContact)/6; $i++)
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+
+
+                        <div class="card-container">
+                            <div class="persoCard">
+                                <div class="card-top text-center">
+                                    <h3> Personne Contact {{$i+1}} </h3>
+                                </div>
+                                <div class="card-content">
+
+                                    <p> Contact {{$i+1}} : <br> {{$PersonnesContact[$i *6]}} </p><hr>
+
+                                    <p> {{$PersonnesContact[($i *6)+1] }} : <br>  : {{$PersonnesContact[($i *6)+2] }} </p><hr>
+
+                                    <p> {{$PersonnesContact[($i *6)+3] }} : <br>  : {{$PersonnesContact[($i *6)+4] }} </p><hr>
+
+                                    <p> Courriel:  : <br> {{$PersonnesContact[($i *6)+5]}} </p><hr>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                <div class="col-1"></div>
+                </div>
+            </div>
+        @endfor
                 </div>
             </div>
         </div>

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class IsAdmin
+class IsFournisseur
 {
     /**
      * Handle an incoming request.
@@ -17,11 +17,11 @@ class IsAdmin
     public function handle(Request $request, Closure $next)
     {
         // Vérifie si l'utilisateur connecté a le rôle administrateur
-        if (Auth::guard('usager')->check() && Auth::guard('usager')->user()->role === 'administrateur') {
+        if (Auth::guard('fournisseur')->check()) {
             return $next($request);
         }
 
         // Sinon, redirige vers une page de refus d'accès ou la page de connexion
-        return redirect()->route('Usagers.connexion')->withErrors(['Accès refusé.']);
+        return redirect()->route('Fournisseurs.connexion')->withErrors(['Accès refusé.']);
     }
 }

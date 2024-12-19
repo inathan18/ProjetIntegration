@@ -23,7 +23,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Mauricie (04)',
             'country' => 'Canada',
-            'phone' => json_encode(['8196930855', 'Bureau']),
+            'phone' => json_encode('["Bureau", "8196930855"]'),
             'postCode' => 'g9a6m1',
             'unspsc' => json_encode(['31160000','25101702']),
             'website' => 'rona.ca',
@@ -34,7 +34,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.2']),
             'password' => Hash::make('rona'),
             'raisonRefus' => null,
-            'personneContact' => 'Directeur',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'A',
         ]);
 
@@ -45,7 +45,7 @@ class FournisseursTableSeeder extends Seeder
             'city' => 'Oakville',
             'province' => 'Ontario',
             'country' => 'Canada',
-            'phone' => json_encode(['18005653673', 'Bureau']),
+            'phone' => json_encode('["Bureau", "18005653673"]'),
             'postCode' => 'L6J5E4',
             'unspsc' => json_encode(['25101702']),
             'website' => 'ford.ca',
@@ -56,7 +56,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.3', '1.2']),
             'password' => Hash::make('ford'),
             'raisonRefus' => null,
-            'personneContact' => 'Directeur',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'A',
 
         ]);
@@ -69,7 +69,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Capitale-Nationale (03)',
             'country' => 'Canada',
-            'phone' => json_encode(['18005653673', 'Bureau']),
+            'phone' => json_encode('["Bureau", "18005653673"]'),
             'postCode' => 'G1S3T4',
             'unspsc' => json_encode([
                 '42293122', '42293123', '42293124', '42293125',
@@ -83,7 +83,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.4', '1.5']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Clement Désilets',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut' => 'A',
         ]);
         
@@ -95,7 +95,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Chaudière-Appalaches (12)',
             'country' => 'Canada',
-            'phone' => json_encode(['4186409293', 'Bureau']),
+            'phone' => json_encode('["Bureau", "4186409293"]'),
             'postCode' => 'G5Y7G8',
             'unspsc' => json_encode([
                 '80111708', '80111709', '80111710',
@@ -110,7 +110,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.6', '1.7']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Phoebe Maltais',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut' => 'A',
         ]);
         
@@ -122,7 +122,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Capitale-Nationale (03)',
             'country' => 'Canada',
-            'phone' => json_encode(['18005653673', 'Bureau']),
+            'phone' => json_encode('["Bureau", "18005653673"]'),
             'postCode' => 'G1P1K7',
             'unspsc' => json_encode([
                 '48101801', '48101802', '48101803', '48101804', '48101805'
@@ -135,7 +135,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.2']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Miro Petit',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut' => 'A',
         ]);
         
@@ -147,7 +147,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Estrie (05)',
             'country' => 'Canada',
-            'phone' => json_encode(['4385034820', 'Bureau']),
+            'phone' => json_encode('["Bureau", "4385034820"]'),
             'postCode' => 'J1N3X2',
             'unspsc' => json_encode(['25172802', '25172803', '42201703', '42201704', '42201705', '42201706']),
             'website' => 'www.gestiongotainc.com',
@@ -158,7 +158,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.2', '1.3']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Joud Kirouac',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'R',
         ]);
         
@@ -170,7 +170,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Montréal (06)',
             'country' => 'Canada',
-            'phone' => json_encode(['5794906641', 'Bureau']),
+            'phone' => json_encode('["Bureau", "5794906641"]'),
             'postCode' => 'H4G1K9',
             'unspsc' => json_encode(['41113031', '41113032', '41113033', '42312111', '42312112', '42312113', '41113624', '41113625']),
             'website' => 'www.restaurantpierrettepatate.com',
@@ -181,7 +181,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.4', '1.5']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Rose Munger',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'AT',
         ]);
         
@@ -193,7 +193,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Saguenay--Lac-Saint-Jean (02)',
             'country' => 'Canada',
-            'phone' => json_encode(['5817979493', 'Bureau']),
+            'phone' => json_encode('["Bureau", "5817979493"]'),
             'postCode' => 'G0V1B0',
             'unspsc' => json_encode(['31161612', '31161613', '23101514', '23101515']),
             'website' => 'www.centredelapetiteenfanceles.com',
@@ -204,7 +204,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.2', '1.6']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'Norah Bouchard',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'AT',
         ]);
         
@@ -216,7 +216,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Montréal (06)',
             'country' => 'Canada',
-            'phone' => json_encode(['N/A', 'Bureau']),
+            'phone' => json_encode('["Bureau", "N/A"]'),
             'postCode' => 'N/A',
             'unspsc' => json_encode(['41113624', '41113625']),
             'website' => 'www.rockncrestobarenr.com',
@@ -227,7 +227,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.8']),
             'password' => Hash::make('Abc%123'),
             'raisonRefus' => null,
-            'personneContact' => 'N/A',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'AT',
         ]);
         
@@ -239,7 +239,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Capitale-Nationale (03)',
             'country' => 'Canada',
-            'phone' => json_encode(['4185552931', 'Bureau']),
+            'phone' => json_encode('["Bureau", "4185552931"]'),
             'postCode' => 'G1X4N5',
             'unspsc' => json_encode(['43211501', '43211502', '43211600']),
             'website' => 'vstinc.ca',
@@ -250,7 +250,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1']),
             'password' => Hash::make('Vst1234%'),
             'raisonRefus' => null,
-            'personneContact' => 'Responsable des ventes',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'A',
         ]);
         
@@ -262,7 +262,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Mauricie (04)',
             'country' => 'Canada',
-            'phone' => json_encode(['8196964523', 'Bureau']),
+            'phone' => json_encode('["Bureau", "8196964523"]'),
             'postCode' => 'G9A1J4',
             'unspsc' => json_encode(['25171600', '25171601', '25171602']),
             'website' => 'equipautoaventure.com',
@@ -273,7 +273,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1']),
             'password' => Hash::make('Auto1234%'),
             'raisonRefus' => null,
-            'personneContact' => 'Technicien principal',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'A',
         ]);
         
@@ -285,7 +285,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Outaouais (08)',
             'country' => 'Canada',
-            'phone' => json_encode(['8197703212', 'Bureau']),
+            'phone' => json_encode('["Bureau", "8197703212"]'),
             'postCode' => 'J8X4B9',
             'unspsc' => json_encode(['77101501', '77101502', '77101503']),
             'website' => 'solutionslavoie.com',
@@ -296,7 +296,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1', '1.2']),
             'password' => Hash::make('Enviro1234%'),
             'raisonRefus' => null,
-            'personneContact' => 'Coordonnateur des projets',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'AR',
         ]);
         
@@ -308,7 +308,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Montérégie (10)',
             'country' => 'Canada',
-            'phone' => json_encode(['4504635684', 'Bureau']),
+            'phone' => json_encode('["Bureau", "4504635684"]'),
             'postCode' => 'J4H3A5',
             'unspsc' => json_encode(['46171500', '46171501']),
             'website' => 'reseausecuritaireest.com',
@@ -319,7 +319,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1']),
             'password' => Hash::make('Securite1234%'),
             'raisonRefus' => null,
-            'personneContact' => 'Directeur des opérations',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'AT',
         ]);
         
@@ -331,7 +331,7 @@ class FournisseursTableSeeder extends Seeder
             'province' => 'Québec',
             'region' => 'Montérégie (10)',
             'country' => 'Canada',
-            'phone' => json_encode(['4506557420', 'Bureau']),
+            'phone' => json_encode('["Bureau", "4506557420"]'),
             'postCode' => 'J4B2X6',
             'unspsc' => json_encode(['43222100', '43222200', '43222300']),
             'website' => 'lumos-technologies.com',
@@ -342,7 +342,7 @@ class FournisseursTableSeeder extends Seeder
             'typesRbq' => json_encode(['1.1']),
             'password' => Hash::make('Lumos1234%'),
             'raisonRefus' => null,
-            'personneContact' => 'Chef de produit',
+            'personneContact' => json_encode('["Directeur", "Bureau", "AH", "Bureau2", "AH2", "asd@asd.com"]'),
             'statut'=> 'R',
         ]);
         
