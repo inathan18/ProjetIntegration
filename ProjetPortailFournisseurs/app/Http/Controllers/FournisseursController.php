@@ -212,10 +212,10 @@ class FournisseursController extends Controller
         // Récupérer le fournisseur associé à cet ID
         $fournisseur = Fournisseur::findOrFail($id);
     
-        // Vérification que les données 'unspsc' et 'typesRbq' ne sont pas nulles et sont des tableaux
+        // Vérification que les données 'unspsc', 'typesRbq' et 'personneContact' ne sont pas nulles et sont des tableaux
         $codesUnspsc = is_string($fournisseur->unspsc) ? json_decode($fournisseur->unspsc, true) : ($fournisseur->unspsc ?? []);
         $codesRbq = is_string($fournisseur->typesRbq) ? json_decode($fournisseur->typesRbq, true) : ($fournisseur->typesRbq ?? []);
-    
+        $personnesContact = json_decode($fournisseur->personneContact, true);
         // Charger les données du fichier unspsc.json et typesrbq.json depuis le répertoire public
         $unspscFilePath = public_path('unspsc.json');
         $rbqFilePath = public_path('typesrbq.json');
@@ -268,6 +268,7 @@ class FournisseursController extends Controller
             'fournisseur' => $fournisseur,
             'produitsServices' => $produitsServices,
             'licencesRbq' => $licencesRbq,
+            'personnesContact' => $personnesContact,
         ]);
     }
 
