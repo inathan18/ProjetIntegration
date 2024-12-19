@@ -109,6 +109,48 @@
             </div>
         </div>
 
+        <div class="col-6">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+
+                    <div class="card-container">
+                        <div class="persoCard">
+                            <div class="card-top text-center">
+                                <h3> Informations Financières</h3>
+                            </div>
+                            <div class="card-content">
+                                @if($financialInformation->noTps)
+                                    <p>No TPS : 
+                                        <span>{{$financialInformation->noTps}}</span>
+                                    </p>
+                                    <p>No TVQ : 
+                                        <span>{{$financialInformation->noTvq}}</span>
+                                    </p>
+                                    <p>Condition de paiement : 
+                                        <span>{{$financialInformation->conditionPaiement}}</span>
+                                    </p>
+                                    <p>Devise : 
+                                        <span>{{$financialInformation->devise}}</span>
+                                    </p>
+                                    <p>Mode de communication : 
+                                        <span>{{$financialInformation->modeCommunication}}</span>
+                                    </p>
+                                @else
+                                    <p class="text-danger">
+                                        <i class="fas fa-times-circle"></i> Aucune informations financières fournies
+                                    </p>
+                                @endif
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+
     </div>
 
 </div>
@@ -200,7 +242,10 @@
 <div class="col-12">
     <div class="text-center">
     <a href="{{route('Fournisseurs.edit')}}" class="btn align-self-center" style="background-color: #FFFFFF; border-color: black; color:black;"> Modifier les informations </a>
-    </div>
+    @if($fournisseur_actuel->statut == 'A')
+    <a href="{{route('Fournisseurs.editFinancialInformation')}}" class="btn align-self-center" style="background-color: #FFFFFF; border-color: black; color:black;"> Modifier ou ajouter les informations financières </a>
+    @endif
+</div>
 </div>
 </div>
 

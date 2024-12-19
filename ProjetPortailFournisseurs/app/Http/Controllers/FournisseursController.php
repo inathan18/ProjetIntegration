@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\FournisseurRequest;
 use App\Http\Requests\HistoriqueRequest;
 use App\Models\Fournisseur;
+use App\Models\FinancialInformation;
 use App\Models\Historique;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,7 @@ use App\Events\AccountCreated;
 use App\Events\StatusChanged;
 
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Constraint\Count;
 
 class FournisseursController extends Controller
 {
@@ -36,6 +38,14 @@ class FournisseursController extends Controller
 
         $fournisseurs = Fournisseur::all();
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
+        if (!$fournisseur_actuel->financial_information_id) {
+            // Créer un objet vide si n'existe pas
+            $financialInformation = new FinancialInformation();
+        }
+        else {
+            $financialInformation = FinancialInformation::findOrFail($fournisseur_actuel->financial_information_id);
+        }
+
 
         $codesUnspsc = is_string($fournisseur_actuel->unspsc) ? json_decode($fournisseur_actuel->unspsc, true) : ($fournisseur_actuel->unspsc ?? []);
         $codesRbq = is_string($fournisseur_actuel->typesRbq) ? json_decode($fournisseur_actuel->typesRbq, true) : ($fournisseur_actuel->typesRbq ?? []);
@@ -102,7 +112,7 @@ class FournisseursController extends Controller
         
         $fichier = $this->IniFichier($fournisseur_actuel);
 
-        return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'PersonnesContact', 'produitsServices', 'licencesRbq', 'unspsc', 'fichier'));
+        return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'PersonnesContact', 'produitsServices', 'licencesRbq', 'unspsc', 'fichier', 'financialInformation'));
     }
 
 
@@ -138,6 +148,30 @@ class FournisseursController extends Controller
     public function unspsc(){
         return view('Fournisseurs.UNSPSC');
     }
+    //Enregistrement des informations financières
+    public function storeFinancialInformation(Request $request, Fournisseur $fournisseur) 
+    { 
+        //Log::Debug($request);
+        $fournisseur_actuel = auth()->guard('fournisseur')->user();
+
+
+        
+        $validatedData = $request->validate([ 
+        'noTps' => 'required|string', 
+        'noTvq' => 'required|string',
+        'conditionPaiement' => 'required|string',
+        'devise' => 'required|string', 
+        'modeCommunication' => 'required|string', 
+    ]); 
+    $validatedData['modeCommunication'] = ucfirst($validatedData['modeCommunication']);
+        
+         $financialInformation = FinancialInformation::create($validatedData); 
+         $fournisseur = Fournisseur::find($fournisseur_actuel->id);
+         $fournisseur->financial_information_id = $financialInformation->id;
+         $fournisseur->save();
+         return redirect()->route('Fournisseurs.Accueil')->with('success', 'Les informations financières ont été mises à jour avec succès!');
+}
+         
 
 
     /* Fonction utilisé pour connecter le Fournisseur a son compte */
@@ -211,6 +245,26 @@ class FournisseursController extends Controller
     {
         // Récupérer le fournisseur associé à cet ID
         $fournisseur = Fournisseur::findOrFail($id);
+        if($fournisseur->financial_information_id){
+            $financialInformation = FinancialInformation::findOrFail($fournisseur->financial_information_id);
+        }
+        else {
+            $financialInformation = NULL;
+        }
+        $noTps = '';
+        $noTvq = '';
+        $conditionPaiement = '';
+        $devise = '';
+        $modeCommunication = '';
+        if($financialInformation)
+        {
+            $noTps = $financialInformation->noTps;
+            $noTvq = $financialInformation->noTvq;
+            $conditionPaiement = $financialInformation->conditionPaiement;
+            $devise = $financialInformation->devise;
+            $modeCommunication = $financialInformation->modeCommunication;
+        }
+        
     
         // Vérification que les données 'unspsc', 'typesRbq' et 'personneContact' ne sont pas nulles et sont des tableaux
         $codesUnspsc = is_string($fournisseur->unspsc) ? json_decode($fournisseur->unspsc, true) : ($fournisseur->unspsc ?? []);
@@ -269,6 +323,11 @@ class FournisseursController extends Controller
             'produitsServices' => $produitsServices,
             'licencesRbq' => $licencesRbq,
             'personnesContact' => $personnesContact,
+            'noTps' => $noTps,
+            'noTvq' => $noTvq,
+            'conditionPaiement' => $conditionPaiement,
+            'devise' => $devise,
+            'modeCommunication' => $modeCommunication,
         ]);
     }
 
@@ -334,6 +393,31 @@ class FournisseursController extends Controller
         
         return view('GestionFournisseurs.editFiche', compact('fournisseur'));
     }
+
+    //Page de modification des informations financières
+    public function editFinancialInformation()
+    {
+        try {
+            $fournisseur_actuel = auth()->guard('fournisseur')->user();
+            
+            if (!$fournisseur_actuel->financial_information_id) {
+                // Créer un objet vide si n'existe pas
+                $financialInformation = new FinancialInformation();
+            }
+            else {
+                $financialInformation = FinancialInformation::findOrFail($fournisseur_actuel->financial_information_id);
+            }
+            
+            
+    
+            return view('Fournisseurs.infos-finances', compact('fournisseur_actuel', 'financialInformation'));
+        } catch (\Exception $e) {
+            \Log::error('Erreur des informations financières ' . $e->getMessage());
+            // Prendre en charge l'erreur
+            return redirect()->back()->with('error', 'Impossible de retrouver les informations financières. ');
+        }
+    }
+    
 
     public function modifierEtatFournisseur(Request $request, $id){
 
@@ -435,11 +519,15 @@ class FournisseursController extends Controller
     {
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
 
+        $PersonnesContact = json_decode($fournisseur_actuel->personneContact, true);
+
+        $Count = Count($PersonnesContact);
+
 
         $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
 
 
-        return view('Fournisseurs.Modification', compact('fournisseur_actuel', 'unspsc'));
+        return view('Fournisseurs.Modification', compact('fournisseur_actuel', 'PersonnesContact', 'Count', 'unspsc'));
     }
 
     public function fichierDelete()
@@ -466,7 +554,7 @@ class FournisseursController extends Controller
         {
             $oldData = $fournisseur->only(['personneContact', 'website']);
             $fournisseur->update([
-                'personneContact' => $request->personneContact,
+                'personneContact' => json_encode($request->personneContact),
                 'website' => $request->website,
 
             ]);

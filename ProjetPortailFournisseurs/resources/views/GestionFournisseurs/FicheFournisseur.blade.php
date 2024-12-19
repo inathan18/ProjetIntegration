@@ -314,11 +314,11 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Finances</h5>
-                    <p>TPS : </p>
-                    <p>TVQ : </p>
-                    <p>Conditions de paiement :</p>
-                    <p>Devise : </p>
-                    <p>Mode de communication : </p>
+                    <p>TPS : {{ $noTps }}</p>
+                    <p>TVQ : {{ $noTvq }}</p>
+                    <p>Conditions de paiement : {{ $conditionPaiement }}</p>
+                    <p>Devise : {{ $devise }}</p>
+                    <p>Mode de communication : {{ $modeCommunication }}</p>
                 </div>
             </div>
         </div>
