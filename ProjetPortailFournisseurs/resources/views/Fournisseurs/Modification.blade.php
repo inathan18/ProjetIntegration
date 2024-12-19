@@ -111,6 +111,9 @@
         <button class="btn text-white" style="background-color: #092D74;" type="submit">
             Modifier
         </button>
+        <button class="btn text-white" style="background-color: #092D74;" type="button" onclick="window.history.back();">
+            Retour
+        </button>
 
         </form>
 
