@@ -33,8 +33,13 @@ return new class extends Migration
             $table->timestamps();
             $table->text('raisonRefus')->nullable();
             $table->string('password', 255);
+            $table->unsignedBigInteger('financial_information_id');
             $table->datetime('email_verified_at')->nullable();
             $table->rememberToken();
+            $table->foreign('financial_information_id')->nullable()
+            ->references('id')->on('financial_informations')
+            ->onDelete('cascade')
+            ->nullable();
         });
     }
 

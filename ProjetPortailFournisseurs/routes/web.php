@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Models\Fournisseur;
 use App\Models\Usager;
+use App\Models\FinancialInformation;
 use App\Notifications\BienvenueNotification;
 use App\Notifications\ChangementFournisseur;
 use App\Notifications\NouveauFournisseur;
@@ -82,6 +83,12 @@ Route::middleware([IsFournisseur::class])->group(function () {
 
     Route::get('/fournisseur/modification', 
     [FournisseursController::class, 'edit'])->name('Fournisseurs.edit');
+
+    Route::get('/fournisseur/store-financial-information', 
+    [FournisseursController::class, 'editFinancialInformation'])->name('Fournisseurs.editFinancialInformation');
+
+    Route::patch('/fournisseur/{fournisseur}/store-financial-information', 
+    [FournisseursController::class, 'storeFinancialInformation'])->name('Fournisseurs.storeFinancialInformation');
 
     Route::patch('/fournisseur/{fournisseur}/modification', 
     [FournisseursController::class, 'update'])->name('Fournisseurs.update');

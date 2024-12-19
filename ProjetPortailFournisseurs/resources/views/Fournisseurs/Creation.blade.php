@@ -43,6 +43,7 @@ session_start();
 
         <div class="col-10 p-0" style="height:100%;"> <!-- Section Formulaire -->
 
+
             <div class="card-container" style="height: 95%; padding:20px;">
                 <div class="persoCardInscription">
                     <div class="card-contentInscription">
@@ -55,6 +56,12 @@ session_start();
                                 </div>
 
                                 <div class="row" style="    margin-left: 2%; margin-right: 2%;">
+                                <div>
+        <label for="search-rbq">Recherche RBQ:</label>
+        <input type="text" id="search-rbq" placeholder="Entrer RBQ" />
+    </div>
+
+    <div id="rbq-results" style="margin-top: 20px;"></div>
 
                                     <div class="col-6 FormInscription" style="padding-right: 12px">
                                         <label class="beaulabel" for="name">Nom de l'entreprise : </label>
@@ -178,11 +185,48 @@ session_start();
                                 <div class="col-12 text-center V3R-BleuFonce" style="color:white; border-radius: 20px; padding-bottom: 2px; padding-top: 2px;">
                                     <h1>UNSPSC</h1>
                                 </div>
+                                <div id="unspsc-search-component" class="container mx-auto p-4">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <!-- Champs Recherche -->
+        <div class="mb-4 flex space-x-4">
+            <div class="flex-grow">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Recherche</label>
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Rechercher par code ou description"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+            </div>
+        </div>
 
-                                <div class="col-6 FormInscription">
-                                    <label class="beaulabel" for="city">UNSPSC : </label>
-                                    <input class="form-control" type="text" id="unspsc" name="unspsc">
-                                </div>
+        <div class="grid grid-cols-12 gap-4">
+            <!-- Resultats de la recherche des UNSPSC -->
+            <div class="col-span-8 bg-gray-100 rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-4">Résultats de recherche</h2>
+                <div id="unspsc-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                     <!-- Les UNSPSC sélectionnes apparaissent ici -->
+                </div>
+            </div>
+
+            <!-- Section de selection des UNSPSC -->
+            <div class="col-span-4 bg-gray-100 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold">UNSPSC Sélectionnés</h2>
+                    <button
+                        id="clear-all-btn"
+                        class="text-red-500 hover:text-red-700 text-sm"
+                    >
+                        Tout effacer
+                    </button>
+                </div>
+                <div id="selected-unspscs-list" class="space-y-2">
+                    <!-- Les UNSPSC sélectionnes apparaissent ici -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
                             </div>
 
@@ -285,6 +329,270 @@ session_start();
 
 
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.fournisseur-form');
+    
+    if (!form) {
+        console.error('Form with class "fournisseur-form" not found');
+        return;
+    }
+
+    const searchInput = document.getElementById('search-input');
+    const unspscList = document.getElementById('unspsc-list');
+    const selectedUnspscsList = document.getElementById('selected-unspscs-list');
+    const clearAllBtn = document.getElementById('clear-all-btn');
+
+    const state = {
+        unspscs: [],
+        selectedUnspscs: [],
+        search: '',
+        maxResults: 5,
+        currentPage: 0
+    };
+
+    function updateUnspscInput() {
+        form.querySelectorAll('input[name="unspscs[]"]').forEach(input => input.remove());
+        state.selectedUnspscs.forEach(code => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'unspscs[]';
+            input.value = code;
+            form.appendChild(input);
+        });
+    }
+
+    function toggleSelection(code) {
+        const index = state.selectedUnspscs.indexOf(code);
+        if (index !== -1) {
+            state.selectedUnspscs.splice(index, 1);
+        } else {
+            state.selectedUnspscs.push(code);
+        }
+        
+        renderUnspscs();
+        renderSelectedUnspscs();
+        updateUnspscInput();
+    }
+
+    function renderSelectedUnspscs() {
+        if (!selectedUnspscsList) return;
+
+        selectedUnspscsList.innerHTML = state.selectedUnspscs.map(code => {
+            const unspsc = state.unspscs.find(item => item.codeUnspsc === code);
+            if (!unspsc) return '';
+            
+            return `
+                <div class="bg-white rounded-lg p-3 flex justify-between items-center shadow">
+                    <div class="flex-grow">
+                        <span class="font-bold text-blue-600 mr-2">${unspsc.codeUnspsc}</span>
+                        <span class="text-sm text-gray-700">${unspsc.detailUnspsc.slice(0, 50)}...</span>
+                    </div>
+                    <button type="button" class="ml-2 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full" data-code="${unspsc.codeUnspsc}">
+                        ✕
+                    </button>
+                </div>
+            `;
+        }).join('');
+    }
+
+
+    function filterUnspscs() {
+        return state.unspscs.filter(item => {
+            return !state.search || 
+                item.codeUnspsc.toLowerCase().includes(state.search.toLowerCase()) ||
+                item.detailUnspsc.toLowerCase().includes(state.search.toLowerCase());
+        });
+    }
+
+    function renderUnspscs() {
+        if (!unspscList) return;
+
+        const filteredUnspscs = filterUnspscs();
+        const resultsToShow = filteredUnspscs.slice(0, state.maxResults);
+
+        unspscList.innerHTML = resultsToShow.map(item => {
+            const isSelected = state.selectedUnspscs.includes(item.codeUnspsc);
+            return `
+                <div
+                    class="bg-white rounded-lg shadow p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 ${isSelected ? 'border-2 border-green-500 bg-green-50' : 'border border-gray-200'}"
+                    data-code="${item.codeUnspsc}"
+                >
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-blue-600">${item.codeUnspsc}</span>
+                        ${isSelected ? `
+                            <span class="text-green-500 text-xs">✓</span>
+                        ` : ''}
+                    </div>
+                    <p class="text-sm text-gray-700">${item.detailUnspsc.slice(0, 100)}...</p>
+                    <div class="text-xs text-gray-500 mt-2">${item.categoryDesc || ''}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function loadUnspscs() {
+        try {
+            const response = await fetch('/unspsc.json');
+            state.unspscs = await response.json();
+            renderUnspscs();
+        } catch (error) {
+            console.error('Error loading UNSPSC data:', error);
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            state.search = e.target.value;
+            renderUnspscs();
+        });
+    }
+
+    if (unspscList) {
+        unspscList.addEventListener('click', (e) => {
+            const codeElement = e.target.closest('[data-code]');
+            if (codeElement) {
+                const code = codeElement.getAttribute('data-code');
+                toggleSelection(code);
+            }
+        });
+    }
+
+    if (selectedUnspscsList) {
+        selectedUnspscsList.addEventListener('click', (e) => {
+            const button = e.target.closest('button[data-code]');
+            if (button) {
+                const code = button.getAttribute('data-code');
+                toggleSelection(code);
+            }
+        });
+    }
+
+    if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', () => {
+            state.selectedUnspscs = [];
+            renderSelectedUnspscs();
+            renderUnspscs();
+            updateUnspscInput();
+        });
+    }
+
+    window.toggleSelection = toggleSelection;
+    loadUnspscs();
+});
+document.addEventListener("DOMContentLoaded", () => {
+    const validationRBQ = {
+        searchInput: '',
+        rbqs: null,
+        typesRbq: [],
+        async fetchData(searchQuery) {
+            if (!searchQuery) {
+                this.rbqs = null;
+                this.updateView();
+                return;
+            }
+
+            try {
+                const url = `https://www.donneesquebec.ca/recherche/api/3/action/datastore_search?resource_id=32f6ec46-85fd-45e9-945b-965d9235840a&q=${encodeURIComponent(searchQuery)}`;
+                const response = await fetch(url, {
+                    headers: { 'Accept-Language': 'fr' }
+                });
+                const json = await response.json();
+
+                this.rbqs = json.result.records.slice(0, 1); 
+                this.typesRbq = this.rbqs.map(record => record['Sous-categories']);
+                this.updateView();
+            } catch (error) {
+                console.error("Error fetching RBQ data:", error);
+            }
+        },
+        updateView() {
+            const resultsContainer = document.getElementById('rbq-results');
+            resultsContainer.innerHTML = '';
+
+            if (this.rbqs && this.rbqs.length > 0) {
+                const record = this.rbqs[0]; 
+                const div = document.createElement('div');
+                div.className = 'rbq-item';
+                div.textContent = `${record['Nom de l\'intervenant']} (${record['Numero de licence']})`;
+                div.dataset.index = 0; 
+                div.addEventListener('click', () => this.handleItemClick(div, record));
+
+                resultsContainer.appendChild(div);
+            } else {
+                resultsContainer.textContent = "No results found.";
+            }
+        },
+        handleItemClick(div, record) {
+            
+            this.clearSelection(); 
+            div.classList.add('selected'); 
+
+            
+            supplierForm.prefillData(record, this.typesRbq[0]);
+        },
+        clearSelection() {
+            const allItems = document.querySelectorAll('.rbq-item');
+            allItems.forEach(item => {
+                item.classList.remove('selected'); 
+            });
+        }
+    };
+
+    const supplierForm = {
+        formFields: {
+            name: document.getElementById('name'),
+            address: document.getElementById('address'),
+            email: document.getElementById('email'),
+            neq: document.getElementById('neq'),
+            city: document.getElementById('city'),
+            region: document.getElementById('region'),
+            postCode: document.getElementById('postCode'),
+            website: document.getElementById('website'),
+            status: document.getElementById('status')
+        },
+prefillData(selected, typesRbq) {
+    
+    const municipality = selected['Municipalite'] ? selected['Municipalite'].toLowerCase() : '';
+    const address = selected['Adresse'] || '';
+    
+    let addressParts = [];
+    if (municipality) {
+        
+        addressParts = address.toLowerCase().split(municipality);
+    }
+
+    
+    this.formFields.name.value = selected['Nom de l\'intervenant'] || '';
+    this.formFields.address.value = addressParts[0] || ''; 
+    this.formFields.email.value = selected['Courriel'] || '';
+    this.formFields.neq.value = selected['NEQ'] || '';
+    this.formFields.city.value = selected['Municipalite'] || '';
+    this.formFields.region.value = `${selected['Region administrative']} (${selected['Code de region administrative']})` || '';
+    
+    
+    const postcodePart = selected['Adresse'] && selected['Adresse'].split('CANADA ')[1];
+    this.formFields.postCode.value = postcodePart ? postcodePart.trim() : '';
+
+    
+    const websiteDomain = selected['Courriel'] ? selected['Courriel'].split('@')[1] : '';
+    this.formFields.website.value = websiteDomain ? `www.${websiteDomain}` : '';
+
+    this.formFields.status.value = selected['Statut de la licence'] || '';
+
+    
+    console.log("RBQ Types:", typesRbq);
+}
+
+    };
+
+
+    document.getElementById('search-rbq').addEventListener('input', (event) => {
+        validationRBQ.searchInput = event.target.value;
+        validationRBQ.fetchData(validationRBQ.searchInput);
+    });
+});
+
 </script>
 
 <script src="../localisation.js"></script>

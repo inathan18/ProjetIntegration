@@ -24,5 +24,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FournisseursTableSeeder::class);
         $this->call(HistoriqueEtatsSeeder::class);
         $this->call(ParametersSeeder::class);
+        $this->call(NotificationTemplateSeeder::class);
     }
 }
