@@ -58,7 +58,7 @@ session_start();
                                 <div class="row" style="    margin-left: 2%; margin-right: 2%;">
                                 <div>
         <label for="search-rbq">Recherche RBQ:</label>
-        <input type="text" id="search-rbq" placeholder="Enter NEQ or other details" />
+        <input type="text" id="search-rbq" placeholder="Entrer RBQ" />
     </div>
 
     <div id="rbq-results" style="margin-top: 20px;"></div>
