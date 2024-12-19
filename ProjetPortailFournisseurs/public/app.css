@@ -53,6 +53,10 @@ html, body,main {
     padding-top: 3%;
     padding-bottom: 3%;
 }
+.rbq-item.selected {
+    background-color: #d3e5ff; /* Light blue background */
+    border: 2px solid #007bff; /* Blue border */
+}
 
 .Standard-logo {
     position: relative; 
