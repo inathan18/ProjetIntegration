@@ -159,14 +159,20 @@ class FournisseursController extends Controller
 
             Log::debug('a');
 
-            $fournisseur['postCode'] = trim($request['postCode']);
+            $fournisseur['postCode'] = strtoupper(trim($request['postCode']));
 
             Log::debug(trim($request['postCode']));
 
             $fournisseur['personneContact'] = json_encode($request['personneContact']);
 
-            $fournisseur['phone'] = json_encode($request['phone']);
-
+            $fournisseur['phone'] = json_encode(
+                array_map(
+                    function ($phone) {
+                        return preg_replace('/\D/', '', $phone);
+                    },
+                    $request['phone']
+                )
+            );
             $fournisseur['unspsc'] = $request->input('unspscs', []);
 
             $fournisseur['region'] = $request['region'];
