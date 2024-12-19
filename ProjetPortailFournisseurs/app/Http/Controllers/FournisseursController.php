@@ -289,7 +289,45 @@ class FournisseursController extends Controller
             'historique' => $historique,
         ]);
     }
+
     
+    public function desactiverFiche(Request $request, $id)
+    {
+        // Valider les données
+        $request->validate([
+            'nouvel_etat' => 'required|string|in:A,D',
+        ]);
+    
+        // Trouver le fournisseur
+        $fournisseur = Fournisseur::findOrFail($id);
+    
+        // Si le statut doit passer à "D" (désactivé)
+        if ($request->input('nouvel_etat') == 'D') {
+            // Supprimer les fichiers si le statut passe à "D"
+            if ($fournisseur->statut != 'D') {
+                $this->DelFichier($fournisseur);
+            }
+    
+            // Mettre à jour le statut à "D"
+            $fournisseur->statut = 'D';
+        }
+    
+        // Si le statut doit passer à "A" (activé)
+        elseif ($request->input('nouvel_etat') == 'A') {
+            // Mettre à jour le statut à "A"
+            $fournisseur->statut = 'A';
+        }
+    
+        // Sauvegarder les modifications dans la base de données
+        $fournisseur->save();
+    
+        // Retourner avec un message de succès
+        return redirect()->back()->with('success', 'Le statut du fournisseur a été mis à jour avec succès.');
+    }
+    
+    
+    
+
     public function editFiche($id)
     {
         $fournisseur = Fournisseur::findOrFail($id);
@@ -571,6 +609,7 @@ class FournisseursController extends Controller
         } catch (\Throwable $e) {
         }
     }
+    
 
     //--------------------------------Fonction pour alèger le code-------------------------------------------------
 

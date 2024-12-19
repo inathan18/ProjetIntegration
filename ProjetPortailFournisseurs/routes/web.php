@@ -161,6 +161,8 @@ Route::middleware([IsAuthorized::class])->group(function () {
     
     Route::put('/fournisseurs/{id}/modifieretat', [FournisseursController::class, 'modifierEtatFournisseur'])->name('fournisseurs.modifierEtatFournisseur');
 
+    Route::put('/fournisseurs/{id}/changer-statut', [FournisseursController::class, 'desactiverFiche'])->name('fournisseurs.desactiverFiche');
+
 });
 
 

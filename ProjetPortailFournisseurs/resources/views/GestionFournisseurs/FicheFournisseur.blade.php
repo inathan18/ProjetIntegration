@@ -29,6 +29,7 @@
                         @elseif ($fournisseur->statut == 'AT') text-warning
                         @elseif ($fournisseur->statut == 'AR') text-primary
                         @elseif ($fournisseur->statut == 'R') text-danger
+                        @elseif ($fournisseur->statut == 'D') text-muted
                         @endif">
                         
                         @if ($fournisseur->statut == 'A')
@@ -47,6 +48,8 @@
                                     </span>
                                 @endif
                             @endif
+                        @elseif ($fournisseur->statut == 'D')
+                            <i class="fas fa-ban"></i> Désactivée
                         @else
                             <i class="fas fa-info-circle"></i> Statut inconnu
                         @endif
@@ -58,7 +61,49 @@
                         <button type="button" class="btn btn-warning mt-3" id="btnChangeEtat">
                             Modifier l'état
                         </button>
-                        
+
+                       <!-- Bouton pour désactiver ou réactiver la fiche -->
+                        @if ($fournisseur->statut === 'D')
+                            <!-- Bouton pour réactiver -->
+                            <button type="button" class="btn btn-success mt-3" id="btnReactiverFiche" data-bs-toggle="modal" data-bs-target="#modalConfirmation">
+                                Réactiver la fiche
+                            </button>
+                        @else
+                            <!-- Bouton pour désactiver -->
+                            <button type="button" class="btn btn-danger mt-3" id="btnDesactiverFiche" data-bs-toggle="modal" data-bs-target="#modalConfirmation">
+                                Désactiver la fiche
+                            </button>
+                        @endif
+
+                        <!-- Fenêtre de confirmation -->
+                        <div id="modalConfirmation" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Confirmation</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        @if ($fournisseur->statut === 'D')
+                                            <p>Êtes-vous sûr de vouloir réactiver cette fiche ?</p>
+                                        @else
+                                            <p>Êtes-vous sûr de vouloir désactiver cette fiche ? Les fichiers joints seront supprimés.</p>
+                                        @endif
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <form action="{{ route('fournisseurs.desactiverFiche', ['id' => $fournisseur->id]) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="nouvel_etat" value="{{ $fournisseur->statut === 'D' ? 'A' : 'D' }}">
+                                            <button type="submit" class="btn {{ $fournisseur->statut === 'D' ? 'btn-success' : 'btn-danger' }}">
+                                                Confirmer
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Formulaire caché -->
                         <div id="formChangeEtat" style="display: none;">
                             <form action="{{ route('fournisseurs.modifierEtatFournisseur', ['id' => $fournisseur->id]) }}" method="POST">
@@ -73,6 +118,7 @@
                                         <option value="AT" @if($fournisseur->statut == 'AT') selected @endif>En attente</option>
                                         <option value="AR" @if($fournisseur->statut == 'AR') selected @endif>À réviser</option>
                                         <option value="R" @if($fournisseur->statut == 'R') selected @endif>Refusée</option>
+                                        <option value="D" @if($fournisseur->statut == 'D') selected @endif>Désactivée</option>
                                     </select>
                                 </div>
 
@@ -325,6 +371,18 @@
             formChangeEtat.style.display = 'none';
         }
     });
+
+    // Bouton désactiver fiche
+    document.getElementById('btnDesactiverFiche').addEventListener('click', function () {
+        var modal = new bootstrap.Modal(document.getElementById('modalConfirmation'));
+        modal.show();
+    });
+
+    document.addEventListener('hidden.bs.modal', function (event) {
+                                document.body.classList.remove('modal-open');
+                                document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+                            });
+
 });
 
 </script>

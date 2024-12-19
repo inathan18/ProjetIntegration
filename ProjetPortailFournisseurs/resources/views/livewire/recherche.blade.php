@@ -118,20 +118,26 @@
                 <tbody>
                     @foreach ($fournisseurs as $fournisseur)
                     <tr>
-                        <td>
-                            <span class="text-{{ $fournisseur->statut == 'AT' ? 'warning' : 
-                                ($fournisseur->statut == 'A' ? 'success' : ($fournisseur->statut == 'R' ? 'danger' : 'secondary')) }}">
-                                @if ($fournisseur->statut == 'AT')
-                                    <i class="fas fa-hourglass-half"></i>
-                                @elseif ($fournisseur->statut == 'A')
-                                    <i class="fas fa-check-circle"></i>
-                                @elseif ($fournisseur->statut == 'R')
-                                    <i class="fas fa-times-circle"></i>
-                                @else
-                                    <i class="fas fa-info-circle"></i>
-                                @endif
-                            </span>
-                        </td>
+                    <td>
+                        <span class="text-{{ 
+                            $fournisseur->statut == 'AT' ? 'warning' : 
+                            ($fournisseur->statut == 'A' ? 'success' : 
+                            ($fournisseur->statut == 'R' ? 'danger' : 
+                            ($fournisseur->statut == 'D' ? 'muted' : 'secondary'))) }}">
+                            @if ($fournisseur->statut == 'AT')
+                                <i class="fas fa-hourglass-half"></i>
+                            @elseif ($fournisseur->statut == 'A')
+                                <i class="fas fa-check-circle"></i>
+                            @elseif ($fournisseur->statut == 'R')
+                                <i class="fas fa-times-circle"></i>
+                            @elseif ($fournisseur->statut == 'D')
+                                <i class="fas fa-ban"></i>
+                            @else
+                                <i class="fas fa-info-circle"></i>
+                            @endif
+                        </span>
+                    </td>
+
 
                         <td>{{ $fournisseur->name }}</td>
                         <td>{{ $fournisseur->city }}</td>
