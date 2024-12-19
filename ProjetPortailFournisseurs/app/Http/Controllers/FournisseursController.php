@@ -92,8 +92,13 @@ class FournisseursController extends Controller
 
         $PersonnesContact = json_decode($fournisseur_actuel->personneContact, true);
         Log::debug($PersonnesContact);
-
-        $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
+        if($fournisseur_actuel->unspsc){
+            $unspsc = json_decode($fournisseur_actuel->unspsc[0], true);
+        }
+        else {
+            $unspsc = NULL;
+        }
+        
         
         $fichier = $this->IniFichier($fournisseur_actuel);
 

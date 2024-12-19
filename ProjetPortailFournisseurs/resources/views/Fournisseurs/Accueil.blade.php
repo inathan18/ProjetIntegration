@@ -176,11 +176,11 @@
 
                                     <p> Contact {{$i+1}} : <br> {{$PersonnesContact[$i *6]}} </p><hr>
 
-                                    <p> {{$PersonnesContact[($i *6)+1] }} : <br>  : {{$PersonnesContact[($i *6)+2] }} </p><hr>
+                                    <p> {{$PersonnesContact[($i *6)+1] }} : <br>   {{$PersonnesContact[($i *6)+2] }} </p><hr>
 
-                                    <p> {{$PersonnesContact[($i *6)+3] }} : <br>  : {{$PersonnesContact[($i *6)+4] }} </p><hr>
+                                    <p> {{$PersonnesContact[($i *6)+3] }} : <br>   {{$PersonnesContact[($i *6)+4] }} </p><hr>
 
-                                    <p> Courriel:  : <br> {{$PersonnesContact[($i *6)+5]}} </p><hr>
+                                    <p> Courriel:   <br> {{$PersonnesContact[($i *6)+5]}} </p><hr>
 
 
                                 </div>

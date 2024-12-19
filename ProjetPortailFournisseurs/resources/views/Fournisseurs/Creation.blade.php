@@ -336,106 +336,17 @@ session_start();
     const selectedUnspscsList = document.getElementById('selected-unspscs-list');
     const clearAllBtn = document.getElementById('clear-all-btn');
 
-    let unspscs = [];
-    let selectedUnspscs = [];
-    let search = '';
-    let maxResults = 5;
-    let currentPage = 0;
+    const state = {
+        unspscs: [],
+        selectedUnspscs: [],
+        search: '',
+        maxResults: 5,
+        currentPage: 0
+    };
 
-    // Load UNSPSCs data
-    async function loadUnspscs() {
-        try {
-            const response = await fetch('/unspsc.json'); // Update this path
-            const data = await response.json();
-            unspscs = data;
-            renderUnspscs();
-        } catch (error) {
-            console.error('Error loading UNSPSC data:', error);
-        }
-    }
-
-    // Filter and render UNSPSCs based on search term
-    function filterUnspscs() {
-        return unspscs.filter(item => {
-            const matchesSearch = !search || 
-                item.codeUnspsc.toLowerCase().includes(search.toLowerCase()) ||
-                item.detailUnspsc.toLowerCase().includes(search.toLowerCase());
-            return matchesSearch;
-        });
-    }
-
-    // Render UNSPSCs to the list
-    function renderUnspscs() {
-        const filteredUnspscs = filterUnspscs();
-        const resultsToShow = filteredUnspscs.slice(0, maxResults);  // Limit the results shown
-
-        unspscList.innerHTML = resultsToShow.map(item => {
-            const isSelected = selectedUnspscs.includes(item.codeUnspsc);
-            return `
-                <div
-                    class="bg-white rounded-lg shadow p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 
-                    ${isSelected ? 'border-2 border-green-500 bg-green-50' : 'border border-gray-200'}"
-                    data-code="${item.codeUnspsc}"
-                >
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="font-bold text-blue-600">${item.codeUnspsc}</span>
-                    </div>
-                    <p class="text-sm text-gray-700">${item.detailUnspsc.slice(0, 100)}...</p>
-                    <div class="text-xs text-gray-500 mt-2">${item.categoryDesc}</div>
-                    ${isSelected ? `
-                        <div class="flex items-center justify-center h-4 w-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-green-500" fill="none" viewBox="4 4 16 16" stroke="currentColor" style="width: 16px; height: 16px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }).join('');
-    }
-
-    // Toggle UNSPSC selection
-    function toggleSelection(code) {
-        const index = selectedUnspscs.indexOf(code);
-        if (index !== -1) {
-            selectedUnspscs.splice(index, 1); // Deselect
-        } else {
-            selectedUnspscs.push(code); // Select
-        }
-        
-        renderUnspscs();
-        renderSelectedUnspscs();
-        updateUnspscInput();
-    }
-
-    // Render selected UNSPSCs
-    function renderSelectedUnspscs() {
-        selectedUnspscsList.innerHTML = selectedUnspscs.map(code => {
-            const unspsc = unspscs.find(item => item.codeUnspsc === code);
-            return `
-                <div class="bg-white rounded-lg p-3 flex justify-between items-center shadow">
-                    <div>
-                        <span class="font-bold text-blue-600 mr-2">${unspsc.codeUnspsc}</span>
-                        <span class="text-sm text-gray-700">${unspsc.detailUnspsc.slice(0, 50)}...</span>
-                    </div>
-                    <button type="button" class="text-red-500 hover:text-red-700" onclick="toggleSelection('${unspsc.codeUnspsc}')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2" viewBox="4 4 16 16" fill="currentColor" style="width: 16px; height: 16px;">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
-            `;
-        }).join('');
-    }
-
-    // Update hidden input for form submission
     function updateUnspscInput() {
-        // Remove existing UNSPSC hidden inputs
-        const existingInputs = form.querySelectorAll('input[name="unspscs[]"]');
-        existingInputs.forEach(input => input.remove());
-
-        // Create new hidden inputs for selected UNSPSCs
-        selectedUnspscs.forEach(code => {
+        form.querySelectorAll('input[name="unspscs[]"]').forEach(input => input.remove());
+        state.selectedUnspscs.forEach(code => {
             const input = document.createElement('input');
             input.type = 'hidden';
             input.name = 'unspscs[]';
@@ -444,35 +355,122 @@ session_start();
         });
     }
 
-    // Clear selected UNSPSCs
-    clearAllBtn.addEventListener('click', () => {
-        selectedUnspscs = [];
-        renderSelectedUnspscs();
-        renderUnspscs();
-        updateUnspscInput();
-    });
-
-    // Search input event listener
-    searchInput.addEventListener('input', (e) => {
-        search = e.target.value;
-        renderUnspscs();
-    });
-
-    // Click event listener for selecting/deselecting UNSPSCs
-    unspscList.addEventListener('click', (e) => {
-        const code = e.target.closest('[data-code]')?.getAttribute('data-code');
-        if (code) {
-            toggleSelection(code);
+    function toggleSelection(code) {
+        const index = state.selectedUnspscs.indexOf(code);
+        if (index !== -1) {
+            state.selectedUnspscs.splice(index, 1);
+        } else {
+            state.selectedUnspscs.push(code);
         }
-    });
-
-    // Form submission handler
-    form.addEventListener('submit', function(event) {
-        // Ensure UNSPSC inputs are up to date
+        
+        renderUnspscs();
+        renderSelectedUnspscs();
         updateUnspscInput();
-    });
+    }
 
-    // Initial load
+    function renderSelectedUnspscs() {
+        if (!selectedUnspscsList) return;
+
+        selectedUnspscsList.innerHTML = state.selectedUnspscs.map(code => {
+            const unspsc = state.unspscs.find(item => item.codeUnspsc === code);
+            if (!unspsc) return '';
+            
+            return `
+                <div class="bg-white rounded-lg p-3 flex justify-between items-center shadow">
+                    <div class="flex-grow">
+                        <span class="font-bold text-blue-600 mr-2">${unspsc.codeUnspsc}</span>
+                        <span class="text-sm text-gray-700">${unspsc.detailUnspsc.slice(0, 50)}...</span>
+                    </div>
+                    <button type="button" class="ml-2 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full" data-code="${unspsc.codeUnspsc}">
+                        ✕
+                    </button>
+                </div>
+            `;
+        }).join('');
+    }
+
+
+    function filterUnspscs() {
+        return state.unspscs.filter(item => {
+            return !state.search || 
+                item.codeUnspsc.toLowerCase().includes(state.search.toLowerCase()) ||
+                item.detailUnspsc.toLowerCase().includes(state.search.toLowerCase());
+        });
+    }
+
+    function renderUnspscs() {
+        if (!unspscList) return;
+
+        const filteredUnspscs = filterUnspscs();
+        const resultsToShow = filteredUnspscs.slice(0, state.maxResults);
+
+        unspscList.innerHTML = resultsToShow.map(item => {
+            const isSelected = state.selectedUnspscs.includes(item.codeUnspsc);
+            return `
+                <div
+                    class="bg-white rounded-lg shadow p-3 cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 ${isSelected ? 'border-2 border-green-500 bg-green-50' : 'border border-gray-200'}"
+                    data-code="${item.codeUnspsc}"
+                >
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-blue-600">${item.codeUnspsc}</span>
+                        ${isSelected ? `
+                            <span class="text-green-500 text-xs">✓</span>
+                        ` : ''}
+                    </div>
+                    <p class="text-sm text-gray-700">${item.detailUnspsc.slice(0, 100)}...</p>
+                    <div class="text-xs text-gray-500 mt-2">${item.categoryDesc || ''}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function loadUnspscs() {
+        try {
+            const response = await fetch('/unspsc.json');
+            state.unspscs = await response.json();
+            renderUnspscs();
+        } catch (error) {
+            console.error('Error loading UNSPSC data:', error);
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            state.search = e.target.value;
+            renderUnspscs();
+        });
+    }
+
+    if (unspscList) {
+        unspscList.addEventListener('click', (e) => {
+            const codeElement = e.target.closest('[data-code]');
+            if (codeElement) {
+                const code = codeElement.getAttribute('data-code');
+                toggleSelection(code);
+            }
+        });
+    }
+
+    if (selectedUnspscsList) {
+        selectedUnspscsList.addEventListener('click', (e) => {
+            const button = e.target.closest('button[data-code]');
+            if (button) {
+                const code = button.getAttribute('data-code');
+                toggleSelection(code);
+            }
+        });
+    }
+
+    if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', () => {
+            state.selectedUnspscs = [];
+            renderSelectedUnspscs();
+            renderUnspscs();
+            updateUnspscInput();
+        });
+    }
+
+    window.toggleSelection = toggleSelection;
     loadUnspscs();
 });
 </script>
