@@ -17,10 +17,10 @@
     @livewireStyles  
 </head>
 <body>
-    <main>
-        @include("partials.navbar")
+
+
         @yield("contenu")
-    </main>
+
 
     {{ $slot }}
 
