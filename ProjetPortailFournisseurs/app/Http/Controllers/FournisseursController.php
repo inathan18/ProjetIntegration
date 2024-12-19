@@ -37,6 +37,14 @@ class FournisseursController extends Controller
 
         $fournisseurs = Fournisseur::all();
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
+        if (!$fournisseur_actuel->financial_information_id) {
+            // Créer un objet vide si n'existe pas
+            $financialInformation = new FinancialInformation();
+        }
+        else {
+            $financialInformation = FinancialInformation::findOrFail($fournisseur_actuel->financial_information_id);
+        }
+
 
         $codesUnspsc = is_string($fournisseur_actuel->unspsc) ? json_decode($fournisseur_actuel->unspsc, true) : ($fournisseur_actuel->unspsc ?? []);
         $codesRbq = is_string($fournisseur_actuel->typesRbq) ? json_decode($fournisseur_actuel->typesRbq, true) : ($fournisseur_actuel->typesRbq ?? []);
@@ -103,7 +111,7 @@ class FournisseursController extends Controller
         
         $fichier = $this->IniFichier($fournisseur_actuel);
 
-        return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'PersonnesContact', 'produitsServices', 'licencesRbq', 'unspsc', 'fichier'));
+        return view('Fournisseurs.Accueil', compact('fournisseurs', 'fournisseur_actuel', 'telephone', 'PersonnesContact', 'produitsServices', 'licencesRbq', 'unspsc', 'fichier', 'financialInformation'));
     }
 
 
@@ -142,7 +150,11 @@ class FournisseursController extends Controller
     //Enregistrement des informations financières
     public function storeFinancialInformation(Request $request, Fournisseur $fournisseur) 
     { 
+        //Log::Debug($request);
         $fournisseur_actuel = auth()->guard('fournisseur')->user();
+
+
+        
         $validatedData = $request->validate([ 
         'noTps' => 'required|string', 
         'noTvq' => 'required|string',
@@ -156,7 +168,9 @@ class FournisseursController extends Controller
          $fournisseur = Fournisseur::find($fournisseur_actuel->id);
          $fournisseur->financial_information_id = $financialInformation->id;
          $fournisseur->save();
-         return redirect()->back()->with('success', 'Les informations financières ont été mises à jour avec succès!'); }
+         return redirect()->route('Fournisseurs.Accueil')->with('success', 'Les informations financières ont été mises à jour avec succès!');
+}
+         
 
 
     /* Fonction utilisé pour connecter le Fournisseur a son compte */
@@ -348,7 +362,7 @@ class FournisseursController extends Controller
             $fournisseur_actuel = auth()->guard('fournisseur')->user();
             
             if (!$fournisseur_actuel->financial_information_id) {
-                // Handle case where ID doesn't exist
+                // Créer un objet vide si n'existe pas
                 $financialInformation = new FinancialInformation();
             }
             else {
@@ -359,9 +373,9 @@ class FournisseursController extends Controller
     
             return view('Fournisseurs.infos-finances', compact('fournisseur_actuel', 'financialInformation'));
         } catch (\Exception $e) {
-            \Log::error('Financial Information Error: ' . $e->getMessage());
-            // Handle the error appropriately
-            return redirect()->back()->with('error', 'Unable to load financial information');
+            \Log::error('Erreur des informations financières ' . $e->getMessage());
+            // Prendre en charge l'erreur
+            return redirect()->back()->with('error', 'Impossible de retrouver les informations financières. ');
         }
     }
     
