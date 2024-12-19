@@ -43,6 +43,7 @@ session_start();
 
         <div class="col-10 p-0" style="height:100%;"> <!-- Section Formulaire -->
 
+
             <div class="card-container" style="height: 95%; padding:20px;">
                 <div class="persoCardInscription">
                     <div class="card-contentInscription">
@@ -55,6 +56,12 @@ session_start();
                                 </div>
 
                                 <div class="row" style="    margin-left: 2%; margin-right: 2%;">
+                                <div>
+        <label for="search-rbq">Search RBQ:</label>
+        <input type="text" id="search-rbq" placeholder="Enter NEQ or other details" />
+    </div>
+
+    <div id="rbq-results" style="margin-top: 20px;"></div>
 
                                     <div class="col-6 FormInscription" style="padding-right: 12px">
                                         <label class="beaulabel" for="name">Nom de l'entreprise : </label>
@@ -180,7 +187,7 @@ session_start();
                                 </div>
                                 <div id="unspsc-search-component" class="container mx-auto p-4">
     <div class="bg-white shadow-md rounded-lg p-6">
-        <!-- Search Input -->
+        <!-- Champs Recherche -->
         <div class="mb-4 flex space-x-4">
             <div class="flex-grow">
                 <label class="block text-gray-700 text-sm font-bold mb-2">Recherche</label>
@@ -194,15 +201,15 @@ session_start();
         </div>
 
         <div class="grid grid-cols-12 gap-4">
-            <!-- UNSPSC Results Section -->
+            <!-- Resultats de la recherche des UNSPSC -->
             <div class="col-span-8 bg-gray-100 rounded-lg p-4">
                 <h2 class="text-lg font-semibold mb-4">Résultats de recherche</h2>
                 <div id="unspsc-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    <!-- UNSPSCs will be rendered here -->
+                     <!-- Les UNSPSC sélectionnes apparaissent ici -->
                 </div>
             </div>
 
-            <!-- Selected UNSPSCs Section -->
+            <!-- Section de selection des UNSPSC -->
             <div class="col-span-4 bg-gray-100 rounded-lg p-4">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold">UNSPSC Sélectionnés</h2>
@@ -214,7 +221,7 @@ session_start();
                     </button>
                 </div>
                 <div id="selected-unspscs-list" class="space-y-2">
-                    <!-- Selected UNSPSCs will be rendered here -->
+                    <!-- Les UNSPSC sélectionnes apparaissent ici -->
                 </div>
             </div>
         </div>
@@ -473,6 +480,119 @@ session_start();
     window.toggleSelection = toggleSelection;
     loadUnspscs();
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const validationRBQ = {
+        searchInput: '',
+        rbqs: null,
+        typesRbq: [],
+        async fetchData(searchQuery) {
+            if (!searchQuery) {
+                this.rbqs = null;
+                this.updateView();
+                return;
+            }
+
+            try {
+                const url = `https://www.donneesquebec.ca/recherche/api/3/action/datastore_search?resource_id=32f6ec46-85fd-45e9-945b-965d9235840a&q=${encodeURIComponent(searchQuery)}`;
+                const response = await fetch(url, {
+                    headers: { 'Accept-Language': 'fr' }
+                });
+                const json = await response.json();
+
+                this.rbqs = json.result.records.slice(0, 1); 
+                this.typesRbq = this.rbqs.map(record => record['Sous-categories']);
+                this.updateView();
+            } catch (error) {
+                console.error("Error fetching RBQ data:", error);
+            }
+        },
+        updateView() {
+            const resultsContainer = document.getElementById('rbq-results');
+            resultsContainer.innerHTML = '';
+
+            if (this.rbqs && this.rbqs.length > 0) {
+                const record = this.rbqs[0]; 
+                const div = document.createElement('div');
+                div.className = 'rbq-item';
+                div.textContent = `${record['Nom de l\'intervenant']} (${record['Numero de licence']})`;
+                div.dataset.index = 0; 
+                div.addEventListener('click', () => this.handleItemClick(div, record));
+
+                resultsContainer.appendChild(div);
+            } else {
+                resultsContainer.textContent = "No results found.";
+            }
+        },
+        handleItemClick(div, record) {
+            
+            this.clearSelection(); 
+            div.classList.add('selected'); 
+
+            
+            supplierForm.prefillData(record, this.typesRbq[0]);
+        },
+        clearSelection() {
+            const allItems = document.querySelectorAll('.rbq-item');
+            allItems.forEach(item => {
+                item.classList.remove('selected'); 
+            });
+        }
+    };
+
+    const supplierForm = {
+        formFields: {
+            name: document.getElementById('name'),
+            address: document.getElementById('address'),
+            email: document.getElementById('email'),
+            neq: document.getElementById('neq'),
+            city: document.getElementById('city'),
+            region: document.getElementById('region'),
+            postCode: document.getElementById('postCode'),
+            website: document.getElementById('website'),
+            status: document.getElementById('status')
+        },
+prefillData(selected, typesRbq) {
+    
+    const municipality = selected['Municipalite'] ? selected['Municipalite'].toLowerCase() : '';
+    const address = selected['Adresse'] || '';
+    
+    let addressParts = [];
+    if (municipality) {
+        
+        addressParts = address.toLowerCase().split(municipality);
+    }
+
+    
+    this.formFields.name.value = selected['Nom de l\'intervenant'] || '';
+    this.formFields.address.value = addressParts[0] || ''; 
+    this.formFields.email.value = selected['Courriel'] || '';
+    this.formFields.neq.value = selected['NEQ'] || '';
+    this.formFields.city.value = selected['Municipalite'] || '';
+    this.formFields.region.value = `${selected['Region administrative']} (${selected['Code de region administrative']})` || '';
+    
+    
+    const postcodePart = selected['Adresse'] && selected['Adresse'].split('CANADA ')[1];
+    this.formFields.postCode.value = postcodePart ? postcodePart.trim() : '';
+
+    
+    const websiteDomain = selected['Courriel'] ? selected['Courriel'].split('@')[1] : '';
+    this.formFields.website.value = websiteDomain ? `www.${websiteDomain}` : '';
+
+    this.formFields.status.value = selected['Statut de la licence'] || '';
+
+    
+    console.log("RBQ Types:", typesRbq);
+}
+
+    };
+
+
+    document.getElementById('search-rbq').addEventListener('input', (event) => {
+        validationRBQ.searchInput = event.target.value;
+        validationRBQ.fetchData(validationRBQ.searchInput);
+    });
+});
+
 </script>
 
 <script src="../localisation.js"></script>
