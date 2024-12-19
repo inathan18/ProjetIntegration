@@ -41,7 +41,7 @@
             <div class="col-md-5">
                 <div class="card">
                     <div class="card-body">
-                    <form id="chooseTemplate method="POST" action="{{route('NotificationTemplate.fetchTemplate')}}">
+                    <form id="chooseTemplate" method="POST" action="{{route('NotificationTemplate.fetchTemplate')}}">
                     @csrf
                         <h5 class="card-title">Modèles</h5>
                         <div class="mb-3">
