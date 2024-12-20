@@ -11,7 +11,14 @@
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <strong>Rechercher et Filtrer</strong>
-            <button class="btn btn-secondary ms-auto" wire:click="resetFiltres">Réinitialiser les filtres</button>
+                <div class="d-flex">
+                <!-- Bouton d'export CSV -->
+                <button class="btn btn-secondary" title="Extraire les résultats vers un fichier CSV" wire:click="exportFournisseursToCsv">
+                    <i class="fas fa-file-csv"></i>
+                </button>
+                <!-- Bouton réinitialiser les filtres -->
+                <button class="btn btn-secondary ms-2" wire:click="resetFiltres">Réinitialiser les filtres</button>
+            </div>
         </div>
 
         <!-- Cases à cocher statut demande-->
@@ -241,6 +248,13 @@ $(document).ready(function() {
         @this.chargerToutesLesVilles();
         
         $('.selectpicker').selectpicker('refresh');
+    });
+
+    // CSV
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('download-csv', () => {
+            window.location.href = `${window.location.pathname}?download=csv`;
+        });
     });
 });
 </script>

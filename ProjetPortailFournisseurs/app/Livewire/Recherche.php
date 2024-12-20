@@ -7,7 +7,10 @@ use App\Models\Fournisseur;
 use Illuminate\Support\Facades\Cache;
 use Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
+
 class Recherche extends Component
 {
     public $filtre = [
@@ -341,4 +344,124 @@ class Recherche extends Component
             'fournisseurs' => $this->fournisseurs,
         ]);
     }
+
+    public function exportFournisseursToCsv()
+    {
+        try {
+            return response()->streamDownload(function() {
+                // En-têtes du CSV
+                echo "\xEF\xBB\xBF";  // Pour l'encodage UTF-8 avec BOM
+                $headers = [
+                    'Nom',
+                    'Adresse',
+                    'Ville',
+                    'Province',
+                    'Région',
+                    'Pays',
+                    'Téléphone',
+                    'Code postal',
+                    'UNSPSC',
+                    'Site web',
+                    'Email',
+                    'NEQ',
+                    'RBQ',
+                    'Types RBQ',
+                    'Personne de contact',
+                    'Statut'
+                ];
+                
+                // Ouvrir le fichier en mémoire pour l'écriture
+                $output = fopen('php://output', 'w');
+                fputcsv($output, $headers, ';'); // Utilisation du délimiteur ';'
+
+                // Appliquer les filtres
+                $query = Fournisseur::query();
+                
+                $statuts = [];
+                if ($this->filtre['attente']) $statuts[] = 'AT';
+                if ($this->filtre['accepte']) $statuts[] = 'A';
+                if ($this->filtre['refuse']) $statuts[] = 'R';
+                if ($this->filtre['reviser']) $statuts[] = 'AR';
+
+                if (!empty($statuts)) {
+                    $query->whereIn('statut', $statuts);
+                }
+
+                if (!empty($this->rechercheTerm)) {
+                    $query->where('name', 'like', '%' . $this->rechercheTerm . '%');
+                }
+
+                if (!empty($this->filtre['ville'])) {
+                    $query->whereIn('city', $this->filtre['ville']);
+                } elseif (!empty($this->filtre['region'])) {
+                    $villesAutorisees = collect($this->toutesLesVilles)
+                        ->filter(function ($ville) {
+                            return in_array($ville['region'], $this->filtre['region']);
+                        })
+                        ->pluck('value')
+                        ->toArray();
+                    $query->whereIn('city', $villesAutorisees);
+                }
+
+                if (!empty($this->filtre['produitsServices'])) {
+                    $query->where(function ($subQuery) {
+                        foreach ($this->filtre['produitsServices'] as $code) {
+                            $subQuery->orWhereJsonContains('unspsc', $code);
+                        }
+                    });
+                }
+
+                if (!empty($this->filtre['categorie'])) {
+                    $query->where(function ($subQuery) {
+                        foreach ($this->filtre['categorie'] as $categorieCode) {
+                            $subQuery->orWhereJsonContains('typesRbq', $categorieCode);
+                        }
+                    });
+                }
+
+                // Récupérer les fournisseurs filtrés
+                $fournisseurs = $query->get();
+
+                // Parcourir chaque fournisseur et ajouter les lignes au CSV
+                foreach ($fournisseurs as $fournisseur) {
+                    $unspsc = is_string($fournisseur->unspsc) ? json_decode($fournisseur->unspsc, true) : $fournisseur->unspsc;
+                    $typesRbq = is_string($fournisseur->typesRbq) ? json_decode($fournisseur->typesRbq, true) : $fournisseur->typesRbq;
+                    $phone = is_string($fournisseur->phone) ? json_decode($fournisseur->phone, true) : $fournisseur->phone;
+                    $contact = is_string($fournisseur->personneContact) ? json_decode($fournisseur->personneContact, true) : $fournisseur->personneContact;
+
+                    // Ajouter chaque fournisseur au CSV
+                    fputcsv($output, [
+                        $fournisseur->name,
+                        $fournisseur->address,
+                        $fournisseur->city,
+                        $fournisseur->province,
+                        $fournisseur->region,
+                        $fournisseur->country,
+                        is_array($phone) ? implode(', ', $phone) : $phone,
+                        $fournisseur->postCode,
+                        is_array($unspsc) ? implode(', ', $unspsc) : $unspsc,
+                        $fournisseur->website,
+                        $fournisseur->email,
+                        $fournisseur->neq,
+                        $fournisseur->rbq,
+                        is_array($typesRbq) ? implode(', ', $typesRbq) : $typesRbq,
+                        is_array($contact) ? implode(', ', $contact) : $contact,
+                        $fournisseur->statut
+                    ], ';');
+                }
+
+                fclose($output);
+
+            }, 'fournisseurs_' . date('Y-m-d_H-i-s') . '.csv', [
+                'Content-Type' => 'text/csv; charset=UTF-8',
+                'Content-Disposition' => 'attachment'
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('CSV Export Error: ' . $e->getMessage());
+            session()->flash('error', 'Une erreur est survenue lors de l\'exportation.');
+            return null;
+        }
+    }
+
 }

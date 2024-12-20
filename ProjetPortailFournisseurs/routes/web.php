@@ -170,6 +170,8 @@ Route::middleware([IsAuthorized::class])->group(function () {
 
     Route::put('/fournisseurs/{id}/changer-statut', [FournisseursController::class, 'desactiverFiche'])->name('fournisseurs.desactiverFiche');
 
+    Route::get('/export-fournisseurs', [FournisseurController::class, 'exportFournisseursToCsv']);
+
 });
 
 
